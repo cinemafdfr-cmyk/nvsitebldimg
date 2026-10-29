@@ -1,0 +1,4919 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Balad'Images - Le cinéma Familles Rurales</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg-dark: #0f0f12;
+      --bg-card: #18181c;
+      --bg-surface: #222228;
+      --brand-orange: #E88C1E;
+      --brand-orange-hover: #d17a12;
+      --text-main: #ffffff;
+      --text-muted: #a0a0ab;
+      --border-subtle: rgba(255, 255, 255, 0.12);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+    }
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.4;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+
+    /* =========================================================
+       LOADER
+       ========================================================= */
+
+    #app-loader {
+      position: fixed;
+      inset: 0;
+      background-color: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+
+      transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+    }
+
+    #app-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+
+      border: 3.5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--brand-orange);
+
+      border-radius: 50%;
+
+      animation: spin 0.8s linear infinite;
+
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+
+    /* =========================================================
+       TRANSITION
+       ========================================================= */
+
+    #page-transition-overlay {
+      position: fixed;
+      inset: 0;
+
+      background-color: #000000;
+
+      z-index: 9998;
+
+      opacity: 0;
+      pointer-events: none;
+
+      transition: opacity 0.18s ease-in-out;
+    }
+
+    #page-transition-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    header {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.20) 0%,
+          rgba(255, 255, 255, 0.05) 100%
+        );
+
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      position: fixed;
+
+      top: 0;
+      left: 0;
+      right: 0;
+
+      z-index: 1000;
+
+      padding: 10px 4%;
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 10px;
+    }
+
+
+    .header-left {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      flex-shrink: 0;
+    }
+
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+
+      gap: 8px;
+
+      font-weight: 700;
+      font-size: 0.95rem;
+
+      letter-spacing: -0.01em;
+
+      color: white;
+
+      text-decoration: none;
+
+      cursor: pointer;
+
+      white-space: nowrap;
+
+      flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+       LOGO
+       ========================================================= */
+
+    .brand-logo-img {
+      height: 38px;
+      width: auto;
+      max-width: 150px;
+
+      display: block;
+
+      object-fit: contain;
+
+      flex-shrink: 0;
+    }
+
+
+    .logo-text {
+      color: white;
+
+      font-family: inherit;
+    }
+
+
+    .header-center {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      flex: 1;
+
+      justify-content: flex-end;
+
+      max-width: 500px;
+    }
+
+
+    .header-search-container {
+      position: relative;
+
+      display: flex;
+
+      align-items: center;
+
+      width: 100%;
+
+      max-width: 260px;
+    }
+
+
+    .header-search-input {
+      width: 100%;
+
+      background: rgba(255, 255, 255, 0.14);
+
+      border: 1px solid rgba(255, 255, 255, 0.22);
+
+      border-radius: 22px;
+
+      padding: 8px 36px 8px 14px;
+
+      color: white;
+
+      font-size: 0.85rem;
+
+      font-family: inherit;
+
+      outline: none;
+
+      transition: all 0.2s ease;
+    }
+
+
+    .header-search-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+
+    .header-search-input:focus {
+      background: rgba(0, 0, 0, 0.9);
+
+      border-color: var(--brand-orange);
+    }
+
+
+    .search-btn-trigger {
+      position: absolute;
+
+      right: 4px;
+
+      background: transparent;
+
+      border: none;
+
+      cursor: pointer;
+
+      padding: 6px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      z-index: 3;
+    }
+
+
+    .search-btn-trigger svg {
+      width: 16px;
+      height: 16px;
+
+      fill: rgba(255, 255, 255, 0.8);
+    }
+
+
+    /* SEARCH DROPDOWN */
+
+    .search-dropdown {
+      position: absolute;
+
+      top: 100%;
+      left: 0;
+      right: 0;
+
+      background: #18181c;
+
+      border: 1px solid var(--border-subtle);
+
+      border-radius: var(--radius-sm);
+
+      margin-top: 6px;
+
+      max-height: 250px;
+
+      overflow-y: auto;
+
+      display: none;
+
+      z-index: 10000;
+
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+
+    .search-dropdown.open {
+      display: block;
+    }
+
+
+    .search-dropdown-item {
+      padding: 10px 14px;
+
+      color: white;
+
+      font-size: 0.88rem;
+
+      cursor: pointer;
+
+      display: block;
+
+      text-decoration: none;
+
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+      transition: background 0.15s ease;
+    }
+
+
+    .search-dropdown-item:hover {
+      background: var(--bg-surface);
+
+      color: var(--brand-orange);
+    }
+
+
+    /* LOCATION */
+
+    .header-location-wrapper {
+      position: relative;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      flex-shrink: 0;
+    }
+
+
+    .header-location-select {
+      appearance: none;
+      -webkit-appearance: none;
+
+      background: rgba(255, 255, 255, 0.14);
+
+      border: 1px solid rgba(255, 255, 255, 0.22);
+
+      color: white;
+
+      padding: 8px 24px 8px 12px;
+
+      border-radius: 22px;
+
+      font-family: inherit;
+
+      font-size: 0.82rem;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      outline: none;
+
+      transition: all 0.18s ease;
+
+      max-width: 130px;
+
+      text-overflow: ellipsis;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+    }
+
+
+    .header-location-select:hover {
+      border-color: var(--brand-orange);
+    }
+
+
+    .header-location-select option {
+      background: var(--bg-card);
+      color: white;
+    }
+
+
+    .dropdown-icon {
+      position: absolute;
+
+      right: 8px;
+
+      pointer-events: none;
+
+      font-size: 0.6rem;
+
+      color: white;
+    }
+
+
+    /* NAV */
+
+    .header-nav {
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
+      flex-shrink: 0;
+    }
+
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.85);
+
+      text-decoration: none;
+
+      font-size: 0.88rem;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      padding: 4px 8px;
+    }
+
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: white;
+    }
+
+
+    .menu-burger-btn {
+      display: none;
+
+      background: none;
+
+      border: none;
+
+      color: white;
+
+      font-size: 1.5rem;
+
+      cursor: pointer;
+
+      z-index: 1001;
+
+      padding: 4px;
+    }
+
+
+    /* MOBILE MENU */
+
+    .mobile-nav-overlay {
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      background: rgba(15, 15, 18, 0.98);
+
+      backdrop-filter: blur(15px);
+
+      z-index: 999;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      align-items: center;
+
+      gap: 24px;
+    }
+
+
+    .mobile-nav-overlay.open {
+      display: flex;
+    }
+
+
+    .mobile-nav-overlay .nav-link {
+      font-size: 1.2rem;
+    }
+
+
+    body.view-venue-active .header-search-container {
+      display: none !important;
+    }
+
+
+    /* =========================================================
+       VUES
+       ========================================================= */
+
+    .view-page {
+      display: none;
+
+      min-height: 100vh;
+
+      opacity: 0;
+
+      transition: opacity 0.25s ease-in-out;
+    }
+
+
+    .view-page.active-view {
+      display: block;
+
+      opacity: 1;
+    }
+
+
+    /* =========================================================
+       HERO ACCUEIL
+       ========================================================= */
+
+    .hero-slider-wrapper {
+      position: relative;
+
+      width: 100%;
+
+      height: 70vh;
+
+      min-height: 500px;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      overflow: hidden;
+    }
+
+
+    .hero-slide {
+      position: absolute;
+
+      inset: 0;
+
+      opacity: 0;
+
+      visibility: hidden;
+
+      transition:
+        opacity 0.8s ease-in-out,
+        visibility 0.8s ease-in-out;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      cursor: pointer;
+    }
+
+
+    .hero-slide.active {
+      opacity: 1;
+
+      visibility: visible;
+    }
+
+
+    .hero-bg-layer {
+      position: absolute;
+
+      inset: -3%;
+
+      transform: scale(1.055);
+
+      background-size: cover;
+
+      background-position: center top !important;
+    }
+
+
+    .hero-overlay-gradient {
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        linear-gradient(
+          180deg,
+
+          rgba(15, 15, 18, 0.25) 0%,
+
+          rgba(15, 15, 18, 0.10) 30%,
+
+          rgba(15, 15, 18, 0.18) 50%,
+
+          rgba(15, 15, 18, 0.45) 68%,
+
+          rgba(15, 15, 18, 0.78) 82%,
+
+          rgba(15, 15, 18, 0.96) 94%,
+
+          var(--bg-dark) 100%
+        );
+
+      pointer-events: none;
+
+      z-index: 2;
+    }
+
+
+    .hero-content {
+      position: relative;
+
+      max-width: 820px;
+
+      z-index: 3;
+
+      width: 100%;
+
+      padding:
+        185px
+        5%
+        55px
+        5%;
+    }
+
+
+    .badge-salle {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      background: rgba(255, 255, 255, 0.16);
+
+      border: 1px solid rgba(255, 255, 255, 0.25);
+
+      padding: 5px 12px;
+
+      border-radius: 14px;
+
+      font-size: 0.8rem;
+
+      font-weight: 600;
+
+      margin-bottom: 10px;
+
+      color: #fff;
+
+      text-decoration: none;
+
+      transition: all 0.18s;
+    }
+
+
+    a.badge-salle:hover {
+      background: rgba(255, 255, 255, 0.28);
+
+      border-color: var(--brand-orange);
+    }
+
+
+    .hero-title,
+    .movie-title {
+      font-size: clamp(1.9rem, 4.2vw, 3.2rem);
+
+      font-weight: 900;
+
+      line-height: 1.1;
+
+      letter-spacing: -0.02em;
+
+      margin-bottom: 8px;
+    }
+
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+
+      opacity: 0.85;
+
+      margin-top: -2px;
+
+      margin-bottom: 14px;
+    }
+
+
+    .hero-meta,
+    .movie-quick-meta {
+      font-size: 0.88rem;
+
+      color: #e0e0e0;
+
+      margin-bottom: 10px;
+
+      display: flex;
+
+      gap: 8px;
+
+      align-items: center;
+
+      flex-wrap: wrap;
+    }
+
+
+    .badge-2k,
+    .age-badge {
+      background: rgba(255, 255, 255, 0.18);
+
+      border: 1px solid rgba(255, 255, 255, 0.25);
+
+      color: #ffffff;
+
+      font-size: 0.72rem;
+
+      font-weight: 800;
+
+      padding: 2px 6px;
+
+      border-radius: 4px;
+    }
+
+
+    .hero-synopsis {
+      color: #e0e0e5;
+
+      font-size: 0.9rem;
+
+      line-height: 1.45;
+
+      margin-bottom: 14px;
+
+      display: -webkit-box;
+
+      -webkit-line-clamp: 2;
+
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
+    }
+
+
+    .hero-slots-container {
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      align-items: center;
+
+      margin-bottom: 16px;
+
+      z-index: 4;
+
+      position: relative;
+    }
+
+
+    .btn-glass-slot {
+      background: rgba(255, 255, 255, 0.14);
+
+      border: 1px solid rgba(255, 255, 255, 0.25);
+
+      backdrop-filter: blur(10px);
+
+      color: white !important;
+
+      padding: 9px 16px;
+
+      border-radius: var(--radius-sm);
+
+      font-size: 0.85rem;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      text-decoration: none;
+
+      transition: all 0.18s ease;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+    }
+
+
+    .btn-glass-slot strong {
+      color: white !important;
+
+      font-weight: 600;
+    }
+
+
+    .btn-glass-slot:hover {
+      background: rgba(255, 255, 255, 0.28);
+
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+
+    /* HERO DOTS */
+
+    .hero-dots-indicator {
+      position: absolute;
+
+      bottom: 15px;
+
+      left: 5%;
+
+      z-index: 10;
+
+      display: flex;
+
+      gap: 8px;
+
+      align-items: center;
+    }
+
+
+    .dot-item {
+      height: 4px;
+
+      width: 22px;
+
+      background: rgba(255, 255, 255, 0.3);
+
+      border-radius: 2px;
+
+      cursor: pointer;
+
+      transition: width 0.3s ease;
+
+      position: relative;
+
+      overflow: hidden;
+    }
+
+
+    .dot-item.active {
+      width: 42px;
+
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+
+    .dot-item-fill {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+      bottom: 0;
+
+      width: 0%;
+
+      background: var(--brand-orange);
+
+      border-radius: 2px;
+    }
+
+
+    .dot-item.active .dot-item-fill {
+      animation: heroProgress 7s linear forwards;
+    }
+
+
+    @keyframes heroProgress {
+      from {
+        width: 0%;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+
+
+    /* =========================================================
+       PAGE DETAIL FILM
+       ========================================================= */
+
+    .movie-hero {
+
+      position: relative;
+
+      width: 100%;
+
+      min-height: 82vh;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      justify-content: space-between;
+
+      overflow: hidden;
+
+      padding:
+        225px
+        5%
+        95px
+        5%;
+
+      background-size: cover;
+
+      background-position: center center !important;
+
+      transition: background-image 0.4s ease-in-out;
+    }
+
+
+    /* =========================================================
+       DEGRADE DETAIL FILM
+       ========================================================= */
+
+    .movie-hero::after {
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 1;
+
+      pointer-events: none;
+
+      background:
+
+        radial-gradient(
+          ellipse 70% 65% at 12% 82%,
+          rgba(15, 15, 18, 0.94) 0%,
+          rgba(15, 15, 18, 0.78) 28%,
+          rgba(15, 15, 18, 0.48) 52%,
+          rgba(15, 15, 18, 0.18) 72%,
+          rgba(15, 15, 18, 0) 100%
+        ),
+
+        linear-gradient(
+          180deg,
+
+          rgba(15, 15, 18, 0.12) 0%,
+
+          rgba(15, 15, 18, 0.04) 28%,
+
+          rgba(15, 15, 18, 0.10) 45%,
+
+          rgba(15, 15, 18, 0.30) 64%,
+
+          rgba(15, 15, 18, 0.62) 79%,
+
+          rgba(15, 15, 18, 0.88) 91%,
+
+          var(--bg-dark) 100%
+        );
+    }
+
+
+    .movie-hero > div[style*="z-index:3"] {
+      position: relative;
+
+      z-index: 3;
+    }
+
+
+    /* =========================================================
+       BOUTON BANDE ANNONCE
+       ========================================================= */
+
+    .trailer-btn-wrapper {
+      z-index: 3;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      margin: auto;
+
+      flex-shrink: 0;
+    }
+
+
+    .btn-play-trailer {
+      width: 80px;
+      height: 80px;
+
+      border-radius: 50%;
+
+      background: rgba(255, 255, 255, 0.14);
+
+      border: 1px solid rgba(255, 255, 255, 0.28);
+
+      color: white;
+
+      backdrop-filter: blur(10px);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-decoration: none;
+
+      transition: all 0.2s ease;
+
+      cursor: pointer;
+
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+
+    .btn-play-trailer:hover {
+      transform: scale(1.08);
+
+      background: rgba(232, 140, 30, 0.9);
+
+      border-color: var(--brand-orange);
+    }
+
+
+    .btn-play-trailer svg {
+      width: 32px;
+      height: 32px;
+
+      fill: white;
+
+      margin-left: 2px;
+    }
+
+
+    .btn-play-trailer .mobile-trailer-text {
+      display: none;
+    }
+
+
+    /* =========================================================
+       SYNOPSIS
+       ========================================================= */
+
+    .synopsis-wrapper {
+      margin-bottom: 10px;
+
+      line-height: 1.5;
+    }
+
+
+    .synopsis-text {
+      display: inline;
+
+      color: #f0f0f5;
+
+      font-size: 0.92rem;
+    }
+
+
+    .btn-toggle-synopsis {
+      display: none;
+
+      background: none;
+
+      border: none;
+
+      color: var(--brand-orange);
+
+      font-size: 0.88rem;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      padding: 0 0 0 6px;
+
+      text-decoration: underline;
+    }
+
+
+    .movie-credits-text {
+      font-size: 0.85rem;
+
+      color: #b0b0bb;
+
+      margin-top: 10px;
+
+      margin-bottom: 10px;
+
+      display: flex;
+
+      gap: 14px;
+
+      flex-wrap: wrap;
+
+      align-items: flex-start;
+    }
+
+
+    .movie-credits-text strong {
+      color: #ffffff;
+
+      font-weight: 600;
+
+      margin-right: 4px;
+    }
+
+
+    .credit-block {
+      display: inline-flex;
+
+      align-items: flex-start;
+    }
+
+
+    /* =========================================================
+       CATALOGUE
+       ========================================================= */
+
+    .catalog-container {
+      padding: 30px 5%;
+    }
+
+
+    .section-header {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      margin-bottom: 18px;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+    }
+
+
+    .section-title {
+      font-size: 1.25rem;
+
+      font-weight: 800;
+
+      margin-bottom: 14px;
+    }
+
+
+    .btn-back-home {
+      background: rgba(255, 255, 255, 0.12);
+
+      border: 1px solid var(--border-subtle);
+
+      color: white;
+
+      padding: 8px 16px;
+
+      border-radius: var(--radius-sm);
+
+      font-size: 0.85rem;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition: all 0.18s;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      text-decoration: none;
+    }
+
+
+    .btn-back-home:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+
+    .grid-movies {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fill,
+          minmax(250px, 1fr)
+        );
+
+      gap: 20px;
+
+      align-items: start;
+    }
+
+
+    .card-movie {
+      background: var(--bg-card);
+
+      border-radius: var(--radius-md);
+
+      border: 1px solid var(--border-subtle);
+
+      overflow: hidden;
+
+      display: flex;
+
+      flex-direction: column;
+
+      transition:
+        border-color 0.2s ease,
+        transform 0.18s ease;
+
+      cursor: pointer;
+
+      position: relative;
+    }
+
+
+    .card-movie:hover {
+      border-color: rgba(255, 255, 255, 0.35);
+
+      transform: translateY(-3px);
+    }
+
+
+    .card-poster {
+      position: relative;
+
+      height: 260px;
+
+      background: var(--bg-surface);
+    }
+
+
+    .card-poster img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+
+    .card-content {
+      padding: 16px;
+
+      display: flex;
+
+      flex-direction: column;
+    }
+
+
+    .card-title {
+      font-size: 1.05rem;
+
+      font-weight: 700;
+
+      margin-bottom: 5px;
+
+      color: white;
+    }
+
+
+    .card-meta {
+      font-size: 0.78rem;
+
+      color: var(--text-muted);
+
+      margin-bottom: 12px;
+
+      display: flex;
+
+      gap: 6px;
+
+      align-items: center;
+    }
+
+
+    .card-slots-area {
+      border-top: 1px solid var(--border-subtle);
+
+      padding-top: 10px;
+    }
+
+
+    .slots-label {
+      font-size: 0.7rem;
+
+      text-transform: uppercase;
+
+      font-weight: 800;
+
+      color: var(--brand-orange);
+
+      margin-bottom: 8px;
+    }
+
+
+    .slots-list {
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+    }
+
+
+    .slot-pill {
+      background: var(--bg-surface);
+
+      border: 1px solid var(--border-subtle);
+
+      color: white;
+
+      padding: 8px 12px;
+
+      border-radius: var(--radius-sm);
+
+      font-size: 0.8rem;
+
+      font-weight: 600;
+
+      text-decoration: none;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      transition: all 0.18s ease;
+
+      cursor: pointer;
+    }
+
+
+    .slot-pill .town {
+      font-size: 0.75rem;
+
+      color: var(--brand-orange);
+
+      font-weight: 700;
+    }
+
+
+    .slot-pill:hover {
+      background: var(--brand-orange);
+
+      border-color: var(--brand-orange);
+
+      color: white;
+    }
+
+
+    .slot-pill:hover .town {
+      color: white;
+    }
+
+
+    .btn-more-slots {
+      background: transparent;
+
+      border: 1px dashed var(--border-subtle);
+
+      color: var(--text-muted);
+
+      padding: 7px;
+
+      border-radius: var(--radius-sm);
+
+      font-size: 0.75rem;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      text-align: center;
+
+      margin-top: 6px;
+
+      transition: all 0.18s;
+
+      width: 100%;
+    }
+
+
+    .btn-more-slots:hover {
+      border-color: var(--brand-orange);
+
+      color: var(--brand-orange);
+    }
+
+
+    /* =========================================================
+       SEANCES
+       ========================================================= */
+
+    .showtimes-section {
+
+      position: relative;
+
+      z-index: 3;
+
+      margin-top: -65px;
+
+      padding:
+        15px
+        5%
+        50px
+        5%;
+    }
+
+
+    .horizontal-cards-strip {
+      display: flex;
+
+      gap: 12px;
+
+      overflow-x: auto;
+
+      padding-bottom: 12px;
+
+      margin-bottom: 22px;
+
+      scrollbar-width: thin;
+
+      scrollbar-color:
+        var(--brand-orange)
+        transparent;
+    }
+
+
+    .showtime-horizontal-card {
+      min-width: 210px;
+
+      max-width: 250px;
+
+      background: var(--bg-card);
+
+      border: 1px solid var(--border-subtle);
+
+      border-radius: var(--radius-md);
+
+      padding: 14px;
+
+      cursor: pointer;
+
+      transition: all 0.18s ease;
+
+      flex-shrink: 0;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 4px;
+    }
+
+
+    .showtime-horizontal-card:hover,
+    .showtime-horizontal-card.active {
+      border-color: var(--brand-orange);
+
+      background: var(--bg-surface);
+    }
+
+
+    .town-tag {
+      color: var(--brand-orange);
+
+      font-size: 0.82rem;
+
+      font-weight: 800;
+
+      text-transform: uppercase;
+    }
+
+
+    .card-date {
+      font-size: 0.92rem;
+
+      font-weight: 800;
+
+      color: white;
+    }
+
+
+    .card-venue {
+      font-size: 0.78rem;
+
+      color: var(--text-muted);
+    }
+
+
+    .practical-details-panel {
+      background: var(--bg-card);
+
+      border: 1px solid var(--border-subtle);
+
+      border-radius: var(--radius-md);
+
+      padding: 22px;
+
+      max-width: 850px;
+
+      transition:
+        opacity 0.2s ease-in-out,
+        transform 0.2s ease-in-out;
+
+      opacity: 1;
+
+      transform: translateY(0);
+    }
+
+
+    .practical-details-panel.changing {
+      opacity: 0;
+
+      transform: translateY(6px);
+    }
+
+
+    .panel-header {
+      border-bottom: 1px solid var(--border-subtle);
+
+      padding-bottom: 12px;
+
+      margin-bottom: 16px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+    }
+
+
+    .panel-title {
+      font-size: 1.05rem;
+
+      font-weight: 800;
+
+      color: white;
+    }
+
+
+    .panel-title span {
+      color: var(--brand-orange);
+    }
+
+
+    .practical-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(180px, 1fr)
+        );
+
+      gap: 16px;
+
+      margin-bottom: 16px;
+    }
+
+
+    .practical-item {
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 3px;
+    }
+
+
+    .item-label {
+      font-size: 0.72rem;
+
+      text-transform: uppercase;
+
+      font-weight: 800;
+
+      color: var(--brand-orange);
+    }
+
+
+    .item-value {
+      font-size: 0.88rem;
+
+      color: white;
+
+      font-weight: 600;
+    }
+
+
+    .actions-row {
+      display: flex;
+
+      gap: 12px;
+
+      flex-wrap: wrap;
+    }
+
+
+    .btn-agenda {
+      background: var(--bg-surface);
+
+      border: 1px solid var(--brand-orange);
+
+      color: var(--brand-orange);
+
+      padding: 9px 16px;
+
+      border-radius: var(--radius-sm);
+
+      font-size: 0.85rem;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      text-decoration: none;
+
+      transition: all 0.18s;
+    }
+
+
+    .btn-agenda:hover {
+      background: var(--brand-orange);
+
+      color: white;
+    }
+
+
+    /* =========================================================
+       VUE LIEU
+       ========================================================= */
+
+    .venue-details-section {
+      background: var(--bg-card);
+
+      border-top: 1px solid var(--border-subtle);
+
+      padding: 30px 5%;
+
+      margin-top: 30px;
+    }
+
+
+    .venue-grid {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 24px;
+
+      align-items: start;
+    }
+
+
+    .venue-info-box h3 {
+      font-size: 1.15rem;
+
+      font-weight: 800;
+
+      margin-bottom: 14px;
+    }
+
+
+    .info-item {
+      display: flex;
+
+      gap: 10px;
+
+      margin-bottom: 8px;
+
+      font-size: 0.88rem;
+
+      color: #d1d1d6;
+    }
+
+
+    .info-item strong {
+      color: white;
+
+      min-width: 90px;
+    }
+
+
+    .badge-pmr {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      background: rgba(255, 255, 255, 0.08);
+
+      padding: 6px 12px;
+
+      border-radius: var(--radius-sm);
+
+      font-size: 0.8rem;
+
+      font-weight: 600;
+
+      margin-top: 8px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1024px) {
+
+      .logo-text {
+        display: none !important;
+      }
+
+    }
+
+
+    @media (max-width: 768px) {
+
+      header {
+        padding: 8px 12px;
+      }
+
+
+      .header-left {
+        gap: 6px;
+      }
+
+
+      .brand-logo-img {
+        height: 28px;
+        max-width: 105px;
+      }
+
+
+      .header-center {
+        gap: 6px;
+
+        max-width: none;
+      }
+
+
+      .header-location-select {
+        max-width: 95px;
+
+        font-size: 0.75rem;
+
+        padding: 6px 18px 6px 8px;
+      }
+
+
+      .header-nav {
+        display: none;
+      }
+
+
+      .menu-burger-btn {
+        display: block;
+
+        margin-left: 2px;
+      }
+
+
+      .header-search-container {
+        flex: 1;
+
+        max-width: none;
+      }
+
+
+      .header-search-input {
+        padding: 6px 30px 6px 10px;
+
+        font-size: 0.8rem;
+      }
+
+
+      .search-btn-trigger {
+        right: 2px;
+
+        padding: 4px;
+      }
+
+
+      .search-dropdown {
+        position: fixed;
+
+        top: 54px;
+
+        left: 10px;
+
+        right: 10px;
+
+        width: auto;
+      }
+
+
+      /* HERO ACCUEIL MOBILE */
+
+      .hero-slide .badge-2k,
+      .hero-slide .age-badge {
+        display: none !important;
+      }
+
+
+      .hero-slider-wrapper {
+        min-height: 470px;
+
+        height: auto;
+      }
+
+
+      .hero-content {
+        padding:
+          145px
+          5%
+          42px
+          5%;
+      }
+
+
+      /* PAGE FILM MOBILE */
+
+      .movie-hero {
+
+        min-height: 88vh;
+
+        padding:
+          180px
+          5%
+          105px
+          5%;
+
+        background-size: auto 100%;
+
+        background-position:
+          center center !important;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        justify-content: flex-end;
+      }
+
+
+      .movie-hero::after {
+        background:
+          linear-gradient(
+            180deg,
+
+            rgba(15, 15, 18, 0.14) 0%,
+
+            rgba(15, 15, 18, 0.06) 30%,
+
+            rgba(15, 15, 18, 0.16) 52%,
+
+            rgba(15, 15, 18, 0.42) 70%,
+
+            rgba(15, 15, 18, 0.78) 88%,
+
+            var(--bg-dark) 100%
+          );
+      }
+
+
+      .trailer-btn-wrapper {
+        width: 100%;
+
+        margin: 14px 0 0 0;
+
+        justify-content: flex-start;
+      }
+
+
+      .btn-play-trailer {
+
+        width: auto;
+
+        height: auto;
+
+        border-radius: 20px;
+
+        padding: 8px 16px;
+
+        background: rgba(255, 255, 255, 0.16);
+
+        border: 1px solid rgba(255, 255, 255, 0.25);
+
+        backdrop-filter: blur(8px);
+
+        font-size: 0.82rem;
+
+        font-weight: 600;
+
+        gap: 8px;
+
+        box-shadow: none;
+      }
+
+
+      .btn-play-trailer svg {
+        width: 14px;
+
+        height: 14px;
+
+        margin-left: 0;
+      }
+
+
+      .btn-play-trailer .mobile-trailer-text {
+        display: inline;
+
+        color: white;
+      }
+
+
+      .btn-toggle-synopsis {
+        display: inline-block;
+      }
+
+
+      .synopsis-text.collapsed {
+        display: -webkit-box;
+
+        -webkit-line-clamp: 2;
+
+        -webkit-box-orient: vertical;
+
+        overflow: hidden;
+      }
+
+
+      .showtimes-section {
+        margin-top: -75px;
+
+        padding-top: 15px;
+      }
+
+
+      .venue-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body class="page-accueil">
+
+
+  <!-- =========================================================
+       LOADER
+       ========================================================= -->
+
+  <div id="app-loader">
+
+    <div class="spinner"></div>
+
+    <div style="
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    ">
+      Chargement du programme...
+    </div>
+
+  </div>
+
+
+  <div id="page-transition-overlay"></div>
+
+
+  <!-- =========================================================
+       HEADER
+       ========================================================= -->
+
+  <header>
+
+    <div class="header-left">
+
+      <a
+        onclick="goHome()"
+        class="logo-container"
+      >
+
+        <img
+          src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png"
+          alt="Balad'Images"
+          class="brand-logo-img"
+        >
+
+        <span class="logo-text">
+          Cinémas itinérants Balad'images
+        </span>
+
+      </a>
+
+    </div>
+
+
+    <div class="header-center">
+
+      <div class="header-location-wrapper">
+
+        <select
+          class="header-location-select"
+          id="locationSelect"
+          onchange="handleLocationChange(this.value)"
+        >
+
+          <option value="all">
+            Cinémas
+          </option>
+
+        </select>
+
+        <span class="dropdown-icon">
+          ▼
+        </span>
+
+      </div>
+
+
+      <div
+        class="header-search-container"
+        id="searchContainer"
+      >
+
+        <input
+          type="text"
+          class="header-search-input"
+          id="searchInput"
+          placeholder="Rechercher..."
+          oninput="handleSearchInput(this.value)"
+        >
+
+
+        <button
+          class="search-btn-trigger"
+          id="searchBtnTrigger"
+          onclick="triggerSearchExecution()"
+        >
+
+          <svg viewBox="0 0 24 24">
+
+            <path d="
+              M15.5 14h-.79l-.28-.27
+              C15.41 12.59 16 11.11 16 9.5
+              16 5.91 13.09 3 9.5 3
+              S3 5.91 3 9.5
+              5.91 16 9.5 16
+              c1.61 0 3.09-.59 4.23-1.57
+              l.27.28v.79l5 4.99
+              L20.49 19l-4.99-5zm-6 0
+              C7.01 14 5 11.99 5 9.5
+              S7.01 5 9.5 5
+              14 7.01 14 9.5
+              11.99 14 9.5 14z
+            "/>
+
+          </svg>
+
+        </button>
+
+
+        <div
+          class="search-dropdown"
+          id="searchDropdown"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+    <nav class="header-nav">
+
+      <a
+        onclick="goHome()"
+        class="nav-link active"
+      >
+        Accueil
+      </a>
+
+      <a class="nav-link">
+        Tarifs
+      </a>
+
+      <a class="nav-link">
+        À propos
+      </a>
+
+      <a class="nav-link">
+        Bénévolat
+      </a>
+
+    </nav>
+
+
+    <button
+      class="menu-burger-btn"
+      onclick="toggleMenu()"
+    >
+      ☰
+    </button>
+
+  </header>
+
+
+  <!-- =========================================================
+       MENU MOBILE
+       ========================================================= -->
+
+  <div
+    class="mobile-nav-overlay"
+    id="mobileMenu"
+  >
+
+    <a
+      class="nav-link"
+      onclick="goHome(); toggleMenu();"
+    >
+      Accueil
+    </a>
+
+    <a
+      class="nav-link"
+      onclick="toggleMenu()"
+    >
+      Tarifs
+    </a>
+
+    <a
+      class="nav-link"
+      onclick="toggleMenu()"
+    >
+      À propos
+    </a>
+
+    <a
+      class="nav-link"
+      onclick="toggleMenu()"
+    >
+      Bénévolat
+    </a>
+
+  </div>
+
+
+  <!-- =========================================================
+       VUE ACCUEIL
+       ========================================================= -->
+
+  <div
+    id="view-home"
+    class="view-page active-view"
+  >
+
+    <div
+      id="home-hero-container"
+      style="position:relative;"
+    ></div>
+
+
+    <div class="catalog-container">
+
+      <div
+        class="section-title"
+        id="catalog-title"
+      >
+        Toute la programmation réseau
+      </div>
+
+
+      <div
+        class="grid-movies"
+        id="home-grid"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       VUE FILM
+       ========================================================= -->
+
+  <div
+    id="view-movie"
+    class="view-page"
+  >
+
+    <section
+      class="movie-hero"
+      id="movie-detail-hero"
+    ></section>
+
+
+    <section class="showtimes-section">
+
+      <div class="section-title">
+        Prochaines projections
+      </div>
+
+
+      <div
+        class="horizontal-cards-strip"
+        id="movie-showtimes-strip"
+      ></div>
+
+
+      <div
+        class="practical-details-panel"
+        id="details-panel"
+      ></div>
+
+    </section>
+
+  </div>
+
+
+  <!-- =========================================================
+       VUE LIEU
+       ========================================================= -->
+
+  <div
+    id="view-venue"
+    class="view-page"
+  >
+
+    <div
+      id="venue-hero-container"
+    ></div>
+
+
+    <div class="catalog-container">
+
+      <div class="section-header">
+
+        <div class="section-title">
+
+          Programmation à
+          <span id="venue-page-title"></span>
+
+        </div>
+
+
+        <button
+          class="btn-back-home"
+          onclick="goHome()"
+        >
+          ← Retour à l'accueil
+        </button>
+
+      </div>
+
+
+      <div
+        class="grid-movies"
+        id="venue-grid"
+      ></div>
+
+    </div>
+
+
+    <section class="venue-details-section">
+
+      <div
+        class="venue-grid"
+        id="venue-info-container"
+      ></div>
+
+    </section>
+
+  </div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+       ========================================================= -->
+
+  <script>
+
+    const GOOGLE_SHEET_API_URL =
+      "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
+
+
+    let db = {
+      films: [],
+      seances: []
+    };
+
+
+    let previousView = 'view-home';
+
+    let currentLieuId = null;
+
+    let isSearchActive = false;
+
+
+    let heroCarouselTimer = null;
+
+    let heroCarouselIndex = 0;
+
+    let heroFeaturedFilms = [];
+
+
+    /* =========================================================
+       GOOGLE MAPS
+       ========================================================= */
+
+    /*
+      IMPORTANT :
+
+      La colonne "google_maps_url" de l'onglet Seances
+      contient directement l'URL Google Maps souhaitée.
+
+      On ne transforme PLUS cette URL en coordonnées GPS.
+
+      Si l'URL est valide, elle est renvoyée telle quelle.
+
+      Si elle est absente ou invalide, on crée un lien
+      Google Maps de secours à partir du nom du lieu.
+    */
+
+    function sanitizeGoogleMapsUrl(rawUrl, queryFallback) {
+
+      if (
+        rawUrl &&
+        typeof rawUrl === "string"
+      ) {
+
+        const url =
+          rawUrl.trim();
+
+
+        /*
+          On accepte les principales formes d'URL
+          Google Maps.
+        */
+
+        if (
+          url.includes("google.com/maps") ||
+          url.includes("maps.google.com")
+        ) {
+
+          return url;
+
+        }
+
+      }
+
+
+      /*
+        URL de secours si google_maps_url est vide.
+      */
+
+      return (
+        "https://www.google.com/maps/search/?api=1&query=" +
+        encodeURIComponent(
+          queryFallback || ""
+        )
+      );
+
+    }
+
+
+    /* =========================================================
+       FORMATAGE
+       ========================================================= */
+
+    function formatTime(val) {
+
+      if (!val) return "";
+
+      let str =
+        String(val).trim();
+
+
+      if (str.includes("T")) {
+
+        const d =
+          new Date(str);
+
+
+        if (!isNaN(d.getTime())) {
+
+          let hours =
+            d.getUTCHours();
+
+          let minutes =
+            d.getUTCMinutes() + 10;
+
+
+          if (minutes >= 60) {
+
+            minutes -= 60;
+
+            hours += 1;
+
+          }
+
+
+          if (hours >= 24) {
+
+            hours = 0;
+
+          }
+
+
+          return (
+            hours +
+            "h" +
+            (
+              minutes < 10
+                ? "0"
+                : ""
+            ) +
+            minutes
+          );
+
+        }
+
+      }
+
+
+      const timeMatch =
+        str.match(
+          /^(\d{1,2})[:h](\d{2})(?::\d{2})?$/
+        );
+
+
+      if (timeMatch) {
+
+        let hours =
+          parseInt(
+            timeMatch[1],
+            10
+          );
+
+        let minutes =
+          parseInt(
+            timeMatch[2],
+            10
+          );
+
+
+        minutes += 10;
+
+
+        if (minutes >= 60) {
+
+          minutes -= 60;
+
+          hours += 1;
+
+        }
+
+
+        if (hours >= 24) {
+
+          hours = 0;
+
+        }
+
+
+        return (
+          hours +
+          "h" +
+          (
+            minutes < 10
+              ? "0"
+              : ""
+          ) +
+          minutes
+        );
+
+      }
+
+
+      return str;
+
+    }
+
+
+    function formatDate(val) {
+
+      if (!val) return "";
+
+      let str = String(val).trim();
+
+
+      if (
+        str.includes("T") &&
+        str.length > 20
+      ) {
+
+        const d = new Date(str);
+
+
+        if (!isNaN(d.getTime())) {
+
+          const jours = [
+            'dim.',
+            'lun.',
+            'mar.',
+            'mer.',
+            'jeu.',
+            'ven.',
+            'sam.'
+          ];
+
+
+          const mois = [
+            'janv.',
+            'févr.',
+            'mars',
+            'avril',
+            'mai',
+            'juin',
+            'juil.',
+            'août',
+            'sept.',
+            'oct.',
+            'nov.',
+            'déc.'
+          ];
+
+
+          return `
+            ${jours[d.getDay()]}
+            ${d.getDate()}
+            ${mois[d.getMonth()]}
+          `;
+
+        }
+
+      }
+
+
+      return str;
+
+    }
+
+
+    function formatYear(val) {
+
+      if (!val) return "";
+
+      let str = String(val).trim();
+
+
+      if (str.includes("T")) {
+
+        const d = new Date(str);
+
+
+        if (!isNaN(d.getTime())) {
+
+          return d.getFullYear();
+
+        }
+
+      }
+
+
+      const match =
+        str.match(/\b(19|20)\d{2}\b/);
+
+
+      return match
+        ? match[0]
+        : str;
+
+    }
+
+
+    function getCommune(seance) {
+
+      return (
+        seance.lieu_id ||
+        seance.commune ||
+        seance.lieu_nom
+      );
+
+    }
+
+
+    /* =========================================================
+       CHARGEMENT DES DONNEES
+       ========================================================= */
+
+    async function loadDataFromSheet() {
+
+      try {
+
+        const cachedData =
+          sessionStorage.getItem(
+            'balad_data_cache'
+          );
+
+
+        if (cachedData) {
+
+          db = JSON.parse(cachedData);
+
+          initAppUI();
+
+        }
+
+
+        const response =
+          await fetch(GOOGLE_SHEET_API_URL);
+
+
+        const freshData =
+          await response.json();
+
+
+        db = freshData;
+
+
+        db.films =
+          (db.films || [])
+          .filter(
+            f =>
+              f &&
+              f.titre &&
+              String(f.titre).trim() !== ""
+          );
+
+
+        db.films.forEach(f => {
+
+          f.id_film =
+            String(f.id_film).trim();
+
+
+          f.duree =
+            formatTime(f.duree) ||
+            f.duree;
+
+
+          f.annee =
+            formatYear(f.annee);
+
+
+          f.realisateur =
+            f.real ||
+            f.realisateur ||
+            '';
+
+
+          f.bande_annonce =
+            f.trailer_url ||
+            f.bande_annonce ||
+            '';
+
+
+          f.synopsis_long =
+            f.synopsis_long ||
+            f.synopsis_complet ||
+            '';
+
+        });
+
+
+        db.seances =
+          (db.seances || [])
+          .filter(
+            s =>
+              s &&
+              s.id_film
+          );
+
+
+        db.seances.forEach(
+          (s, idx) => {
+
+            s.id_film =
+              String(s.id_film).trim();
+
+
+            s.horaire_texte =
+              formatTime(
+                s.horaire_texte
+              ) ||
+              s.horaire_texte;
+
+
+            s.date_texte =
+              formatDate(
+                s.date_texte
+              ) ||
+              s.date_texte;
+
+
+            /*
+              On conserve volontairement
+              s.google_maps_url intact.
+            */
+
+
+            if (!s.id_seance) {
+
+              s.id_seance =
+                'seance_' + idx;
+
+            }
+
+          }
+        );
+
+
+        sessionStorage.setItem(
+          'balad_data_cache',
+          JSON.stringify(db)
+        );
+
+
+        if (!cachedData) {
+
+          initAppUI();
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Erreur de chargement Google Sheets:",
+          error
+        );
+
+
+        if (!db.films.length) {
+
+          document.getElementById(
+            'home-grid'
+          ).innerHTML =
+            '<p style="color:red;">Erreur lors du chargement des films.</p>';
+
+        }
+
+      }
+
+      finally {
+
+        const loader =
+          document.getElementById(
+            'app-loader'
+          );
+
+
+        if (loader) {
+
+          loader.classList.add(
+            'hidden'
+          );
+
+        }
+
+      }
+
+    }
+
+
+    function initAppUI() {
+
+      populateLocationDropdown();
+
+      setupHeroCarousel();
+
+      renderGridMovies(
+        db.films,
+        'home-grid'
+      );
+
+    }
+
+
+    /* =========================================================
+       LOCATIONS
+       ========================================================= */
+
+    function populateLocationDropdown() {
+
+      const select =
+        document.getElementById(
+          'locationSelect'
+        );
+
+
+      select.innerHTML =
+        '<option value="all">Cinémas</option>';
+
+
+      const communesMap =
+        new Map();
+
+
+      db.seances.forEach(s => {
+
+        const lieuId =
+          getCommune(s);
+
+
+        if (
+          lieuId &&
+          !communesMap.has(lieuId)
+        ) {
+
+          communesMap.set(
+            lieuId,
+            {
+              id: lieuId,
+              nom: lieuId
+            }
+          );
+
+        }
+
+      });
+
+
+      communesMap.forEach(item => {
+
+        select.innerHTML += `
+          <option value="${item.id}">
+            ${item.nom}
+          </option>
+        `;
+
+      });
+
+    }
+
+
+    /* =========================================================
+       HERO CAROUSEL
+       ========================================================= */
+
+    function setupHeroCarousel() {
+
+      if (
+        !db.films ||
+        !db.films.length
+      ) return;
+
+
+      heroFeaturedFilms =
+        [...db.films]
+        .sort(
+          () => 0.5 - Math.random()
+        )
+        .slice(0, 5);
+
+
+      heroCarouselIndex = 0;
+
+
+      renderHeroCarouselContainer();
+
+      startHeroAutoPlay();
+
+    }
+
+
+    function renderHeroCarouselContainer() {
+
+      const container =
+        document.getElementById(
+          'home-hero-container'
+        );
+
+
+      if (
+        !container ||
+        !heroFeaturedFilms.length
+      ) return;
+
+
+      const isMobile =
+        window.innerWidth <= 768;
+
+
+      let slidesHtml =
+        heroFeaturedFilms
+        .map(
+          (movie, index) => {
+
+            const movieSeances =
+              db.seances.filter(
+                s =>
+                  String(s.id_film) ===
+                  String(movie.id_film)
+              );
+
+
+            const maxSlots =
+              isMobile
+                ? 1
+                : 3;
+
+
+            const slotsToShow =
+              movieSeances.slice(
+                0,
+                maxSlots
+              );
+
+
+            let slotsHtml =
+              slotsToShow
+              .map(
+                s => `
+                  <a
+                    onclick="
+                      event.stopPropagation();
+                      openMovieDetails(
+                        '${movie.id_film}',
+                        '${s.id_seance}'
+                      )
+                    "
+                    class="btn-glass-slot"
+                  >
+                    ${getCommune(s)}
+                    -
+                    ${s.date_texte}
+                    à
+                    ${s.horaire_texte}
+                  </a>
+                `
+              )
+              .join('');
+
+
+            if (
+              movieSeances.length >
+              maxSlots
+            ) {
+
+              const rest =
+                movieSeances.length -
+                maxSlots;
+
+
+              slotsHtml += `
+                <a
+                  onclick="
+                    event.stopPropagation();
+                    openMovieDetails(
+                      '${movie.id_film}'
+                    )
+                  "
+                  class="btn-glass-slot"
+                  style="border-style:dashed;"
+                >
+                  + ${rest} séance(s)
+                </a>
+              `;
+
+            }
+
+
+            return `
+              <div
+                class="
+                  hero-slide
+                  ${index === 0 ? 'active' : ''}
+                "
+                id="hero-slide-${index}"
+                onclick="
+                  openMovieDetails(
+                    '${movie.id_film}'
+                  )
+                "
+              >
+
+                <div
+                  class="hero-bg-layer"
+                  style="
+                    background-image:
+                      url('${movie.fond_url || movie.affiche_url}');
+                  "
+                ></div>
+
+
+                <div class="hero-overlay-gradient"></div>
+
+
+                <div class="hero-content">
+
+                  <h1 class="hero-title">
+                    ${movie.titre}
+                  </h1>
+
+
+                  <div class="hero-meta">
+
+                    <span>
+                      ${movie.annee || ''}
+                    </span>
+
+                    •
+
+                    <span>
+                      ${movie.duree}
+                    </span>
+
+
+                    <span class="badge-2k">
+                      2K
+                    </span>
+
+
+                    ${
+                      movie.age
+                        ? `
+                          <span class="age-badge">
+                            ${movie.age}
+                          </span>
+                        `
+                        : ''
+                    }
+
+                  </div>
+
+
+                  <p class="hero-synopsis">
+                    ${movie.synopsis || ''}
+                  </p>
+
+
+                  <div class="hero-slots-container">
+                    ${slotsHtml}
+                  </div>
+
+                </div>
+
+              </div>
+            `;
+
+          }
+        )
+        .join('');
+
+
+      let dotsHtml =
+        heroFeaturedFilms
+        .map(
+          (_, i) => `
+            <div
+              class="
+                dot-item
+                ${i === 0 ? 'active' : ''}
+              "
+              id="hero-dot-${i}"
+              onclick="
+                event.stopPropagation();
+                setHeroSlide(${i})
+              "
+            >
+
+              <div class="dot-item-fill"></div>
+
+            </div>
+          `
+        )
+        .join('');
+
+
+      container.innerHTML = `
+
+        <div class="hero-slider-wrapper">
+
+          ${slidesHtml}
+
+          <div class="hero-dots-indicator">
+            ${dotsHtml}
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    function startHeroAutoPlay() {
+
+      clearInterval(
+        heroCarouselTimer
+      );
+
+
+      heroCarouselTimer =
+        setInterval(
+          () => {
+
+            const nextIndex =
+              (
+                heroCarouselIndex + 1
+              ) %
+              heroFeaturedFilms.length;
+
+
+            setHeroSlide(
+              nextIndex
+            );
+
+          },
+          7000
+        );
+
+    }
+
+
+    function setHeroSlide(index) {
+
+      const slides =
+        document.querySelectorAll(
+          '.hero-slide'
+        );
+
+
+      const dots =
+        document.querySelectorAll(
+          '.dot-item'
+        );
+
+
+      slides.forEach(
+        (s, i) => {
+
+          if (i === index) {
+
+            s.classList.add(
+              'active'
+            );
+
+          }
+          else {
+
+            s.classList.remove(
+              'active'
+            );
+
+          }
+
+        }
+      );
+
+
+      dots.forEach(
+        (d, i) => {
+
+          if (i === index) {
+
+            d.classList.remove(
+              'active'
+            );
+
+
+            void d.offsetWidth;
+
+
+            d.classList.add(
+              'active'
+            );
+
+          }
+          else {
+
+            d.classList.remove(
+              'active'
+            );
+
+          }
+
+        }
+      );
+
+
+      heroCarouselIndex =
+        index;
+
+    }
+
+
+    /* =========================================================
+       GRILLE FILMS
+       ========================================================= */
+
+    function renderGridMovies(
+      filmList,
+      containerId
+    ) {
+
+      const container =
+        document.getElementById(
+          containerId
+        );
+
+
+      if (!container) return;
+
+
+      container.innerHTML = '';
+
+
+      if (!filmList.length) {
+
+        container.innerHTML =
+          '<p style="color:var(--text-muted); grid-column:1/-1;">Aucun film trouvé.</p>';
+
+        return;
+
+      }
+
+
+      filmList.forEach(
+        (movie, mIndex) => {
+
+          const movieSeances =
+            db.seances.filter(
+              s =>
+                String(s.id_film) ===
+                String(movie.id_film)
+            );
+
+
+          let slotsListHtml = '';
+
+          const limit = 2;
+
+
+          movieSeances.forEach(
+            (s, idx) => {
+
+              const isHidden =
+                idx >= limit;
+
+
+              slotsListHtml += `
+
+                <div
+                  class="
+                    slot-pill
+                    ${
+                      isHidden
+                        ? 'extra-slot-' +
+                          containerId +
+                          '-' +
+                          mIndex
+                        : ''
+                    }
+                  "
+                  style="
+                    ${
+                      isHidden
+                        ? 'display:none;'
+                        : ''
+                    }
+                  "
+                  onclick="
+                    event.stopPropagation();
+                    openMovieDetails(
+                      '${movie.id_film}',
+                      '${s.id_seance}'
+                    )
+                  "
+                >
+
+                  <span class="town">
+                    ${getCommune(s)}
+                  </span>
+
+
+                  <span>
+                    ${s.date_texte}
+                    à
+                    ${s.horaire_texte}
+                  </span>
+
+                </div>
+
+              `;
+
+            }
+          );
+
+
+          let moreBtnHtml = '';
+
+
+          if (
+            movieSeances.length >
+            limit
+          ) {
+
+            const remaining =
+              movieSeances.length -
+              limit;
+
+
+            moreBtnHtml = `
+
+              <button
+                class="btn-more-slots"
+                id="
+                  btn-more-${containerId}-${mIndex}
+                "
+                onclick="
+                  event.stopPropagation();
+                  toggleExtraSlots(
+                    '${containerId}',
+                    ${mIndex},
+                    ${remaining}
+                  )
+                "
+              >
+                + ${remaining}
+                autre(s) séance(s)
+              </button>
+
+            `;
+
+          }
+
+
+          const card =
+            document.createElement(
+              'div'
+            );
+
+
+          card.className =
+            'card-movie';
+
+
+          card.onclick =
+            () =>
+              openMovieDetails(
+                movie.id_film
+              );
+
+
+          card.innerHTML = `
+
+            <div class="card-poster">
+
+              <img
+                src="${movie.affiche_url}"
+                alt="${movie.titre}"
+                loading="lazy"
+              >
+
+            </div>
+
+
+            <div class="card-content">
+
+              <div class="card-title">
+                ${movie.titre}
+              </div>
+
+
+              <div class="card-meta">
+
+                <span>
+                  ${movie.duree}
+                </span>
+
+                •
+
+                <span>
+                  ${movie.genre}
+                </span>
+
+
+                <span class="badge-2k">
+                  2K
+                </span>
+
+
+                ${
+                  movie.age
+                    ? `
+                      <span class="age-badge">
+                        ${movie.age}
+                      </span>
+                    `
+                    : ''
+                }
+
+              </div>
+
+
+              <div class="card-slots-area">
+
+                <div class="slots-label">
+                  Prochaines séances :
+                </div>
+
+
+                <div class="slots-list">
+                  ${slotsListHtml}
+                </div>
+
+
+                ${moreBtnHtml}
+
+              </div>
+
+            </div>
+
+          `;
+
+
+          container.appendChild(
+            card
+          );
+
+        }
+      );
+
+    }
+
+
+    function toggleExtraSlots(
+      prefix,
+      movieIndex,
+      count
+    ) {
+
+      const extraPills =
+        document.querySelectorAll(
+          `.extra-slot-${prefix}-${movieIndex}`
+        );
+
+
+      const btn =
+        document.getElementById(
+          `btn-more-${prefix}-${movieIndex}`
+        );
+
+
+      let isCollapsed = false;
+
+
+      extraPills.forEach(
+        el => {
+
+          if (
+            el.style.display ===
+            'none'
+          ) {
+
+            el.style.display =
+              'flex';
+
+          }
+          else {
+
+            el.style.display =
+              'none';
+
+            isCollapsed = true;
+
+          }
+
+        }
+      );
+
+
+      if (btn) {
+
+        btn.textContent =
+          isCollapsed
+            ? `+ ${count} autre(s) séance(s)`
+            : "Voir moins";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    function switchView(
+      targetViewId
+    ) {
+
+      const overlay =
+        document.getElementById(
+          'page-transition-overlay'
+        );
+
+
+      overlay.classList.add(
+        'active'
+      );
+
+
+      setTimeout(
+        () => {
+
+          document
+            .querySelectorAll(
+              '.view-page'
+            )
+            .forEach(
+              el =>
+                el.classList.remove(
+                  'active-view'
+                )
+            );
+
+
+          const target =
+            document.getElementById(
+              targetViewId
+            );
+
+
+          if (target) {
+
+            target.classList.add(
+              'active-view'
+            );
+
+
+            window.scrollTo(
+              0,
+              0
+            );
+
+          }
+
+
+          if (
+            targetViewId ===
+            'view-venue'
+          ) {
+
+            document.body.classList.add(
+              'view-venue-active'
+            );
+
+          }
+          else {
+
+            document.body.classList.remove(
+              'view-venue-active'
+            );
+
+          }
+
+
+          document
+            .getElementById(
+              'searchDropdown'
+            )
+            ?.classList.remove(
+              'open'
+            );
+
+
+          setTimeout(
+            () => {
+
+              overlay.classList.remove(
+                'active'
+              );
+
+            },
+            40
+          );
+
+        },
+        180
+      );
+
+    }
+
+
+    function goHome() {
+
+      currentLieuId = null;
+
+      isSearchActive = false;
+
+
+      document.getElementById(
+        'searchInput'
+      ).value = '';
+
+
+      document.getElementById(
+        'locationSelect'
+      ).value = 'all';
+
+
+      document.getElementById(
+        'catalog-title'
+      ).textContent =
+        "Toute la programmation réseau";
+
+
+      switchView(
+        'view-home'
+      );
+
+
+      renderGridMovies(
+        db.films,
+        'home-grid'
+      );
+
+    }
+
+
+    function handleLocationChange(
+      val
+    ) {
+
+      if (
+        val === 'all'
+      ) {
+
+        goHome();
+
+      }
+      else {
+
+        openVenueDetails(
+          val
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       RECHERCHE
+       ========================================================= */
+
+    function handleSearchInput(
+      val
+    ) {
+
+      const q =
+        val
+        .toLowerCase()
+        .trim();
+
+
+      const dropdown =
+        document.getElementById(
+          'searchDropdown'
+        );
+
+
+      if (!q) {
+
+        dropdown.classList.remove(
+          'open'
+        );
+
+        dropdown.innerHTML = '';
+
+        return;
+
+      }
+
+
+      const matches =
+        db.films.filter(
+          f =>
+            f.titre &&
+            f.titre
+              .toLowerCase()
+              .includes(q)
+        );
+
+
+      if (matches.length) {
+
+        dropdown.innerHTML =
+          matches
+          .map(
+            f => `
+
+              <a
+                class="search-dropdown-item"
+                onclick="
+                  event.stopPropagation();
+                  openMovieDetails(
+                    '${f.id_film}'
+                  );
+                "
+              >
+                ${f.titre}
+              </a>
+
+            `
+          )
+          .join('');
+
+
+        dropdown.classList.add(
+          'open'
+        );
+
+      }
+      else {
+
+        dropdown.classList.remove(
+          'open'
+        );
+
+      }
+
+    }
+
+
+    function triggerSearchExecution() {
+
+      const input =
+        document.getElementById(
+          'searchInput'
+        );
+
+
+      const q =
+        input.value
+        .toLowerCase()
+        .trim();
+
+
+      document
+        .getElementById(
+          'searchDropdown'
+        )
+        .classList.remove(
+          'open'
+        );
+
+
+      if (!q) return;
+
+
+      isSearchActive = true;
+
+
+      const filtered =
+        db.films.filter(
+          f =>
+            (
+              f.titre &&
+              f.titre
+                .toLowerCase()
+                .includes(q)
+            ) ||
+
+            (
+              f.genre &&
+              f.genre
+                .toLowerCase()
+                .includes(q)
+            ) ||
+
+            (
+              f.casting &&
+              f.casting
+                .toLowerCase()
+                .includes(q)
+            )
+        );
+
+
+      if (
+        document
+          .querySelector(
+            '.view-page.active-view'
+          )
+          ?.id !==
+        'view-home'
+      ) {
+
+        switchView(
+          'view-home'
+        );
+
+      }
+
+
+      renderGridMovies(
+        filtered,
+        'home-grid'
+      );
+
+
+      document.getElementById(
+        'catalog-title'
+      ).textContent =
+        `Résultats de recherche pour "${q}"`;
+
+
+      document.getElementById(
+        'home-grid'
+      ).scrollIntoView({
+        behavior: 'smooth'
+      });
+
+
+      input.value = '';
+
+    }
+
+
+    document.addEventListener(
+      'click',
+      e => {
+
+        const container =
+          document.getElementById(
+            'searchContainer'
+          );
+
+
+        if (
+          container &&
+          !container.contains(
+            e.target
+          )
+        ) {
+
+          document
+            .getElementById(
+              'searchDropdown'
+            )
+            .classList.remove(
+              'open'
+            );
+
+        }
+
+      }
+    );
+
+
+    function toggleMenu() {
+
+      document
+        .getElementById(
+          'mobileMenu'
+        )
+        .classList.toggle(
+          'open'
+        );
+
+    }
+
+
+    /* =========================================================
+       OUVERTURE FILM
+       ========================================================= */
+
+    function openMovieDetails(
+      filmId,
+      selectedSeanceId = null
+    ) {
+
+      const cleanId =
+        String(filmId).trim();
+
+
+      const movie =
+        db.films.find(
+          f =>
+            String(f.id_film) ===
+            cleanId
+        );
+
+
+      if (!movie) return;
+
+
+      document.getElementById(
+        'searchInput'
+      ).value = '';
+
+
+      previousView =
+        document
+          .querySelector(
+            '.view-page.active-view'
+          )
+          ?.id ||
+        'view-home';
+
+
+      switchView(
+        'view-movie'
+      );
+
+
+      const heroSec =
+        document.getElementById(
+          'movie-detail-hero'
+        );
+
+
+      heroSec.style.backgroundImage =
+        `url('${movie.fond_url || movie.affiche_url}')`;
+
+
+      const fullSynopsisText =
+        movie.synopsis_long ||
+        movie.synopsis ||
+        '';
+
+
+      const isMobile =
+        window.innerWidth <= 768;
+
+
+      const backAction =
+        isSearchActive
+          ? 'goHome()'
+          : `switchView('${previousView}')`;
+
+
+      heroSec.innerHTML = `
+
+        <div
+          class="hero-overlay-gradient"
+          style="
+            display:none;
+          "
+        ></div>
+
+
+        <div
+          style="
+            position:relative;
+            z-index:3;
+            max-width:720px;
+          "
+        >
+
+          <div
+            style="
+              margin-bottom:18px;
+            "
+          >
+
+            <button
+              class="btn-back-home"
+              onclick="${backAction}"
+            >
+              ← Retour
+            </button>
+
+          </div>
+
+
+          <h1 class="movie-title">
+            ${movie.titre}
+          </h1>
+
+
+          <div class="movie-quick-meta">
+
+            <span>
+              ${movie.annee || ''}
+            </span>
+
+            •
+
+            <span>
+              ${movie.duree}
+            </span>
+
+            •
+
+            <span>
+              ${movie.genre}
+            </span>
+
+
+            <span class="badge-2k">
+              2K
+            </span>
+
+
+            ${
+              movie.age
+                ? `
+                  <span class="age-badge">
+                    ${movie.age}
+                  </span>
+                `
+                : ''
+            }
+
+          </div>
+
+
+          <div class="synopsis-wrapper">
+
+            <span
+              class="
+                synopsis-text
+                ${
+                  isMobile
+                    ? 'collapsed'
+                    : ''
+                }
+              "
+              id="synopsisText"
+            >
+              ${
+                isMobile
+                  ? (
+                      movie.synopsis ||
+                      fullSynopsisText
+                    )
+                  : fullSynopsisText
+              }
+            </span>
+
+
+            <button
+              class="btn-toggle-synopsis"
+              id="synopsisToggleBtn"
+              onclick="
+                toggleSynopsis(
+                  '${movie.id_film}'
+                )
+              "
+            >
+              Lire la suite
+            </button>
+
+          </div>
+
+
+          <div class="movie-credits-text">
+
+            ${
+              movie.realisateur
+                ? `
+                  <span class="credit-block">
+                    <strong>De</strong>
+                    ${movie.realisateur}
+                  </span>
+                `
+                : ''
+            }
+
+
+            ${
+              movie.casting
+                ? `
+                  <span class="credit-block">
+                    <strong>Avec</strong>
+                    ${movie.casting}
+                  </span>
+                `
+                : ''
+            }
+
+          </div>
+
+        </div>
+
+
+        ${
+          movie.bande_annonce
+            ? `
+
+              <div
+                class="trailer-btn-wrapper"
+              >
+
+                <a
+                  href="${movie.bande_annonce}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-play-trailer"
+                  title="Voir la bande-annonce"
+                >
+
+                  <svg viewBox="0 0 24 24">
+
+                    <path d="
+                      M8 5v14l11-7z
+                    "/>
+
+                  </svg>
+
+
+                  <span class="mobile-trailer-text">
+                    Bande-annonce
+                  </span>
+
+                </a>
+
+              </div>
+
+            `
+            : ''
+        }
+
+      `;
+
+
+      const movieSeances =
+        db.seances.filter(
+          s =>
+            String(s.id_film) ===
+            cleanId
+        );
+
+
+      const strip =
+        document.getElementById(
+          'movie-showtimes-strip'
+        );
+
+
+      strip.innerHTML = '';
+
+
+      if (!movieSeances.length) {
+
+        strip.innerHTML =
+          '<p style="color:var(--text-muted);">Aucune séance programmée pour ce film.</p>';
+
+
+        document.getElementById(
+          'details-panel'
+        ).innerHTML = '';
+
+
+        return;
+
+      }
+
+
+      movieSeances.forEach(
+        (s, idx) => {
+
+          const isActive =
+            selectedSeanceId
+              ? (
+                  String(s.id_seance) ===
+                  String(selectedSeanceId)
+                )
+              : (
+                  idx === 0
+                );
+
+
+          const card =
+            document.createElement(
+              'div'
+            );
+
+
+          card.className =
+            `
+              showtime-horizontal-card
+              ${
+                isActive
+                  ? 'active'
+                  : ''
+              }
+            `;
+
+
+          card.onclick =
+            e =>
+              selectShowtime(
+                e,
+                s,
+                movie
+              );
+
+
+          card.innerHTML = `
+
+            <div class="town-tag">
+              ${getCommune(s)}
+            </div>
+
+
+            <div class="card-date">
+              ${s.date_texte}
+            </div>
+
+
+            <div class="card-venue">
+              ${s.horaire_texte}
+            </div>
+
+          `;
+
+
+          strip.appendChild(
+            card
+          );
+
+
+          if (isActive) {
+
+            renderShowtimePanel(
+              s,
+              movie
+            );
+
+          }
+
+        }
+      );
+
+
+      if (isMobile) {
+
+        setTimeout(
+          () => {
+
+            document
+              .querySelector(
+                '.showtimes-section'
+              )
+              ?.scrollIntoView({
+                behavior: 'smooth'
+              });
+
+          },
+          300
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       SYNOPSIS
+       ========================================================= */
+
+    function toggleSynopsis(
+      filmId
+    ) {
+
+      const movie =
+        db.films.find(
+          f =>
+            String(f.id_film) ===
+            String(filmId)
+        );
+
+
+      if (!movie) return;
+
+
+      const synEl =
+        document.getElementById(
+          'synopsisText'
+        );
+
+
+      const btnEl =
+        document.getElementById(
+          'synopsisToggleBtn'
+        );
+
+
+      if (
+        synEl.classList.contains(
+          'collapsed'
+        )
+      ) {
+
+        synEl.classList.remove(
+          'collapsed'
+        );
+
+
+        synEl.textContent =
+          movie.synopsis_long ||
+          movie.synopsis ||
+          '';
+
+
+        btnEl.textContent =
+          'Réduire';
+
+      }
+
+      else {
+
+        synEl.classList.add(
+          'collapsed'
+        );
+
+
+        synEl.textContent =
+          movie.synopsis ||
+          '';
+
+
+        btnEl.textContent =
+          'Lire la suite';
+
+      }
+
+    }
+
+
+    /* =========================================================
+       SEANCE
+       ========================================================= */
+
+    function selectShowtime(
+      evt,
+      seance,
+      movie
+    ) {
+
+      document
+        .querySelectorAll(
+          '.showtime-horizontal-card'
+        )
+        .forEach(
+          c =>
+            c.classList.remove(
+              'active'
+            )
+        );
+
+
+      if (
+        evt &&
+        evt.currentTarget
+      ) {
+
+        evt.currentTarget.classList.add(
+          'active'
+        );
+
+      }
+
+
+      const panel =
+        document.getElementById(
+          'details-panel'
+        );
+
+
+      panel.classList.add(
+        'changing'
+      );
+
+
+      setTimeout(
+        () => {
+
+          renderShowtimePanel(
+            seance,
+            movie
+          );
+
+
+          panel.classList.remove(
+            'changing'
+          );
+
+        },
+        150
+      );
+
+    }
+
+
+    function renderShowtimePanel(
+      seance,
+      movie
+    ) {
+
+      const lieuAffichage =
+        seance.lieu_nom ||
+        getCommune(seance);
+
+
+      /*
+        ICI :
+
+        On récupère directement la valeur
+        de la colonne google_maps_url
+        correspondant à cette séance.
+
+        Aucune conversion en coordonnées GPS.
+      */
+
+      const mapsUrl =
+        sanitizeGoogleMapsUrl(
+          seance.google_maps_url,
+          `${lieuAffichage} France`
+        );
+
+
+      const mapsBadge = `
+
+        <a
+          href="${mapsUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="badge-salle"
+        >
+          📍 ${lieuAffichage}
+        </a>
+
+      `;
+
+
+      let tarifText =
+        '5,00 €';
+
+
+      if (seance.tarif_plein) {
+
+        tarifText =
+          `Plein : ${seance.tarif_plein}`;
+
+
+        if (seance.tarif_reduit) {
+
+          tarifText +=
+            ` | Réduit : ${seance.tarif_reduit}`;
+
+        }
+
+      }
+
+      else if (seance.tarif) {
+
+        tarifText =
+          seance.tarif;
+
+      }
+
+
+      const panel =
+        document.getElementById(
+          'details-panel'
+        );
+
+
+      panel.innerHTML = `
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+
+            Séance à
+            <span>
+              ${getCommune(seance)}
+            </span>
+
+          </div>
+
+
+          <div class="item-value">
+
+            ${seance.date_texte}
+            à
+            ${seance.horaire_texte}
+
+          </div>
+
+        </div>
+
+
+        <div class="practical-grid">
+
+          <div class="practical-item">
+
+            <div class="item-label">
+              Lieu & Adresse
+            </div>
+
+
+            <div
+              class="item-value"
+              style="margin-top:4px;"
+            >
+              ${mapsBadge}
+            </div>
+
+          </div>
+
+
+          <div class="practical-item">
+
+            <div class="item-label">
+              Tarifs
+            </div>
+
+
+            <div class="item-value">
+              ${tarifText}
+            </div>
+
+          </div>
+
+
+          <div class="practical-item">
+
+            <div class="item-label">
+              Services
+            </div>
+
+
+            <div class="item-value">
+              ${
+                seance.info_services ||
+                'Projection numérique 2K'
+              }
+            </div>
+
+          </div>
+
+
+          <div class="practical-item">
+
+            <div class="item-label">
+              Paiements
+            </div>
+
+
+            <div class="item-value">
+              ${
+                seance.info_paiement ||
+                'CB, Espèces, Chèques'
+              }
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="actions-row">
+
+          <a
+            class="btn-agenda"
+            onclick="
+              openVenueDetails(
+                '${getCommune(seance)}'
+              )
+            "
+          >
+            Voir la salle & infos
+          </a>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       LIEU
+       ========================================================= */
+
+    function openVenueDetails(
+      lieuId
+    ) {
+
+      currentLieuId =
+        lieuId;
+
+
+      switchView(
+        'view-venue'
+      );
+
+
+      document.getElementById(
+        'venue-page-title'
+      ).textContent =
+        lieuId;
+
+
+      const venueSeances =
+        db.seances.filter(
+          s =>
+            getCommune(s) ===
+            lieuId
+        );
+
+
+      const firstSeance =
+        venueSeances[0];
+
+
+      const salleNom =
+        firstSeance?.salle_lieu ||
+        firstSeance?.lieu_nom ||
+        lieuId;
+
+
+      /*
+        IMPORTANT :
+
+        On utilise ici directement le
+        google_maps_url de la première séance
+        du lieu.
+
+        L'URL n'est pas convertie en GPS.
+      */
+
+      const mapsUrl =
+        sanitizeGoogleMapsUrl(
+          firstSeance?.google_maps_url,
+          `${salleNom} ${lieuId} France`
+        );
+
+
+      const bgUrl =
+        firstSeance?.salle_url ||
+        '';
+
+
+      const filmIds =
+        [
+          ...new Set(
+            venueSeances.map(
+              s =>
+                String(
+                  s.id_film
+                )
+            )
+          )
+        ];
+
+
+      const venueFilms =
+        db.films.filter(
+          f =>
+            filmIds.includes(
+              String(
+                f.id_film
+              )
+            )
+        );
+
+
+      const mapsBadge = `
+
+        <a
+          href="${mapsUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="badge-salle"
+        >
+          📍 ${salleNom}
+        </a>
+
+      `;
+
+
+      const heroContainer =
+        document.getElementById(
+          'venue-hero-container'
+        );
+
+
+      heroContainer.innerHTML = `
+
+        <div
+          class="hero-slider-wrapper"
+          style="
+            background-image:url('${bgUrl}');
+            background-size:cover;
+            background-position:center top !important;
+            background-color:var(--bg-card);
+          "
+        >
+
+          <div class="hero-overlay-gradient"></div>
+
+
+          <div class="hero-content">
+
+            <div
+              style="
+                margin-bottom:14px;
+              "
+            >
+
+              <button
+                class="btn-back-home"
+                onclick="goHome()"
+              >
+                ← Retour à l'accueil
+              </button>
+
+            </div>
+
+
+            ${mapsBadge}
+
+
+            <h1 class="hero-title">
+              ${lieuId}
+            </h1>
+
+
+            <p class="hero-subtitle">
+              Retrouvez la programmation
+              Familles Rurales à
+              ${lieuId}.
+            </p>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      renderGridMovies(
+        venueFilms,
+        'venue-grid'
+      );
+
+
+      const infoContainer =
+        document.getElementById(
+          'venue-info-container'
+        );
+
+
+      infoContainer.innerHTML = `
+
+        <div class="venue-info-box">
+
+          <h3>
+            Informations pratiques —
+            ${lieuId}
+          </h3>
+
+
+          <div class="info-item">
+
+            <strong>
+              Salle :
+            </strong>
+
+            ${salleNom}
+
+          </div>
+
+
+          <div class="info-item">
+
+            <strong>
+              Réseau :
+            </strong>
+
+            Balad'Images
+            (Familles Rurales)
+
+          </div>
+
+
+          <div class="info-item">
+
+            <strong>
+              Services :
+            </strong>
+
+            ${
+              firstSeance?.info_services ||
+              'Écran géant, Son Digital'
+            }
+
+          </div>
+
+
+          <div class="info-item">
+
+            <strong>
+              Paiement :
+            </strong>
+
+            ${
+              firstSeance?.info_paiement ||
+              'CB, Espèces'
+            }
+
+          </div>
+
+
+          <div class="badge-pmr">
+            ♿ Accessibilité PMR garantie
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       RESIZE
+       ========================================================= */
+
+    window.addEventListener(
+      'resize',
+      () => {
+
+        if (
+          document
+            .getElementById(
+              'view-home'
+            )
+            ?.classList.contains(
+              'active-view'
+            )
+        ) {
+
+          renderHeroCarouselContainer();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       INITIALISATION
+       ========================================================= */
+
+    window.addEventListener(
+      'DOMContentLoaded',
+      loadDataFromSheet
+    );
+
+  </script>
+
+</body>
+</html>
