@@ -1,4919 +1,1846 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-  <title>Balad'Images - Le cinéma Familles Rurales</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <style>
-
-    :root {
-      --bg-dark: #0f0f12;
-      --bg-card: #18181c;
-      --bg-surface: #222228;
-      --brand-orange: #E88C1E;
-      --brand-orange-hover: #d17a12;
-      --text-main: #ffffff;
-      --text-muted: #a0a0ab;
-      --border-subtle: rgba(255, 255, 255, 0.12);
-
-      --radius-sm: 8px;
-      --radius-md: 14px;
-    }
-
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      line-height: 1.4;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-
-    /* =========================================================
-       LOADER
-       ========================================================= */
-
-    #app-loader {
-      position: fixed;
-      inset: 0;
-      background-color: var(--bg-dark);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-
-      transition:
-        opacity 0.2s ease,
-        visibility 0.2s ease;
-    }
-
-    #app-loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .spinner {
-      width: 44px;
-      height: 44px;
-
-      border: 3.5px solid rgba(255, 255, 255, 0.1);
-      border-top-color: var(--brand-orange);
-
-      border-radius: 50%;
-
-      animation: spin 0.8s linear infinite;
-
-      margin-bottom: 16px;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-
-    /* =========================================================
-       TRANSITION
-       ========================================================= */
-
-    #page-transition-overlay {
-      position: fixed;
-      inset: 0;
-
-      background-color: #000000;
-
-      z-index: 9998;
-
-      opacity: 0;
-      pointer-events: none;
-
-      transition: opacity 0.18s ease-in-out;
-    }
-
-    #page-transition-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-
-    /* =========================================================
-       HEADER
-       ========================================================= */
-
-    header {
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.20) 0%,
-          rgba(255, 255, 255, 0.05) 100%
-        );
-
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-
-      position: fixed;
-
-      top: 0;
-      left: 0;
-      right: 0;
-
-      z-index: 1000;
-
-      padding: 10px 4%;
-
-      display: flex;
-
-      justify-content: space-between;
-      align-items: center;
-
-      gap: 10px;
-    }
-
-
-    .header-left {
-      display: flex;
-      align-items: center;
-
-      gap: 10px;
-
-      flex-shrink: 0;
-    }
-
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-
-      gap: 8px;
-
-      font-weight: 700;
-      font-size: 0.95rem;
-
-      letter-spacing: -0.01em;
-
-      color: white;
-
-      text-decoration: none;
-
-      cursor: pointer;
-
-      white-space: nowrap;
-
-      flex-shrink: 0;
-    }
-
-
-    /* =========================================================
-       LOGO
-       ========================================================= */
-
-    .brand-logo-img {
-      height: 38px;
-      width: auto;
-      max-width: 150px;
-
-      display: block;
-
-      object-fit: contain;
-
-      flex-shrink: 0;
-    }
-
-
-    .logo-text {
-      color: white;
-
-      font-family: inherit;
-    }
-
-
-    .header-center {
-      display: flex;
-
-      align-items: center;
-
-      gap: 10px;
-
-      flex: 1;
-
-      justify-content: flex-end;
-
-      max-width: 500px;
-    }
-
-
-    .header-search-container {
-      position: relative;
-
-      display: flex;
-
-      align-items: center;
-
-      width: 100%;
-
-      max-width: 260px;
-    }
-
-
-    .header-search-input {
-      width: 100%;
-
-      background: rgba(255, 255, 255, 0.14);
-
-      border: 1px solid rgba(255, 255, 255, 0.22);
-
-      border-radius: 22px;
-
-      padding: 8px 36px 8px 14px;
-
-      color: white;
-
-      font-size: 0.85rem;
-
-      font-family: inherit;
-
-      outline: none;
-
-      transition: all 0.2s ease;
-    }
-
-
-    .header-search-input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-
-    .header-search-input:focus {
-      background: rgba(0, 0, 0, 0.9);
-
-      border-color: var(--brand-orange);
-    }
-
-
-    .search-btn-trigger {
-      position: absolute;
-
-      right: 4px;
-
-      background: transparent;
-
-      border: none;
-
-      cursor: pointer;
-
-      padding: 6px;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      z-index: 3;
-    }
-
-
-    .search-btn-trigger svg {
-      width: 16px;
-      height: 16px;
-
-      fill: rgba(255, 255, 255, 0.8);
-    }
-
-
-    /* SEARCH DROPDOWN */
-
-    .search-dropdown {
-      position: absolute;
-
-      top: 100%;
-      left: 0;
-      right: 0;
-
-      background: #18181c;
-
-      border: 1px solid var(--border-subtle);
-
-      border-radius: var(--radius-sm);
-
-      margin-top: 6px;
-
-      max-height: 250px;
-
-      overflow-y: auto;
-
-      display: none;
-
-      z-index: 10000;
-
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    }
-
-
-    .search-dropdown.open {
-      display: block;
-    }
-
-
-    .search-dropdown-item {
-      padding: 10px 14px;
-
-      color: white;
-
-      font-size: 0.88rem;
-
-      cursor: pointer;
-
-      display: block;
-
-      text-decoration: none;
-
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-
-      transition: background 0.15s ease;
-    }
-
-
-    .search-dropdown-item:hover {
-      background: var(--bg-surface);
-
-      color: var(--brand-orange);
-    }
-
-
-    /* LOCATION */
-
-    .header-location-wrapper {
-      position: relative;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      flex-shrink: 0;
-    }
-
-
-    .header-location-select {
-      appearance: none;
-      -webkit-appearance: none;
-
-      background: rgba(255, 255, 255, 0.14);
-
-      border: 1px solid rgba(255, 255, 255, 0.22);
-
-      color: white;
-
-      padding: 8px 24px 8px 12px;
-
-      border-radius: 22px;
-
-      font-family: inherit;
-
-      font-size: 0.82rem;
-
-      font-weight: 600;
-
-      cursor: pointer;
-
-      outline: none;
-
-      transition: all 0.18s ease;
-
-      max-width: 130px;
-
-      text-overflow: ellipsis;
-
-      white-space: nowrap;
-
-      overflow: hidden;
-    }
-
-
-    .header-location-select:hover {
-      border-color: var(--brand-orange);
-    }
-
-
-    .header-location-select option {
-      background: var(--bg-card);
-      color: white;
-    }
-
-
-    .dropdown-icon {
-      position: absolute;
-
-      right: 8px;
-
-      pointer-events: none;
-
-      font-size: 0.6rem;
-
-      color: white;
-    }
-
-
-    /* NAV */
-
-    .header-nav {
-      display: flex;
-
-      align-items: center;
-
-      gap: 14px;
-
-      flex-shrink: 0;
-    }
-
-
-    .nav-link {
-      color: rgba(255, 255, 255, 0.85);
-
-      text-decoration: none;
-
-      font-size: 0.88rem;
-
-      font-weight: 600;
-
-      cursor: pointer;
-
-      padding: 4px 8px;
-    }
-
-
-    .nav-link:hover,
-    .nav-link.active {
-      color: white;
-    }
-
-
-    .menu-burger-btn {
-      display: none;
-
-      background: none;
-
-      border: none;
-
-      color: white;
-
-      font-size: 1.5rem;
-
-      cursor: pointer;
-
-      z-index: 1001;
-
-      padding: 4px;
-    }
-
-
-    /* MOBILE MENU */
-
-    .mobile-nav-overlay {
-      display: none;
-
-      position: fixed;
-
-      inset: 0;
-
-      background: rgba(15, 15, 18, 0.98);
-
-      backdrop-filter: blur(15px);
-
-      z-index: 999;
-
-      flex-direction: column;
-
-      justify-content: center;
-
-      align-items: center;
-
-      gap: 24px;
-    }
-
-
-    .mobile-nav-overlay.open {
-      display: flex;
-    }
-
-
-    .mobile-nav-overlay .nav-link {
-      font-size: 1.2rem;
-    }
-
-
-    body.view-venue-active .header-search-container {
-      display: none !important;
-    }
-
-
-    /* =========================================================
-       VUES
-       ========================================================= */
-
-    .view-page {
-      display: none;
-
-      min-height: 100vh;
-
-      opacity: 0;
-
-      transition: opacity 0.25s ease-in-out;
-    }
-
-
-    .view-page.active-view {
-      display: block;
-
-      opacity: 1;
-    }
-
-
-    /* =========================================================
-       HERO ACCUEIL
-       ========================================================= */
-
-    .hero-slider-wrapper {
-      position: relative;
-
-      width: 100%;
-
-      height: 70vh;
-
-      min-height: 500px;
-
-      display: flex;
-
-      align-items: flex-end;
-
-      overflow: hidden;
-    }
-
-
-    .hero-slide {
-      position: absolute;
-
-      inset: 0;
-
-      opacity: 0;
-
-      visibility: hidden;
-
-      transition:
-        opacity 0.8s ease-in-out,
-        visibility 0.8s ease-in-out;
-
-      display: flex;
-
-      align-items: flex-end;
-
-      cursor: pointer;
-    }
-
-
-    .hero-slide.active {
-      opacity: 1;
-
-      visibility: visible;
-    }
-
-
-    .hero-bg-layer {
-      position: absolute;
-
-      inset: -3%;
-
-      transform: scale(1.055);
-
-      background-size: cover;
-
-      background-position: center top !important;
-    }
-
-
-    .hero-overlay-gradient {
-      position: absolute;
-
-      inset: 0;
-
-      background:
-        linear-gradient(
-          180deg,
-
-          rgba(15, 15, 18, 0.25) 0%,
-
-          rgba(15, 15, 18, 0.10) 30%,
-
-          rgba(15, 15, 18, 0.18) 50%,
-
-          rgba(15, 15, 18, 0.45) 68%,
-
-          rgba(15, 15, 18, 0.78) 82%,
-
-          rgba(15, 15, 18, 0.96) 94%,
-
-          var(--bg-dark) 100%
-        );
-
-      pointer-events: none;
-
-      z-index: 2;
-    }
-
-
-    .hero-content {
-      position: relative;
-
-      max-width: 820px;
-
-      z-index: 3;
-
-      width: 100%;
-
-      padding:
-        185px
-        5%
-        55px
-        5%;
-    }
-
-
-    .badge-salle {
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      background: rgba(255, 255, 255, 0.16);
-
-      border: 1px solid rgba(255, 255, 255, 0.25);
-
-      padding: 5px 12px;
-
-      border-radius: 14px;
-
-      font-size: 0.8rem;
-
-      font-weight: 600;
-
-      margin-bottom: 10px;
-
-      color: #fff;
-
-      text-decoration: none;
-
-      transition: all 0.18s;
-    }
-
-
-    a.badge-salle:hover {
-      background: rgba(255, 255, 255, 0.28);
-
-      border-color: var(--brand-orange);
-    }
-
-
-    .hero-title,
-    .movie-title {
-      font-size: clamp(1.9rem, 4.2vw, 3.2rem);
-
-      font-weight: 900;
-
-      line-height: 1.1;
-
-      letter-spacing: -0.02em;
-
-      margin-bottom: 8px;
-    }
-
-
-    .hero-subtitle {
-      font-size: 0.95rem;
-
-      opacity: 0.85;
-
-      margin-top: -2px;
-
-      margin-bottom: 14px;
-    }
-
-
-    .hero-meta,
-    .movie-quick-meta {
-      font-size: 0.88rem;
-
-      color: #e0e0e0;
-
-      margin-bottom: 10px;
-
-      display: flex;
-
-      gap: 8px;
-
-      align-items: center;
-
-      flex-wrap: wrap;
-    }
-
-
-    .badge-2k,
-    .age-badge {
-      background: rgba(255, 255, 255, 0.18);
-
-      border: 1px solid rgba(255, 255, 255, 0.25);
-
-      color: #ffffff;
-
-      font-size: 0.72rem;
-
-      font-weight: 800;
-
-      padding: 2px 6px;
-
-      border-radius: 4px;
-    }
-
-
-    .hero-synopsis {
-      color: #e0e0e5;
-
-      font-size: 0.9rem;
-
-      line-height: 1.45;
-
-      margin-bottom: 14px;
-
-      display: -webkit-box;
-
-      -webkit-line-clamp: 2;
-
-      -webkit-box-orient: vertical;
-
-      overflow: hidden;
-    }
-
-
-    .hero-slots-container {
-      display: flex;
-
-      gap: 10px;
-
-      flex-wrap: wrap;
-
-      align-items: center;
-
-      margin-bottom: 16px;
-
-      z-index: 4;
-
-      position: relative;
-    }
-
-
-    .btn-glass-slot {
-      background: rgba(255, 255, 255, 0.14);
-
-      border: 1px solid rgba(255, 255, 255, 0.25);
-
-      backdrop-filter: blur(10px);
-
-      color: white !important;
-
-      padding: 9px 16px;
-
-      border-radius: var(--radius-sm);
-
-      font-size: 0.85rem;
-
-      font-weight: 600;
-
-      cursor: pointer;
-
-      text-decoration: none;
-
-      transition: all 0.18s ease;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-    }
-
-
-    .btn-glass-slot strong {
-      color: white !important;
-
-      font-weight: 600;
-    }
-
-
-    .btn-glass-slot:hover {
-      background: rgba(255, 255, 255, 0.28);
-
-      border-color: rgba(255, 255, 255, 0.45);
-    }
-
-
-    /* HERO DOTS */
-
-    .hero-dots-indicator {
-      position: absolute;
-
-      bottom: 15px;
-
-      left: 5%;
-
-      z-index: 10;
-
-      display: flex;
-
-      gap: 8px;
-
-      align-items: center;
-    }
-
-
-    .dot-item {
-      height: 4px;
-
-      width: 22px;
-
-      background: rgba(255, 255, 255, 0.3);
-
-      border-radius: 2px;
-
-      cursor: pointer;
-
-      transition: width 0.3s ease;
-
-      position: relative;
-
-      overflow: hidden;
-    }
-
-
-    .dot-item.active {
-      width: 42px;
-
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-
-    .dot-item-fill {
-      position: absolute;
-
-      top: 0;
-      left: 0;
-      bottom: 0;
-
-      width: 0%;
-
-      background: var(--brand-orange);
-
-      border-radius: 2px;
-    }
-
-
-    .dot-item.active .dot-item-fill {
-      animation: heroProgress 7s linear forwards;
-    }
-
-
-    @keyframes heroProgress {
-      from {
-        width: 0%;
-      }
-
-      to {
-        width: 100%;
-      }
-    }
-
-
-    /* =========================================================
-       PAGE DETAIL FILM
-       ========================================================= */
-
-    .movie-hero {
-
-      position: relative;
-
-      width: 100%;
-
-      min-height: 82vh;
-
-      display: flex;
-
-      align-items: flex-end;
-
-      justify-content: space-between;
-
-      overflow: hidden;
-
-      padding:
-        225px
-        5%
-        95px
-        5%;
-
-      background-size: cover;
-
-      background-position: center center !important;
-
-      transition: background-image 0.4s ease-in-out;
-    }
-
-
-    /* =========================================================
-       DEGRADE DETAIL FILM
-       ========================================================= */
-
-    .movie-hero::after {
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      z-index: 1;
-
-      pointer-events: none;
-
-      background:
-
-        radial-gradient(
-          ellipse 70% 65% at 12% 82%,
-          rgba(15, 15, 18, 0.94) 0%,
-          rgba(15, 15, 18, 0.78) 28%,
-          rgba(15, 15, 18, 0.48) 52%,
-          rgba(15, 15, 18, 0.18) 72%,
-          rgba(15, 15, 18, 0) 100%
-        ),
-
-        linear-gradient(
-          180deg,
-
-          rgba(15, 15, 18, 0.12) 0%,
-
-          rgba(15, 15, 18, 0.04) 28%,
-
-          rgba(15, 15, 18, 0.10) 45%,
-
-          rgba(15, 15, 18, 0.30) 64%,
-
-          rgba(15, 15, 18, 0.62) 79%,
-
-          rgba(15, 15, 18, 0.88) 91%,
-
-          var(--bg-dark) 100%
-        );
-    }
-
-
-    .movie-hero > div[style*="z-index:3"] {
-      position: relative;
-
-      z-index: 3;
-    }
-
-
-    /* =========================================================
-       BOUTON BANDE ANNONCE
-       ========================================================= */
-
-    .trailer-btn-wrapper {
-      z-index: 3;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      margin: auto;
-
-      flex-shrink: 0;
-    }
-
-
-    .btn-play-trailer {
-      width: 80px;
-      height: 80px;
-
-      border-radius: 50%;
-
-      background: rgba(255, 255, 255, 0.14);
-
-      border: 1px solid rgba(255, 255, 255, 0.28);
-
-      color: white;
-
-      backdrop-filter: blur(10px);
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      text-decoration: none;
-
-      transition: all 0.2s ease;
-
-      cursor: pointer;
-
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-
-
-    .btn-play-trailer:hover {
-      transform: scale(1.08);
-
-      background: rgba(232, 140, 30, 0.9);
-
-      border-color: var(--brand-orange);
-    }
-
-
-    .btn-play-trailer svg {
-      width: 32px;
-      height: 32px;
-
-      fill: white;
-
-      margin-left: 2px;
-    }
-
-
-    .btn-play-trailer .mobile-trailer-text {
-      display: none;
-    }
-
-
-    /* =========================================================
-       SYNOPSIS
-       ========================================================= */
-
-    .synopsis-wrapper {
-      margin-bottom: 10px;
-
-      line-height: 1.5;
-    }
-
-
-    .synopsis-text {
-      display: inline;
-
-      color: #f0f0f5;
-
-      font-size: 0.92rem;
-    }
-
-
-    .btn-toggle-synopsis {
-      display: none;
-
-      background: none;
-
-      border: none;
-
-      color: var(--brand-orange);
-
-      font-size: 0.88rem;
-
-      font-weight: 700;
-
-      cursor: pointer;
-
-      padding: 0 0 0 6px;
-
-      text-decoration: underline;
-    }
-
-
-    .movie-credits-text {
-      font-size: 0.85rem;
-
-      color: #b0b0bb;
-
-      margin-top: 10px;
-
-      margin-bottom: 10px;
-
-      display: flex;
-
-      gap: 14px;
-
-      flex-wrap: wrap;
-
-      align-items: flex-start;
-    }
-
-
-    .movie-credits-text strong {
-      color: #ffffff;
-
-      font-weight: 600;
-
-      margin-right: 4px;
-    }
-
-
-    .credit-block {
-      display: inline-flex;
-
-      align-items: flex-start;
-    }
-
-
-    /* =========================================================
-       CATALOGUE
-       ========================================================= */
-
-    .catalog-container {
-      padding: 30px 5%;
-    }
-
-
-    .section-header {
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      margin-bottom: 18px;
-
-      flex-wrap: wrap;
-
-      gap: 10px;
-    }
-
-
-    .section-title {
-      font-size: 1.25rem;
-
-      font-weight: 800;
-
-      margin-bottom: 14px;
-    }
-
-
-    .btn-back-home {
-      background: rgba(255, 255, 255, 0.12);
-
-      border: 1px solid var(--border-subtle);
-
-      color: white;
-
-      padding: 8px 16px;
-
-      border-radius: var(--radius-sm);
-
-      font-size: 0.85rem;
-
-      font-weight: 600;
-
-      cursor: pointer;
-
-      transition: all 0.18s;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      text-decoration: none;
-    }
-
-
-    .btn-back-home:hover {
-      background: rgba(255, 255, 255, 0.22);
-    }
-
-
-    .grid-movies {
-      display: grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fill,
-          minmax(250px, 1fr)
-        );
-
-      gap: 20px;
-
-      align-items: start;
-    }
-
-
-    .card-movie {
-      background: var(--bg-card);
-
-      border-radius: var(--radius-md);
-
-      border: 1px solid var(--border-subtle);
-
-      overflow: hidden;
-
-      display: flex;
-
-      flex-direction: column;
-
-      transition:
-        border-color 0.2s ease,
-        transform 0.18s ease;
-
-      cursor: pointer;
-
-      position: relative;
-    }
-
-
-    .card-movie:hover {
-      border-color: rgba(255, 255, 255, 0.35);
-
-      transform: translateY(-3px);
-    }
-
-
-    .card-poster {
-      position: relative;
-
-      height: 260px;
-
-      background: var(--bg-surface);
-    }
-
-
-    .card-poster img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-    }
-
-
-    .card-content {
-      padding: 16px;
-
-      display: flex;
-
-      flex-direction: column;
-    }
-
-
-    .card-title {
-      font-size: 1.05rem;
-
-      font-weight: 700;
-
-      margin-bottom: 5px;
-
-      color: white;
-    }
-
-
-    .card-meta {
-      font-size: 0.78rem;
-
-      color: var(--text-muted);
-
-      margin-bottom: 12px;
-
-      display: flex;
-
-      gap: 6px;
-
-      align-items: center;
-    }
-
-
-    .card-slots-area {
-      border-top: 1px solid var(--border-subtle);
-
-      padding-top: 10px;
-    }
-
-
-    .slots-label {
-      font-size: 0.7rem;
-
-      text-transform: uppercase;
-
-      font-weight: 800;
-
-      color: var(--brand-orange);
-
-      margin-bottom: 8px;
-    }
-
-
-    .slots-list {
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 6px;
-    }
-
-
-    .slot-pill {
-      background: var(--bg-surface);
-
-      border: 1px solid var(--border-subtle);
-
-      color: white;
-
-      padding: 8px 12px;
-
-      border-radius: var(--radius-sm);
-
-      font-size: 0.8rem;
-
-      font-weight: 600;
-
-      text-decoration: none;
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      transition: all 0.18s ease;
-
-      cursor: pointer;
-    }
-
-
-    .slot-pill .town {
-      font-size: 0.75rem;
-
-      color: var(--brand-orange);
-
-      font-weight: 700;
-    }
-
-
-    .slot-pill:hover {
-      background: var(--brand-orange);
-
-      border-color: var(--brand-orange);
-
-      color: white;
-    }
-
-
-    .slot-pill:hover .town {
-      color: white;
-    }
-
-
-    .btn-more-slots {
-      background: transparent;
-
-      border: 1px dashed var(--border-subtle);
-
-      color: var(--text-muted);
-
-      padding: 7px;
-
-      border-radius: var(--radius-sm);
-
-      font-size: 0.75rem;
-
-      font-weight: 600;
-
-      cursor: pointer;
-
-      text-align: center;
-
-      margin-top: 6px;
-
-      transition: all 0.18s;
-
-      width: 100%;
-    }
-
-
-    .btn-more-slots:hover {
-      border-color: var(--brand-orange);
-
-      color: var(--brand-orange);
-    }
-
-
-    /* =========================================================
-       SEANCES
-       ========================================================= */
-
-    .showtimes-section {
-
-      position: relative;
-
-      z-index: 3;
-
-      margin-top: -65px;
-
-      padding:
-        15px
-        5%
-        50px
-        5%;
-    }
-
-
-    .horizontal-cards-strip {
-      display: flex;
-
-      gap: 12px;
-
-      overflow-x: auto;
-
-      padding-bottom: 12px;
-
-      margin-bottom: 22px;
-
-      scrollbar-width: thin;
-
-      scrollbar-color:
-        var(--brand-orange)
-        transparent;
-    }
-
-
-    .showtime-horizontal-card {
-      min-width: 210px;
-
-      max-width: 250px;
-
-      background: var(--bg-card);
-
-      border: 1px solid var(--border-subtle);
-
-      border-radius: var(--radius-md);
-
-      padding: 14px;
-
-      cursor: pointer;
-
-      transition: all 0.18s ease;
-
-      flex-shrink: 0;
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 4px;
-    }
-
-
-    .showtime-horizontal-card:hover,
-    .showtime-horizontal-card.active {
-      border-color: var(--brand-orange);
-
-      background: var(--bg-surface);
-    }
-
-
-    .town-tag {
-      color: var(--brand-orange);
-
-      font-size: 0.82rem;
-
-      font-weight: 800;
-
-      text-transform: uppercase;
-    }
-
-
-    .card-date {
-      font-size: 0.92rem;
-
-      font-weight: 800;
-
-      color: white;
-    }
-
-
-    .card-venue {
-      font-size: 0.78rem;
-
-      color: var(--text-muted);
-    }
-
-
-    .practical-details-panel {
-      background: var(--bg-card);
-
-      border: 1px solid var(--border-subtle);
-
-      border-radius: var(--radius-md);
-
-      padding: 22px;
-
-      max-width: 850px;
-
-      transition:
-        opacity 0.2s ease-in-out,
-        transform 0.2s ease-in-out;
-
-      opacity: 1;
-
-      transform: translateY(0);
-    }
-
-
-    .practical-details-panel.changing {
-      opacity: 0;
-
-      transform: translateY(6px);
-    }
-
-
-    .panel-header {
-      border-bottom: 1px solid var(--border-subtle);
-
-      padding-bottom: 12px;
-
-      margin-bottom: 16px;
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      flex-wrap: wrap;
-
-      gap: 10px;
-    }
-
-
-    .panel-title {
-      font-size: 1.05rem;
-
-      font-weight: 800;
-
-      color: white;
-    }
-
-
-    .panel-title span {
-      color: var(--brand-orange);
-    }
-
-
-    .practical-grid {
-      display: grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(180px, 1fr)
-        );
-
-      gap: 16px;
-
-      margin-bottom: 16px;
-    }
-
-
-    .practical-item {
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 3px;
-    }
-
-
-    .item-label {
-      font-size: 0.72rem;
-
-      text-transform: uppercase;
-
-      font-weight: 800;
-
-      color: var(--brand-orange);
-    }
-
-
-    .item-value {
-      font-size: 0.88rem;
-
-      color: white;
-
-      font-weight: 600;
-    }
-
-
-    .actions-row {
-      display: flex;
-
-      gap: 12px;
-
-      flex-wrap: wrap;
-    }
-
-
-    .btn-agenda {
-      background: var(--bg-surface);
-
-      border: 1px solid var(--brand-orange);
-
-      color: var(--brand-orange);
-
-      padding: 9px 16px;
-
-      border-radius: var(--radius-sm);
-
-      font-size: 0.85rem;
-
-      font-weight: 700;
-
-      cursor: pointer;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      text-decoration: none;
-
-      transition: all 0.18s;
-    }
-
-
-    .btn-agenda:hover {
-      background: var(--brand-orange);
-
-      color: white;
-    }
-
-
-    /* =========================================================
-       VUE LIEU
-       ========================================================= */
-
-    .venue-details-section {
-      background: var(--bg-card);
-
-      border-top: 1px solid var(--border-subtle);
-
-      padding: 30px 5%;
-
-      margin-top: 30px;
-    }
-
-
-    .venue-grid {
-      display: grid;
-
-      grid-template-columns: 1fr 1fr;
-
-      gap: 24px;
-
-      align-items: start;
-    }
-
-
-    .venue-info-box h3 {
-      font-size: 1.15rem;
-
-      font-weight: 800;
-
-      margin-bottom: 14px;
-    }
-
-
-    .info-item {
-      display: flex;
-
-      gap: 10px;
-
-      margin-bottom: 8px;
-
-      font-size: 0.88rem;
-
-      color: #d1d1d6;
-    }
-
-
-    .info-item strong {
-      color: white;
-
-      min-width: 90px;
-    }
-
-
-    .badge-pmr {
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      background: rgba(255, 255, 255, 0.08);
-
-      padding: 6px 12px;
-
-      border-radius: var(--radius-sm);
-
-      font-size: 0.8rem;
-
-      font-weight: 600;
-
-      margin-top: 8px;
-    }
-
-
-    /* =========================================================
-       RESPONSIVE
-       ========================================================= */
-
-    @media (max-width: 1024px) {
-
-      .logo-text {
-        display: none !important;
-      }
-
-    }
-
-
-    @media (max-width: 768px) {
-
-      header {
-        padding: 8px 12px;
-      }
-
-
-      .header-left {
-        gap: 6px;
-      }
-
-
-      .brand-logo-img {
-        height: 28px;
-        max-width: 105px;
-      }
-
-
-      .header-center {
-        gap: 6px;
-
-        max-width: none;
-      }
-
-
-      .header-location-select {
-        max-width: 95px;
-
-        font-size: 0.75rem;
-
-        padding: 6px 18px 6px 8px;
-      }
-
-
-      .header-nav {
-        display: none;
-      }
-
-
-      .menu-burger-btn {
-        display: block;
-
-        margin-left: 2px;
-      }
-
-
-      .header-search-container {
-        flex: 1;
-
-        max-width: none;
-      }
-
-
-      .header-search-input {
-        padding: 6px 30px 6px 10px;
-
-        font-size: 0.8rem;
-      }
-
-
-      .search-btn-trigger {
-        right: 2px;
-
-        padding: 4px;
-      }
-
-
-      .search-dropdown {
-        position: fixed;
-
-        top: 54px;
-
-        left: 10px;
-
-        right: 10px;
-
-        width: auto;
-      }
-
-
-      /* HERO ACCUEIL MOBILE */
-
-      .hero-slide .badge-2k,
-      .hero-slide .age-badge {
-        display: none !important;
-      }
-
-
-      .hero-slider-wrapper {
-        min-height: 470px;
-
-        height: auto;
-      }
-
-
-      .hero-content {
-        padding:
-          145px
-          5%
-          42px
-          5%;
-      }
-
-
-      /* PAGE FILM MOBILE */
-
-      .movie-hero {
-
-        min-height: 88vh;
-
-        padding:
-          180px
-          5%
-          105px
-          5%;
-
-        background-size: auto 100%;
-
-        background-position:
-          center center !important;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        justify-content: flex-end;
-      }
-
-
-      .movie-hero::after {
-        background:
-          linear-gradient(
-            180deg,
-
-            rgba(15, 15, 18, 0.14) 0%,
-
-            rgba(15, 15, 18, 0.06) 30%,
-
-            rgba(15, 15, 18, 0.16) 52%,
-
-            rgba(15, 15, 18, 0.42) 70%,
-
-            rgba(15, 15, 18, 0.78) 88%,
-
-            var(--bg-dark) 100%
-          );
-      }
-
-
-      .trailer-btn-wrapper {
-        width: 100%;
-
-        margin: 14px 0 0 0;
-
-        justify-content: flex-start;
-      }
-
-
-      .btn-play-trailer {
-
-        width: auto;
-
-        height: auto;
-
-        border-radius: 20px;
-
-        padding: 8px 16px;
-
-        background: rgba(255, 255, 255, 0.16);
-
-        border: 1px solid rgba(255, 255, 255, 0.25);
-
-        backdrop-filter: blur(8px);
-
-        font-size: 0.82rem;
-
-        font-weight: 600;
-
-        gap: 8px;
-
-        box-shadow: none;
-      }
-
-
-      .btn-play-trailer svg {
-        width: 14px;
-
-        height: 14px;
-
-        margin-left: 0;
-      }
-
-
-      .btn-play-trailer .mobile-trailer-text {
-        display: inline;
-
-        color: white;
-      }
-
-
-      .btn-toggle-synopsis {
-        display: inline-block;
-      }
-
-
-      .synopsis-text.collapsed {
-        display: -webkit-box;
-
-        -webkit-line-clamp: 2;
-
-        -webkit-box-orient: vertical;
-
-        overflow: hidden;
-      }
-
-
-      .showtimes-section {
-        margin-top: -75px;
-
-        padding-top: 15px;
-      }
-
-
-      .venue-grid {
-        grid-template-columns: 1fr;
-      }
-
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Balad'Images - Le cinéma Familles Rurales</title>
+
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+<!-- Démarre le téléchargement des données dès le début de la page (gain de temps au chargement) -->
+<script>
+  window.BALAD_API = "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
+  window.__baladData = fetch(window.BALAD_API).then(function (r) { return r.json(); }).catch(function () { return null; });
+</script>
+
+<style>
+:root {
+  --bg-dark: #0f0f12;
+  --bg-dark-rgb: 15, 15, 18;
+  --bg-card: #18181c;
+  --bg-surface: #222228;
+  --brand-orange: #E88C1E;
+  --brand-orange-hover: #d17a12;
+  --text-main: #ffffff;
+  --text-muted: #a0a0ab;
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --hero-delay: 10s;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.4;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+button { font-family: inherit; }
+
+/* ===== LOADER ===== */
+#app-loader {
+  position: fixed; inset: 0; background-color: var(--bg-dark);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999; transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+#app-loader.hidden { opacity: 0; visibility: hidden; }
+.spinner {
+  width: 44px; height: 44px; border: 3.5px solid rgba(255,255,255,0.1);
+  border-top-color: var(--brand-orange); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin-bottom: 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#page-transition-overlay {
+  position: fixed; inset: 0; background-color: #000; z-index: 9998;
+  opacity: 0; pointer-events: none; transition: opacity 0.18s ease-in-out;
+}
+#page-transition-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 100%);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 10px 4%; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+}
+.header-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.logo-container {
+  display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem;
+  letter-spacing: -0.01em; color: white; text-decoration: none; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.brand-logo-img { height: 38px; width: auto; max-width: 150px; display: block; object-fit: contain; flex-shrink: 0; }
+.logo-text { color: white; font-family: inherit; }
+.header-center { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: flex-end; max-width: 500px; }
+.header-search-container { position: relative; display: flex; align-items: center; width: 100%; max-width: 260px; }
+.header-search-input {
+  width: 100%; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 22px; padding: 8px 36px 8px 14px; color: white; font-size: 0.85rem; font-family: inherit;
+  outline: none; transition: all 0.2s ease;
+}
+.header-search-input::placeholder { color: rgba(255,255,255,0.6); }
+.header-search-input:focus { background: rgba(0,0,0,0.9); border-color: var(--brand-orange); }
+.search-btn-trigger {
+  position: absolute; right: 4px; background: transparent; border: none; cursor: pointer; padding: 6px;
+  display: flex; align-items: center; justify-content: center; z-index: 3;
+}
+.search-btn-trigger svg { width: 16px; height: 16px; fill: rgba(255,255,255,0.8); }
+.search-dropdown {
+  position: absolute; top: 100%; left: 0; right: 0; background: #18181c; border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm); margin-top: 6px; max-height: 250px; overflow-y: auto; display: none;
+  z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+.search-dropdown.open { display: block; }
+.search-dropdown-item {
+  padding: 10px 14px; color: white; font-size: 0.88rem; cursor: pointer; display: block; text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s ease;
+}
+.search-dropdown-item:hover { background: var(--bg-surface); color: var(--brand-orange); }
+.header-location-wrapper { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; }
+.header-location-select {
+  appearance: none; -webkit-appearance: none; background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.22); color: white; padding: 8px 24px 8px 12px; border-radius: 22px;
+  font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; outline: none;
+  transition: all 0.18s ease; max-width: 130px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+}
+.header-location-select:hover { border-color: var(--brand-orange); }
+.header-location-select option { background: var(--bg-card); color: white; }
+.dropdown-icon { position: absolute; right: 8px; pointer-events: none; font-size: 0.6rem; color: white; }
+.header-nav { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.nav-link {
+  color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.86rem; font-weight: 600;
+  cursor: pointer; padding: 4px 6px; white-space: nowrap;
+}
+.nav-link:hover, .nav-link.active { color: white; }
+.nav-link.active { box-shadow: 0 2px 0 var(--brand-orange); }
+.menu-burger-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 1001; padding: 4px; }
+.mobile-nav-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(15,15,18,0.98); backdrop-filter: blur(15px);
+  z-index: 999; flex-direction: column; justify-content: center; align-items: center; gap: 24px;
+}
+.mobile-nav-overlay.open { display: flex; }
+.mobile-nav-overlay .nav-link { font-size: 1.2rem; }
+body.view-venue-active .header-search-container { display: none !important; }
+
+/* ===== VUES ===== */
+.view-page { display: none; min-height: 100vh; opacity: 0; transition: opacity 0.25s ease-in-out; }
+.view-page.active-view { display: block; opacity: 1; }
+.view-page.page-simple { min-height: 70vh; }
+
+/* ===== HERO ACCUEIL ===== */
+.hero-slider-wrapper { position: relative; width: 100%; height: 70vh; min-height: 500px; display: flex; align-items: flex-end; overflow: hidden; }
+.hero-slide {
+  position: absolute; inset: 0; opacity: 0; visibility: hidden;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+  display: flex; align-items: flex-end; cursor: pointer;
+}
+.hero-slide.active { opacity: 1; visibility: visible; }
+.hero-bg-layer {
+  position: absolute; inset: -3%; width: 106%; height: 106%; transform: scale(1.055);
+  object-fit: cover; object-position: center top; background: var(--bg-card);
+}
+/* Fin grain : masque légèrement le flou des images basse résolution */
+.hero-slide::before, .movie-hero::before, .venue-grain::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background-image: var(--grain); background-size: 160px 160px; mix-blend-mode: overlay; opacity: 0.16;
+}
+.venue-grain { position: relative; }
+.hero-overlay-gradient {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: linear-gradient(180deg,
+    rgba(15,15,18,0.25) 0%, rgba(15,15,18,0.10) 30%, rgba(15,15,18,0.18) 50%, rgba(15,15,18,0.45) 68%,
+    rgba(15,15,18,0.78) 82%, rgba(15,15,18,0.96) 94%, var(--bg-dark) 100%);
+}
+.hero-content { position: relative; max-width: 900px; z-index: 3; width: 100%; padding: 185px 84px 55px 84px; }
+.badge-salle {
+  display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 14px; font-size: 0.8rem;
+  font-weight: 600; margin-bottom: 10px; color: #fff; text-decoration: none; transition: all 0.18s;
+}
+a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--brand-orange); }
+.hero-title, .movie-title {
+  font-size: clamp(1.9rem, 4.2vw, 3.2rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.hero-subtitle { font-size: 0.95rem; opacity: 0.85; margin-top: -2px; margin-bottom: 14px; }
+.hero-meta, .movie-quick-meta {
+  font-size: 0.88rem; color: #e0e0e0; margin-bottom: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.badge-2k, .age-badge {
+  background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25); color: #fff;
+  font-size: 0.72rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;
+}
+.hero-synopsis {
+  color: #e0e0e5; font-size: 0.9rem; line-height: 1.45; margin-bottom: 14px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.hero-slots-container { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; z-index: 4; position: relative; }
+.btn-glass-slot {
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+  color: white !important; padding: 9px 16px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; text-decoration: none; transition: all 0.18s ease; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-glass-slot:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.45); }
+
+/* Flèches du carrousel */
+.hero-arrow {
+  position: absolute; top: 52%; transform: translateY(-50%); z-index: 10; width: 48px; height: 48px;
+  border-radius: 50%; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.28); color: #fff;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background 0.18s, border-color 0.18s, transform 0.18s;
+}
+.hero-arrow:hover { background: rgba(232,140,30,0.9); border-color: var(--brand-orange); }
+.hero-arrow:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 2px; }
+.hero-arrow.prev { left: 1.5%; }
+.hero-arrow.next { right: 1.5%; }
+.hero-arrow svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.hero-dots-indicator { position: absolute; bottom: 15px; left: 84px; z-index: 10; display: flex; gap: 8px; align-items: center; }
+.dot-item { height: 4px; width: 22px; background: rgba(255,255,255,0.3); border-radius: 2px; cursor: pointer; transition: width 0.3s ease; position: relative; overflow: hidden; }
+.dot-item.active { width: 42px; }
+.dot-item-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; background: var(--brand-orange); border-radius: 2px; }
+.dot-item.active .dot-item-fill { animation: heroProgress var(--hero-delay) linear forwards; }
+@keyframes heroProgress { from { width: 0%; } to { width: 100%; } }
+
+/* ===== PAGE DETAIL FILM ===== */
+.movie-hero {
+  --tint: 15, 15, 18;
+  --tint2: 15, 15, 18;
+  position: relative; width: 100%; min-height: 82vh; display: flex; align-items: flex-end; justify-content: space-between;
+  overflow: hidden; padding: 225px 5% 95px 5%; background-color: var(--bg-dark);
+}
+.movie-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+/* Voile teinté : couleur dominante de l'image, assombrie, qui tend vers le noir en bas */
+.movie-hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 65% at 12% 82%,
+      rgba(var(--tint), 0.94) 0%, rgba(var(--tint), 0.78) 28%, rgba(var(--tint), 0.48) 52%,
+      rgba(var(--tint), 0.18) 72%, rgba(var(--tint), 0) 100%),
+    linear-gradient(180deg,
+      rgba(var(--tint), 0.26) 0%, rgba(var(--tint), 0.36) 30%, rgba(var(--tint), 0.58) 55%,
+      rgba(var(--tint2), 0.84) 76%, rgba(var(--bg-dark-rgb), 0.97) 91%, var(--bg-dark) 100%);
+}
+.movie-hero-content { position: relative; z-index: 3; max-width: 720px; }
+.trailer-btn-wrapper { z-index: 3; display: flex; align-items: center; justify-content: center; margin: auto; flex-shrink: 0; }
+.btn-play-trailer {
+  width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.28); color: white; backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s ease;
+  cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.btn-play-trailer:hover { transform: scale(1.08); background: rgba(232,140,30,0.9); border-color: var(--brand-orange); }
+.btn-play-trailer svg { width: 32px; height: 32px; fill: white; margin-left: 2px; }
+.btn-play-trailer .mobile-trailer-text { display: none; }
+.synopsis-wrapper { margin-bottom: 10px; line-height: 1.5; }
+.synopsis-text { display: inline; color: #f0f0f5; font-size: 0.92rem; }
+.btn-toggle-synopsis {
+  display: none; background: none; border: none; color: var(--brand-orange); font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; padding: 0 0 0 6px; text-decoration: underline;
+}
+.movie-credits-text { font-size: 0.85rem; color: #c4c4cf; margin: 10px 0; display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; }
+.movie-credits-text strong { color: #fff; font-weight: 600; margin-right: 4px; }
+.credit-block { display: inline-flex; align-items: flex-start; }
+
+/* ===== CATALOGUE ===== */
+.catalog-container { padding: 30px 5%; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+.section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 14px; }
+.btn-back-home {
+  background: rgba(255,255,255,0.12); border: 1px solid var(--border-subtle); color: white; padding: 8px 16px;
+  border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+}
+.btn-back-home:hover { background: rgba(255,255,255,0.22); }
+.grid-movies { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; align-items: start; }
+.card-movie {
+  background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;
+  display: flex; flex-direction: column; transition: border-color 0.2s ease, transform 0.18s ease; cursor: pointer; position: relative;
+}
+.card-movie:hover { border-color: rgba(255,255,255,0.35); transform: translateY(-3px); }
+.card-poster { position: relative; height: 260px; background: var(--bg-surface); }
+.card-poster img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.35s ease; }
+.card-poster img.loaded { opacity: 1; }
+.card-content { padding: 16px; display: flex; flex-direction: column; }
+.card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 5px; color: white; }
+.card-meta { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; display: flex; gap: 6px; align-items: center; }
+.card-slots-area { border-top: 1px solid var(--border-subtle); padding-top: 10px; }
+.slots-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--brand-orange); margin-bottom: 8px; }
+.slots-list { display: flex; flex-direction: column; gap: 6px; }
+.slot-pill {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); color: white; padding: 8px 12px;
+  border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600; text-decoration: none; display: flex;
+  justify-content: space-between; align-items: center; transition: all 0.18s ease; cursor: pointer;
+}
+.slot-pill .town { font-size: 0.75rem; color: var(--brand-orange); font-weight: 700; }
+.slot-pill:hover { background: var(--brand-orange); border-color: var(--brand-orange); color: white; }
+.slot-pill:hover .town { color: white; }
+.btn-more-slots {
+  background: transparent; border: 1px dashed var(--border-subtle); color: var(--text-muted); padding: 7px;
+  border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center;
+  margin-top: 6px; transition: all 0.18s; width: 100%;
+}
+.btn-more-slots:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
+
+/* ===== SEANCES ===== */
+.showtimes-section { position: relative; z-index: 3; margin-top: -65px; padding: 15px 5% 50px 5%; }
+.horizontal-cards-strip {
+  display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 22px;
+  scrollbar-width: thin; scrollbar-color: var(--brand-orange) transparent;
+}
+.showtime-horizontal-card {
+  min-width: 210px; max-width: 250px; background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md); padding: 14px; cursor: pointer; transition: all 0.18s ease; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.showtime-horizontal-card:hover, .showtime-horizontal-card.active { border-color: var(--brand-orange); background: var(--bg-surface); }
+.town-tag { color: var(--brand-orange); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; }
+.card-date { font-size: 0.92rem; font-weight: 800; color: white; }
+.card-venue { font-size: 0.78rem; color: var(--text-muted); }
+.practical-details-panel {
+  background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 22px;
+  max-width: 850px; transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; opacity: 1; transform: translateY(0);
+}
+.practical-details-panel.changing { opacity: 0; transform: translateY(6px); }
+.panel-header {
+  border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 16px; display: flex;
+  justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+}
+.panel-title { font-size: 1.05rem; font-weight: 800; color: white; }
+.panel-title span { color: var(--brand-orange); }
+.practical-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.practical-item { display: flex; flex-direction: column; gap: 3px; }
+.item-label { font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--brand-orange); }
+.item-value { font-size: 0.88rem; color: white; font-weight: 600; }
+.tarif-line { display: flex; justify-content: space-between; gap: 14px; font-size: 0.86rem; padding: 2px 0; }
+.tarif-line span:last-child { color: var(--brand-orange); font-weight: 800; white-space: nowrap; }
+.tarif-link { font-size: 0.76rem; color: var(--text-muted); text-decoration: underline; cursor: pointer; margin-top: 4px; display: inline-block; font-weight: 600; }
+.tarif-link:hover { color: var(--brand-orange); }
+.actions-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-agenda {
+  background: var(--bg-surface); border: 1px solid var(--brand-orange); color: var(--brand-orange); padding: 9px 16px;
+  border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex;
+  align-items: center; gap: 6px; text-decoration: none; transition: all 0.18s;
+}
+.btn-agenda:hover, .btn-agenda.filled { background: var(--brand-orange); color: white; }
+.btn-agenda.filled:hover { background: var(--brand-orange-hover); border-color: var(--brand-orange-hover); }
+
+/* ===== VUE LIEU ===== */
+.venue-details-section { background: var(--bg-card); border-top: 1px solid var(--border-subtle); padding: 30px 5%; margin-top: 30px; }
+.venue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.venue-info-box h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; }
+.info-item { display: flex; gap: 10px; margin-bottom: 8px; font-size: 0.88rem; color: #d1d1d6; }
+.info-item strong { color: white; min-width: 90px; }
+.badge-pmr { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600; margin-top: 8px; }
+
+/* ===== PAGES SIMPLES ===== */
+.page-simple {
+  padding: 120px 5% 50px;
+  background: radial-gradient(ellipse 80% 40% at 50% 0, rgba(232,140,30,0.12), transparent 70%), var(--bg-dark);
+}
+.page-wrap { max-width: 980px; margin: 0 auto; }
+.page-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 10px; }
+.page-lead { color: var(--text-muted); margin-bottom: 26px; max-width: 700px; font-size: 0.98rem; line-height: 1.55; }
+.prose p { margin-bottom: 12px; color: #d1d1d6; font-size: 0.95rem; line-height: 1.65; max-width: 760px; }
+.prose h2 { font-size: 1rem; margin: 26px 0 8px; color: var(--brand-orange); letter-spacing: 0.02em; }
+.prose a { color: var(--brand-orange); }
+.prose ul { margin: 0 0 12px 20px; color: #d1d1d6; font-size: 0.95rem; line-height: 1.65; }
+
+/* Tarifs */
+.tarifs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 22px; }
+.tarif-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+.tarif-card.featured { border-color: var(--brand-orange); background: linear-gradient(180deg, rgba(232,140,30,0.10), var(--bg-card) 60%); }
+.tarif-card h3 { font-size: 1.05rem; font-weight: 800; }
+.tarif-price { font-size: 2.6rem; font-weight: 900; letter-spacing: -0.03em; color: var(--brand-orange); line-height: 1; }
+.tarif-price small { font-size: 1rem; font-weight: 700; color: #fff; margin-left: 4px; }
+.tarif-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; font-size: 0.88rem; color: #d1d1d6; }
+.tarif-card li::before { content: "✓"; color: var(--brand-orange); font-weight: 800; margin-right: 8px; }
+.tarif-note { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px 20px; font-size: 0.88rem; color: #d1d1d6; line-height: 1.55; }
+
+/* Activités */
+.activites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+.card-activite { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; cursor: pointer; transition: border-color 0.2s, transform 0.18s; }
+.card-activite:hover { border-color: var(--brand-orange); transform: translateY(-3px); }
+.card-activite .ico { font-size: 1.8rem; margin-bottom: 10px; }
+.card-activite h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; }
+.card-activite p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Contact */
+.contact-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: start; }
+.form-card, .info-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.form-field label { font-size: 0.8rem; font-weight: 700; color: #d1d1d6; }
+.form-field input, .form-field textarea {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 11px 12px;
+  color: white; font-family: inherit; font-size: 0.9rem; outline: none; transition: border-color 0.18s;
+}
+.form-field input:focus, .form-field textarea:focus { border-color: var(--brand-orange); }
+.form-field textarea { min-height: 140px; resize: vertical; }
+.btn-primary {
+  background: var(--brand-orange); color: #fff; border: none; border-radius: var(--radius-sm); padding: 12px 22px;
+  font-size: 0.92rem; font-weight: 800; cursor: pointer; transition: background 0.18s;
+}
+.btn-primary:hover { background: var(--brand-orange-hover); }
+.form-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
+.info-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 12px; }
+.info-card p { font-size: 0.9rem; color: #d1d1d6; line-height: 1.6; margin-bottom: 14px; }
+.map-embed { width: 100%; height: 240px; border: 0; border-radius: var(--radius-sm); filter: grayscale(0.25); }
+
+/* Nos salles */
+.salles-search { position: relative; display: flex; gap: 10px; max-width: 560px; margin-bottom: 14px; }
+.salles-search input {
+  flex: 1; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 22px; padding: 11px 16px;
+  color: white; font-family: inherit; font-size: 0.92rem; outline: none;
+}
+.salles-search input:focus { border-color: var(--brand-orange); }
+.salles-search .search-dropdown { top: 100%; margin-top: 6px; left: 0; right: 70px; }
+#sallesResult { margin-bottom: 14px; }
+.result-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px 18px; }
+.result-box h3 { font-size: 0.98rem; font-weight: 800; margin-bottom: 10px; }
+.result-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 9px 0; border-top: 1px solid var(--border-subtle); font-size: 0.88rem; }
+.result-item .dist { color: var(--brand-orange); font-weight: 800; }
+.result-actions { display: flex; gap: 8px; }
+.btn-mini { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: white; padding: 6px 12px; border-radius: 16px; font-size: 0.76rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+.btn-mini:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
+#sallesMap { position: relative; z-index: 0; height: 62vh; min-height: 420px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-subtle); background: var(--bg-card); }
+.salles-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 10px; }
+.leaflet-popup-content-wrapper { background: var(--bg-card); color: #fff; border-radius: 14px; padding: 0; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.55); }
+.leaflet-popup-content { margin: 0 !important; width: 250px !important; font-family: 'Inter', sans-serif; }
+.leaflet-popup-tip { background: var(--bg-card); }
+.leaflet-container a.leaflet-popup-close-button { color: #fff; z-index: 5; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.popup-img { height: 110px; background: var(--bg-surface) center/cover no-repeat; }
+.popup-body { padding: 12px 14px 14px; }
+.popup-body h4 { font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+.popup-sub { font-size: 0.78rem; color: var(--brand-orange); font-weight: 700; margin-bottom: 8px; }
+.popup-info { font-size: 0.8rem; color: #d1d1d6; line-height: 1.45; margin-bottom: 3px; }
+.popup-actions { display: flex; gap: 8px; margin-top: 12px; }
+.popup-actions .btn-agenda { padding: 8px 12px; font-size: 0.78rem; flex: 1; justify-content: center; }
+.pin-icon svg { filter: drop-shadow(0 3px 4px rgba(0,0,0,0.5)); }
+
+/* ===== FOOTER ===== */
+.site-footer { background: var(--bg-card); border-top: 1px solid var(--border-subtle); padding: 48px 5% 20px; margin-top: 20px; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; }
+.footer-brand img { height: 110px; width: auto; max-width: 260px; object-fit: contain; display: block; margin-bottom: 16px; }
+.footer-brand p { font-size: 0.85rem; color: var(--text-muted); max-width: 320px; margin-bottom: 16px; line-height: 1.5; }
+.socials { display: flex; gap: 10px; }
+.social-btn {
+  width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid var(--border-subtle);
+  display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.18s;
+}
+.social-btn:hover { background: var(--brand-orange); border-color: var(--brand-orange); transform: translateY(-2px); }
+.social-btn svg { width: 20px; height: 20px; }
+.footer-links { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; justify-items: end; text-align: right; }
+.footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { color: #d1d1d6; text-decoration: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+.footer-links a:hover { color: var(--brand-orange); }
+.footer-bottom { max-width: 1100px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-size: 0.76rem; color: var(--text-muted); text-align: center; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) { .logo-text { display: none !important; } }
+@media (max-width: 960px) {
+  .header-nav { display: none; }
+  .menu-burger-btn { display: block; margin-left: 2px; }
+}
+@media (max-width: 768px) {
+  header { padding: 8px 12px; }
+  .header-left { gap: 6px; }
+  .brand-logo-img { height: 28px; max-width: 105px; }
+  .header-center { gap: 6px; max-width: none; }
+  .header-location-select { max-width: 95px; font-size: 0.75rem; padding: 6px 18px 6px 8px; }
+  .header-search-container { flex: 1; max-width: none; }
+  .header-search-input { padding: 6px 30px 6px 10px; font-size: 0.8rem; }
+  .search-btn-trigger { right: 2px; padding: 4px; }
+  .search-dropdown { position: fixed; top: 54px; left: 10px; right: 10px; width: auto; }
+  .salles-search .search-dropdown { position: absolute; top: 100%; left: 0; right: 0; width: auto; }
+  .hero-slide .badge-2k, .hero-slide .age-badge { display: none !important; }
+  .hero-slider-wrapper { min-height: 470px; height: auto; }
+  .hero-content { padding: 145px 5% 42px 5%; }
+  .hero-dots-indicator { left: 5%; }
+  .hero-arrow { width: 36px; height: 36px; top: 40%; }
+  .hero-arrow svg { width: 17px; height: 17px; }
+  .hero-arrow.prev { left: 6px; }
+  .hero-arrow.next { right: 6px; }
+  .movie-hero { min-height: 88vh; padding: 180px 5% 105px 5%; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
+  .movie-hero::after {
+    background: linear-gradient(180deg,
+      rgba(var(--tint), 0.30) 0%, rgba(var(--tint), 0.38) 30%, rgba(var(--tint), 0.62) 52%,
+      rgba(var(--tint2), 0.86) 72%, rgba(var(--bg-dark-rgb), 0.97) 90%, var(--bg-dark) 100%);
+  }
+  .trailer-btn-wrapper { width: 100%; margin: 14px 0 0 0; justify-content: flex-start; }
+  .btn-play-trailer {
+    width: auto; height: auto; border-radius: 20px; padding: 8px 16px; background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(8px); font-size: 0.82rem; font-weight: 600; gap: 8px; box-shadow: none;
+  }
+  .btn-play-trailer svg { width: 14px; height: 14px; margin-left: 0; }
+  .btn-play-trailer .mobile-trailer-text { display: inline; color: white; }
+  .btn-toggle-synopsis { display: inline-block; }
+  .synopsis-text.collapsed { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .showtimes-section { margin-top: -75px; padding-top: 15px; }
+  .venue-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-links { justify-items: start; text-align: left; }
+  .page-simple { padding-top: 100px; }
+}
+</style>
 </head>
-
 
 <body class="page-accueil">
 
+<!-- LOADER -->
+<div id="app-loader">
+  <div class="spinner"></div>
+  <div style="font-size:0.85rem;font-weight:600;color:var(--text-muted);">Chargement du programme...</div>
+</div>
+<div id="page-transition-overlay"></div>
 
-  <!-- =========================================================
-       LOADER
-       ========================================================= -->
-
-  <div id="app-loader">
-
-    <div class="spinner"></div>
-
-    <div style="
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    ">
-      Chargement du programme...
-    </div>
-
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <a onclick="goHome()" class="logo-container">
+      <img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" class="brand-logo-img" fetchpriority="high">
+      <span class="logo-text">Cinémas itinérants Balad'images</span>
+    </a>
   </div>
 
-
-  <div id="page-transition-overlay"></div>
-
-
-  <!-- =========================================================
-       HEADER
-       ========================================================= -->
-
-  <header>
-
-    <div class="header-left">
-
-      <a
-        onclick="goHome()"
-        class="logo-container"
-      >
-
-        <img
-          src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png"
-          alt="Balad'Images"
-          class="brand-logo-img"
-        >
-
-        <span class="logo-text">
-          Cinémas itinérants Balad'images
-        </span>
-
-      </a>
-
+  <div class="header-center">
+    <div class="header-location-wrapper">
+      <select class="header-location-select" id="locationSelect" onchange="handleLocationChange(this.value)">
+        <option value="all">Cinémas</option>
+      </select>
+      <span class="dropdown-icon">▼</span>
     </div>
-
-
-    <div class="header-center">
-
-      <div class="header-location-wrapper">
-
-        <select
-          class="header-location-select"
-          id="locationSelect"
-          onchange="handleLocationChange(this.value)"
-        >
-
-          <option value="all">
-            Cinémas
-          </option>
-
-        </select>
-
-        <span class="dropdown-icon">
-          ▼
-        </span>
-
-      </div>
-
-
-      <div
-        class="header-search-container"
-        id="searchContainer"
-      >
-
-        <input
-          type="text"
-          class="header-search-input"
-          id="searchInput"
-          placeholder="Rechercher..."
-          oninput="handleSearchInput(this.value)"
-        >
-
-
-        <button
-          class="search-btn-trigger"
-          id="searchBtnTrigger"
-          onclick="triggerSearchExecution()"
-        >
-
-          <svg viewBox="0 0 24 24">
-
-            <path d="
-              M15.5 14h-.79l-.28-.27
-              C15.41 12.59 16 11.11 16 9.5
-              16 5.91 13.09 3 9.5 3
-              S3 5.91 3 9.5
-              5.91 16 9.5 16
-              c1.61 0 3.09-.59 4.23-1.57
-              l.27.28v.79l5 4.99
-              L20.49 19l-4.99-5zm-6 0
-              C7.01 14 5 11.99 5 9.5
-              S7.01 5 9.5 5
-              14 7.01 14 9.5
-              11.99 14 9.5 14z
-            "/>
-
-          </svg>
-
-        </button>
-
-
-        <div
-          class="search-dropdown"
-          id="searchDropdown"
-        ></div>
-
-      </div>
-
+    <div class="header-search-container" id="searchContainer">
+      <input type="text" class="header-search-input" id="searchInput" placeholder="Rechercher..." oninput="handleSearchInput(this.value)" onkeydown="if(event.key==='Enter'){triggerSearchExecution()}">
+      <button class="search-btn-trigger" id="searchBtnTrigger" onclick="triggerSearchExecution()" aria-label="Rechercher">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </button>
+      <div class="search-dropdown" id="searchDropdown"></div>
     </div>
-
-
-    <nav class="header-nav">
-
-      <a
-        onclick="goHome()"
-        class="nav-link active"
-      >
-        Accueil
-      </a>
-
-      <a class="nav-link">
-        Tarifs
-      </a>
-
-      <a class="nav-link">
-        À propos
-      </a>
-
-      <a class="nav-link">
-        Bénévolat
-      </a>
-
-    </nav>
-
-
-    <button
-      class="menu-burger-btn"
-      onclick="toggleMenu()"
-    >
-      ☰
-    </button>
-
-  </header>
-
-
-  <!-- =========================================================
-       MENU MOBILE
-       ========================================================= -->
-
-  <div
-    class="mobile-nav-overlay"
-    id="mobileMenu"
-  >
-
-    <a
-      class="nav-link"
-      onclick="goHome(); toggleMenu();"
-    >
-      Accueil
-    </a>
-
-    <a
-      class="nav-link"
-      onclick="toggleMenu()"
-    >
-      Tarifs
-    </a>
-
-    <a
-      class="nav-link"
-      onclick="toggleMenu()"
-    >
-      À propos
-    </a>
-
-    <a
-      class="nav-link"
-      onclick="toggleMenu()"
-    >
-      Bénévolat
-    </a>
-
   </div>
 
+  <nav class="header-nav">
+    <a onclick="go('home')" class="nav-link active" data-page="home">Accueil</a>
+    <a onclick="go('salles')" class="nav-link" data-page="salles">Nos salles</a>
+    <a onclick="go('activites')" class="nav-link" data-page="activites">Activités</a>
+    <a onclick="go('tarifs')" class="nav-link" data-page="tarifs">Tarifs</a>
+    <a onclick="go('apropos')" class="nav-link" data-page="apropos">À propos</a>
+    <a onclick="go('benevolat')" class="nav-link" data-page="benevolat">Bénévolat</a>
+  </nav>
 
-  <!-- =========================================================
-       VUE ACCUEIL
-       ========================================================= -->
+  <button class="menu-burger-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+</header>
 
-  <div
-    id="view-home"
-    class="view-page active-view"
-  >
+<!-- MENU MOBILE -->
+<div class="mobile-nav-overlay" id="mobileMenu">
+  <a class="nav-link" onclick="go('home')">Accueil</a>
+  <a class="nav-link" onclick="go('salles')">Nos salles</a>
+  <a class="nav-link" onclick="go('activites')">Activités</a>
+  <a class="nav-link" onclick="go('tarifs')">Tarifs</a>
+  <a class="nav-link" onclick="go('apropos')">À propos</a>
+  <a class="nav-link" onclick="go('benevolat')">Bénévolat</a>
+  <a class="nav-link" onclick="go('contact')">Nous contacter</a>
+</div>
 
-    <div
-      id="home-hero-container"
-      style="position:relative;"
-    ></div>
+<!-- ===== VUE ACCUEIL ===== -->
+<div id="view-home" class="view-page active-view">
+  <div id="home-hero-container" style="position:relative;"></div>
+  <div class="catalog-container">
+    <div class="section-title" id="catalog-title">Toute la programmation réseau</div>
+    <div class="grid-movies" id="home-grid"></div>
+  </div>
+</div>
 
+<!-- ===== VUE FILM ===== -->
+<div id="view-movie" class="view-page">
+  <section class="movie-hero" id="movie-detail-hero"></section>
+  <section class="showtimes-section">
+    <div class="section-title">Prochaines projections</div>
+    <div class="horizontal-cards-strip" id="movie-showtimes-strip"></div>
+    <div class="practical-details-panel" id="details-panel"></div>
+  </section>
+</div>
 
-    <div class="catalog-container">
-
-      <div
-        class="section-title"
-        id="catalog-title"
-      >
-        Toute la programmation réseau
-      </div>
-
-
-      <div
-        class="grid-movies"
-        id="home-grid"
-      ></div>
-
+<!-- ===== VUE LIEU ===== -->
+<div id="view-venue" class="view-page">
+  <div id="venue-hero-container"></div>
+  <div class="catalog-container">
+    <div class="section-header">
+      <div class="section-title">Programmation à <span id="venue-page-title"></span></div>
+      <button class="btn-back-home" onclick="go('salles')">🗺️ Toutes nos salles</button>
     </div>
-
+    <div class="grid-movies" id="venue-grid"></div>
   </div>
+  <section class="venue-details-section">
+    <div class="venue-grid" id="venue-info-container"></div>
+  </section>
+</div>
 
+<!-- ===== NOS SALLES ===== -->
+<div id="view-salles" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Nos salles</h1>
+    <p class="page-lead">Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.</p>
 
-  <!-- =========================================================
-       VUE FILM
-       ========================================================= -->
+    <div class="salles-search">
+      <input type="text" id="sallesSearch" placeholder="Rechercher une commune..." autocomplete="off"
+             oninput="sallesSuggest(this.value)" onkeydown="if(event.key==='Enter'){sallesSearchGo()}">
+      <button class="btn-primary" onclick="sallesSearchGo()" style="padding:10px 18px;">Chercher</button>
+      <div class="search-dropdown" id="sallesSuggest"></div>
+    </div>
+    <div id="sallesResult"></div>
+    <div id="sallesMap"></div>
+    <div class="salles-note" id="sallesNote"></div>
+  </div>
+</div>
 
-  <div
-    id="view-movie"
-    class="view-page"
-  >
+<!-- ===== ACTIVITES ===== -->
+<div id="view-activites" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Activités</h1>
+    <p class="page-lead">Au-delà des séances en salle, Balad'Images propose d'autres dispositifs et rendez-vous cinéma.</p>
+    <div class="activites-grid" id="activites-grid"></div>
+  </div>
+</div>
 
-    <section
-      class="movie-hero"
-      id="movie-detail-hero"
-    ></section>
+<div id="view-activite" class="view-page page-simple">
+  <div class="page-wrap">
+    <div style="margin-bottom:18px;"><button class="btn-back-home" onclick="go('activites')">← Toutes les activités</button></div>
+    <h1 class="page-title" id="activite-title"></h1>
+    <div class="prose" id="activite-content"></div>
+  </div>
+</div>
 
-
-    <section class="showtimes-section">
-
-      <div class="section-title">
-        Prochaines projections
+<!-- ===== TARIFS ===== -->
+<div id="view-tarifs" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Tarifs</h1>
+    <p class="page-lead">Des places accessibles à tous, dans toutes nos salles.</p>
+    <div class="tarifs-grid">
+      <div class="tarif-card">
+        <h3>Tarif plein</h3>
+        <div class="tarif-price">6<small>€</small></div>
+        <ul><li>Adulte</li></ul>
       </div>
-
-
-      <div
-        class="horizontal-cards-strip"
-        id="movie-showtimes-strip"
-      ></div>
-
-
-      <div
-        class="practical-details-panel"
-        id="details-panel"
-      ></div>
-
-    </section>
-
+      <div class="tarif-card featured">
+        <h3>Tarif réduit</h3>
+        <div class="tarif-price">4<small>€</small></div>
+        <ul>
+          <li>Adulte adhérent Familles Rurales (carte à jour)</li>
+          <li>Demandeur d'emploi</li>
+          <li>Étudiant</li>
+          <li>Enfant de moins de 14 ans</li>
+        </ul>
+      </div>
+      <div class="tarif-card">
+        <h3>Tarif groupes</h3>
+        <div class="tarif-price">3,60<small>€</small></div>
+        <ul><li>Sur demande</li></ul>
+        <a class="btn-agenda" onclick="go('contact')" style="align-self:flex-start;margin-top:4px;">Nous contacter</a>
+      </div>
+    </div>
+    <div class="tarif-note">
+      Certaines séances (avant-premières, événements...) peuvent avoir un tarif spécifique : il est alors indiqué dans l'encart de la séance, sur la page du film.
+    </div>
   </div>
+</div>
 
+<!-- ===== A PROPOS ===== -->
+<div id="view-apropos" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">À propos</h1>
+    <!-- TEXTE PROVISOIRE : à remplacer par le contenu de https://baladimages.spread.name/APropos -->
+    <p class="page-lead">Balad'Images, le cinéma itinérant de Familles Rurales.</p>
+    <div class="prose">
+      <h2>Qui sommes-nous ?</h2>
+      <p>Balad'Images est le circuit de cinéma itinérant porté par Familles Rurales. Des séances de cinéma sont organisées au plus près des habitants, dans des salles de communes, par des associations locales Familles Rurales et leurs équipes de bénévoles.</p>
+      <p>Familles Rurales est un mouvement familial associatif et d'éducation populaire. Il rassemble des femmes et des hommes qui agissent au quotidien pour répondre aux besoins des familles dans leur milieu de vie.</p>
+      <h2>Notre projection</h2>
+      <p>Nous projetons en numérique 2K, avec un écran et un son de qualité, dans des salles accessibles aux personnes à mobilité réduite.</p>
+      <h2>Une question ?</h2>
+      <p><a onclick="go('contact')" style="cursor:pointer;">Écrivez-nous</a> : nous vous répondons du lundi au vendredi.</p>
+    </div>
+  </div>
+</div>
 
-  <!-- =========================================================
-       VUE LIEU
-       ========================================================= -->
+<!-- ===== BENEVOLAT ===== -->
+<div id="view-benevolat" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Bénévolat</h1>
+    <!-- TEXTE PROVISOIRE : à remplacer par le contenu de https://baladimages.spread.name/benevolat -->
+    <p class="page-lead">Rejoignez l'équipe de bénévoles de votre salle.</p>
+    <div class="prose">
+      <h2>Le cinéma près de chez vous repose sur des bénévoles</h2>
+      <p>Chaque séance Balad'Images est rendue possible par des bénévoles de l'association Familles Rurales locale. Vous aimez le cinéma, vous avez un peu de temps ? Vous pouvez nous aider, selon vos envies :</p>
+      <ul>
+        <li>accueil du public et billetterie</li>
+        <li>installation de la salle et du matériel de projection</li>
+        <li>communication locale (affiches, réseaux sociaux)</li>
+        <li>animation de la séance</li>
+      </ul>
+      <p>Les bénévoles sont accompagnés et formés par la fédération.</p>
+      <p><a class="btn-agenda filled" href="mailto:cinema49@famillesrurales.org?subject=Devenir%20b%C3%A9n%C3%A9vole" style="text-decoration:none;color:#fff;">Devenir bénévole</a></p>
+    </div>
+  </div>
+</div>
 
-  <div
-    id="view-venue"
-    class="view-page"
-  >
+<!-- ===== CONTACT ===== -->
+<div id="view-contact" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Nous contacter</h1>
+    <p class="page-lead">Une question, une demande de séance pour un groupe ? Écrivez-nous.</p>
+    <div class="contact-grid">
+      <div class="form-card">
+        <form onsubmit="submitContact(event)">
+          <div class="form-row">
+            <div class="form-field"><label for="c-nom">Nom</label><input id="c-nom" type="text" required autocomplete="family-name"></div>
+            <div class="form-field"><label for="c-prenom">Prénom</label><input id="c-prenom" type="text" required autocomplete="given-name"></div>
+          </div>
+          <div class="form-field"><label for="c-email">Email</label><input id="c-email" type="email" required autocomplete="email"></div>
+          <div class="form-field"><label for="c-objet">Objet</label><input id="c-objet" type="text" required></div>
+          <div class="form-field"><label for="c-message">Message</label><textarea id="c-message" required></textarea></div>
+          <button type="submit" class="btn-primary">Envoyer</button>
+          <p class="form-hint">L'envoi ouvre votre application de messagerie avec le message prêt à partir. Voir les <a onclick="go('mentions')" style="cursor:pointer;text-decoration:underline;">mentions légales</a> pour l'usage de vos données.</p>
+        </form>
+      </div>
+      <div class="info-card">
+        <h3>Nos horaires</h3>
+        <p>Du lundi au vendredi<br><strong>9h30 – 17h</strong></p>
+        <h3>Notre adresse</h3>
+        <p>14 rue Savary<br>49100 Angers</p>
+        <iframe class="map-embed" loading="lazy" title="Carte : 14 rue Savary, 49100 Angers"
+          src="https://www.google.com/maps?q=14+rue+Savary+49100+Angers&output=embed"></iframe>
+        <p style="margin:12px 0 0;"><a class="btn-agenda" target="_blank" rel="noopener noreferrer"
+          href="https://www.google.com/maps/dir/?api=1&destination=14+rue+Savary+49100+Angers">Y aller</a></p>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <div
-      id="venue-hero-container"
-    ></div>
+<!-- ===== MENTIONS LEGALES ===== -->
+<div id="view-mentions" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Mentions légales</h1>
+    <div class="prose">
+      <h2>ÉDITEUR</h2>
+      <p>Responsable de la publication : Bernard GAZON<br>Téléphone : 02 41 18 20 00</p>
+      <h2>HÉBERGÉ PAR SPREADSIMPLE</h2>
+      <p><a href="https://spreadsimple.com/" target="_blank" rel="noopener noreferrer">https://spreadsimple.com/</a><br><a href="mailto:hi@spreadsimple.com">hi@spreadsimple.com</a></p>
+      <h2>SITE RÉALISÉ ET GÉRÉ PAR LA FÉDÉRATION FAMILLES RURALES DU MAINE ET LOIRE</h2>
+      <p>Siège social : 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ<br>+33 2 41 18 20 00</p>
+      <h2>PROPRIÉTÉ</h2>
+      <p>Propriétaire du site : Familles Rurales<br>Siège social : 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ<br>+33 2 41 18 20 00</p>
+      <h2>PROPRIÉTÉS INTELLECTUELLES</h2>
+      <p>Le propriétaire détient les droits de propriété intellectuelle ou détient les droits d’usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logo, icônes, sons, logiciels.</p>
+      <p>Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable du propriétaire.</p>
+      <p>Toute exploitation non autorisée du site ou de l’un des éléments qu’il contient sera considérée comme constitutive d’une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de la Propriété Intellectuelle.</p>
+      <h2>LIENS HYPERTEXTES</h2>
+      <p>Ne pouvant vérifier l’ensemble des liens hypertextes pointant vers le site web, le propriétaire décline toute responsabilité concernant le contenu des sites liés à son Site.</p>
+      <h2>GESTION DES DONNÉES PERSONNELLES</h2>
+      <p>En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6 janvier 1978, la loi n° 2004-801 du 6 août 2004, l’article L. 226-13 du Code pénal et la Directive Européenne du 24 octobre 1995.</p>
+      <p>À l’occasion de l’utilisation certaines données peuvent être recueillies : Origine géographique, page visite, temps resté sur la page…</p>
+      <p>En tout état de cause le site ne collecte des informations personnelles relatives à l’utilisateur que pour le besoin de certains services proposés. L’utilisateur fournit ces informations en toute connaissance de cause, notamment lorsqu’il procède par lui-même à leur saisie. Il est alors précisé à l’utilisateur l’obligation ou non de fournir ces informations.</p>
+      <h2>DROIT D’ACCÈS, DE RECTIFICATION ET D’OPPOSITION AUX DONNÉES</h2>
+      <p>Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, tout utilisateur dispose d’un droit d’accès, de rectification et d’opposition aux données personnelles le concernant, en effectuant sa demande à <a href="mailto:cinema49@famillesrurales.org">cinema49@famillesrurales.org</a>.</p>
+      <p>Aucune information personnelle de l’utilisateur n’est publiée à son insu, échangée, transférée, cédée ou vendue sur un support quelconque à des tiers.</p>
+      <h2>FORMULAIRES DE CONTACT</h2>
+      <p>Les informations recueillies sur ces formulaires sont enregistrées dans un email et sont conservées pendant 3 ans. Elles sont utilisées uniquement pour recontacter l’utilisateur et répondre à sa demande.</p>
+      <p>Conformément à la loi « informatique et libertés », vous pouvez exercer votre droit d’accès aux données vous concernant et les faire rectifier en contactant la fédération départementale familles rurales du Maine et Loire</p>
+      <h2>DROIT APPLICABLE ET ATTRIBUTION DE JURIDICTION</h2>
+      <p>Tout litige en relation avec l’utilisation du site est soumis au droit français. Il est fait attribution exclusive de juridiction aux tribunaux compétents de Paris.</p>
+    </div>
+  </div>
+</div>
 
+<!-- ===== FOOTER UNIVERSEL ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" loading="lazy">
+      <p>Le cinéma itinérant Familles Rurales, au plus près de chez vous.</p>
+      <div class="socials" id="footer-socials"></div>
+    </div>
+    <div class="footer-links">
+      <ul>
+        <li><a onclick="go('home')">Accueil</a></li>
+        <li><a onclick="go('salles')">Nos salles</a></li>
+        <li><a onclick="go('activites')">Activités</a></li>
+        <li><a onclick="go('tarifs')">Tarifs</a></li>
+      </ul>
+      <ul>
+        <li><a onclick="go('apropos')">À propos</a></li>
+        <li><a onclick="go('benevolat')">Bénévolat</a></li>
+        <li><a onclick="go('contact')">Nous contacter</a></li>
+        <li><a onclick="go('mentions')">Mentions légales</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="footer-year"></span> Balad'Images – Familles Rurales Maine-et-Loire</div>
+</footer>
 
-    <div class="catalog-container">
+<script>
+/* =========================================================
+   CONFIGURATION (à adapter facilement)
+   ========================================================= */
+const GOOGLE_SHEET_API_URL = window.BALAD_API;
+const CACHE_KEY = 'balad_data_cache_v2';
+const HERO_DELAY = 10000; // durée d'affichage de chaque film à l'affiche (ms)
 
-      <div class="section-header">
+const SITE = {
+  email: 'cinema49@famillesrurales.org',
+  // Remplacez ces adresses par vos vraies pages de réseaux sociaux
+  socials: [
+    { nom: 'Facebook',  url: 'https://www.facebook.com/',  svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>' },
+    { nom: 'Instagram', url: 'https://www.instagram.com/', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>' },
+    { nom: 'YouTube',   url: 'https://www.youtube.com/',   svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>' }
+  ]
+};
 
-        <div class="section-title">
+// Tarifs courts affichés dans l'encart de chaque séance
+const TARIFS_COURTS = [
+  { label: 'Plein tarif', prix: '6 €' },
+  { label: 'Tarif réduit', prix: '4 €' },
+  { label: 'Groupes (sur demande)', prix: '3,60 €' }
+];
 
-          Programmation à
-          <span id="venue-page-title"></span>
+// Sous-pages de "Activités" : à compléter
+const ACTIVITES = [
+  { id: 'dispositifs', ico: '🎓', titre: 'Nos dispositifs', resume: 'Les actions et dispositifs portés par Balad\'Images.', contenu: '<p>Contenu à venir.</p>' },
+  { id: 'plein-air',   ico: '🌙', titre: 'Cinéma en plein air', resume: 'Des séances sous les étoiles, près de chez vous.', contenu: '<p>Contenu à venir.</p>' },
+  { id: 'autres',      ico: '🎞️', titre: 'Autres activités', resume: 'Événements, rencontres et projections spéciales.', contenu: '<p>Contenu à venir.</p>' }
+];
 
+/* =========================================================
+   ETAT
+   ========================================================= */
+let db = { films: [], seances: [] };
+let previousView = 'view-home';
+let currentLieuId = null;
+let isSearchActive = false;
+let heroCarouselTimer = null;
+let heroCarouselIndex = 0;
+let heroFeaturedFilms = [];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const jsq = s => JSON.stringify(String(s)).replace(/"/g, '&quot;');
+const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+/* =========================================================
+   GOOGLE MAPS
+   ========================================================= */
+function sanitizeGoogleMapsUrl(rawUrl, queryFallback) {
+  if (rawUrl && typeof rawUrl === 'string') {
+    const url = rawUrl.trim();
+    if (url.includes('google.com/maps') || url.includes('maps.google.com')) return url;
+  }
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(queryFallback || '');
+}
+
+/* =========================================================
+   FORMATAGE
+   ========================================================= */
+function formatTime(val) {
+  if (!val) return '';
+  let str = String(val).trim();
+  if (str.includes('T')) {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      let hours = d.getUTCHours();
+      let minutes = d.getUTCMinutes() + 10;
+      if (minutes >= 60) { minutes -= 60; hours += 1; }
+      if (hours >= 24) hours = 0;
+      return hours + 'h' + (minutes < 10 ? '0' : '') + minutes;
+    }
+  }
+  const m = str.match(/^(\d{1,2})[:h](\d{2})(?::\d{2})?$/);
+  if (m) {
+    let hours = parseInt(m[1], 10);
+    let minutes = parseInt(m[2], 10) + 10;
+    if (minutes >= 60) { minutes -= 60; hours += 1; }
+    if (hours >= 24) hours = 0;
+    return hours + 'h' + (minutes < 10 ? '0' : '') + minutes;
+  }
+  return str;
+}
+
+function formatDate(val) {
+  if (!val) return '';
+  let str = String(val).trim();
+  if (str.includes('T') && str.length > 20) {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      const jours = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+      const mois = ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+      return jours[d.getDay()] + ' ' + d.getDate() + ' ' + mois[d.getMonth()];
+    }
+  }
+  return str;
+}
+
+function formatYear(val) {
+  if (!val) return '';
+  let str = String(val).trim();
+  if (str.includes('T')) {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) return d.getFullYear();
+  }
+  const match = str.match(/\b(19|20)\d{2}\b/);
+  return match ? match[0] : str;
+}
+
+function getCommune(seance) { return seance.lieu_id || seance.commune || seance.lieu_nom; }
+
+/* =========================================================
+   CHARGEMENT DES DONNEES (cache persistant + mise à jour en arrière-plan)
+   ========================================================= */
+function normalizeData(raw) {
+  const out = { films: [], seances: [] };
+  out.films = (raw.films || []).filter(f => f && f.titre && String(f.titre).trim() !== '');
+  out.films.forEach(f => {
+    f.id_film = String(f.id_film).trim();
+    f.duree = formatTime(f.duree) || f.duree;
+    f.annee = formatYear(f.annee);
+    f.realisateur = f.real || f.realisateur || '';
+    f.bande_annonce = f.trailer_url || f.bande_annonce || '';
+    f.synopsis_long = f.synopsis_long || f.synopsis_complet || '';
+  });
+  out.seances = (raw.seances || []).filter(s => s && s.id_film);
+  out.seances.forEach((s, idx) => {
+    s.id_film = String(s.id_film).trim();
+    s.horaire_texte = formatTime(s.horaire_texte) || s.horaire_texte;
+    s.date_texte = formatDate(s.date_texte) || s.date_texte;
+    if (!s.id_seance) s.id_seance = 'seance_' + idx;
+  });
+  return out;
+}
+
+function hideLoader() { const l = $('app-loader'); if (l) l.classList.add('hidden'); }
+
+async function loadDataFromSheet() {
+  let rendered = false;
+  let cachedStr = null;
+  try {
+    cachedStr = localStorage.getItem(CACHE_KEY);
+    if (cachedStr) {
+      const cached = JSON.parse(cachedStr);
+      if (cached && cached.films && cached.films.length) {
+        db = cached;
+        initAppUI();
+        rendered = true;
+        hideLoader();
+      }
+    }
+  } catch (e) { cachedStr = null; }
+
+  try {
+    const raw = await (window.__baladData || fetch(GOOGLE_SHEET_API_URL).then(r => r.json()));
+    if (!raw) throw new Error('Pas de données');
+    const fresh = normalizeData(raw);
+    const freshStr = JSON.stringify(fresh);
+    if (freshStr !== cachedStr) {
+      db = fresh;
+      try { localStorage.setItem(CACHE_KEY, freshStr); } catch (e) {}
+      if (rendered) refreshAfterUpdate(); else initAppUI();
+    }
+  } catch (error) {
+    console.error('Erreur de chargement Google Sheets:', error);
+    if (!db.films.length) {
+      $('home-grid').innerHTML = '<p style="color:red;">Erreur lors du chargement des films.</p>';
+    }
+  } finally {
+    hideLoader();
+  }
+}
+
+function initAppUI() {
+  populateLocationDropdown();
+  setupHeroCarousel();
+  renderGridMovies(db.films, 'home-grid');
+  sallesDirty = true;
+}
+
+function refreshAfterUpdate() {
+  populateLocationDropdown();
+  setupHeroCarousel();
+  if (!isSearchActive && $('catalog-title').textContent.indexOf('Résultats') !== 0) renderGridMovies(db.films, 'home-grid');
+  sallesDirty = true;
+}
+
+/* =========================================================
+   LOCATIONS
+   ========================================================= */
+function populateLocationDropdown() {
+  const select = $('locationSelect');
+  select.innerHTML = '<option value="all">Cinémas</option>';
+  const seen = new Set();
+  db.seances.forEach(s => {
+    const id = getCommune(s);
+    if (id && !seen.has(id)) {
+      seen.add(id);
+      select.insertAdjacentHTML('beforeend', '<option value="' + esc(id) + '">' + esc(id) + '</option>');
+    }
+  });
+}
+
+/* =========================================================
+   HERO CAROUSEL
+   ========================================================= */
+const ARROW_L = '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>';
+const ARROW_R = '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>';
+
+function setupHeroCarousel() {
+  if (!db.films || !db.films.length) return;
+  heroFeaturedFilms = [...db.films].sort(() => 0.5 - Math.random()).slice(0, 5);
+  heroCarouselIndex = 0;
+  renderHeroCarouselContainer();
+  startHeroAutoPlay();
+}
+
+function loadHeroImage(index) {
+  const img = document.querySelector('#hero-slide-' + index + ' img[data-src]');
+  if (img) { img.src = img.dataset.src; img.removeAttribute('data-src'); }
+}
+
+function renderHeroCarouselContainer() {
+  const container = $('home-hero-container');
+  if (!container || !heroFeaturedFilms.length) return;
+  const isMobile = window.innerWidth <= 768;
+
+  const slidesHtml = heroFeaturedFilms.map((movie, index) => {
+    const movieSeances = db.seances.filter(s => String(s.id_film) === String(movie.id_film));
+    const maxSlots = isMobile ? 1 : 3;
+    let slotsHtml = movieSeances.slice(0, maxSlots).map(s => `
+      <a onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}', '${s.id_seance}')" class="btn-glass-slot">
+        ${getCommune(s)} - ${s.date_texte} à ${s.horaire_texte}
+      </a>`).join('');
+    if (movieSeances.length > maxSlots) {
+      slotsHtml += `
+      <a onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}')" class="btn-glass-slot" style="border-style:dashed;">
+        + ${movieSeances.length - maxSlots} séance(s)
+      </a>`;
+    }
+    const bg = movie.fond_url || movie.affiche_url || '';
+    // Seule la 1re image se charge tout de suite ; les autres arrivent ensuite
+    const imgAttrs = index === 0
+      ? `src="${bg}" fetchpriority="high"`
+      : `data-src="${bg}"`;
+    return `
+    <div class="hero-slide ${index === 0 ? 'active' : ''}" id="hero-slide-${index}" onclick="openMovieDetails('${movie.id_film}')">
+      <img class="hero-bg-layer" alt="" decoding="async" ${imgAttrs}>
+      <div class="hero-overlay-gradient"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">${movie.titre}</h1>
+        <div class="hero-meta">
+          <span>${movie.annee || ''}</span> • <span>${movie.duree}</span>
+          <span class="badge-2k">2K</span>
+          ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
         </div>
-
-
-        <button
-          class="btn-back-home"
-          onclick="goHome()"
-        >
-          ← Retour à l'accueil
-        </button>
-
+        <p class="hero-synopsis">${movie.synopsis || ''}</p>
+        <div class="hero-slots-container">${slotsHtml}</div>
       </div>
+    </div>`;
+  }).join('');
 
+  const dotsHtml = heroFeaturedFilms.map((_, i) => `
+    <div class="dot-item ${i === 0 ? 'active' : ''}" id="hero-dot-${i}" onclick="event.stopPropagation(); setHeroSlide(${i}); startHeroAutoPlay();">
+      <div class="dot-item-fill"></div>
+    </div>`).join('');
 
-      <div
-        class="grid-movies"
-        id="venue-grid"
-      ></div>
+  container.innerHTML = `
+    <div class="hero-slider-wrapper" id="heroWrapper">
+      ${slidesHtml}
+      <button class="hero-arrow prev" onclick="heroStep(-1)" aria-label="Film précédent">${ARROW_L}</button>
+      <button class="hero-arrow next" onclick="heroStep(1)" aria-label="Film suivant">${ARROW_R}</button>
+      <div class="hero-dots-indicator">${dotsHtml}</div>
+    </div>`;
 
+  // Balayage tactile
+  const wrapper = $('heroWrapper');
+  let touchX = null;
+  wrapper.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  wrapper.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 50) heroStep(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  // Chargement différé des 4 autres visuels après la 1re image (ou au bout de 1,5 s)
+  const first = wrapper.querySelector('#hero-slide-0 img');
+  let loadedOthers = false;
+  const loadOthers = () => {
+    if (loadedOthers) return;
+    loadedOthers = true;
+    for (let i = 1; i < heroFeaturedFilms.length; i++) loadHeroImage(i);
+  };
+  if (first) {
+    if (first.complete) loadOthers(); else first.addEventListener('load', loadOthers, { once: true });
+    setTimeout(loadOthers, 1500);
+  }
+}
+
+function heroStep(dir) {
+  if (!heroFeaturedFilms.length) return;
+  const n = heroFeaturedFilms.length;
+  setHeroSlide((heroCarouselIndex + dir + n) % n);
+  startHeroAutoPlay();
+}
+
+function startHeroAutoPlay() {
+  clearInterval(heroCarouselTimer);
+  heroCarouselTimer = setInterval(() => {
+    setHeroSlide((heroCarouselIndex + 1) % heroFeaturedFilms.length);
+  }, HERO_DELAY);
+}
+
+function setHeroSlide(index) {
+  loadHeroImage(index);
+  document.querySelectorAll('.hero-slide').forEach((s, i) => s.classList.toggle('active', i === index));
+  document.querySelectorAll('.dot-item').forEach((d, i) => {
+    if (i === index) { d.classList.remove('active'); void d.offsetWidth; d.classList.add('active'); }
+    else d.classList.remove('active');
+  });
+  heroCarouselIndex = index;
+}
+
+/* =========================================================
+   GRILLE FILMS
+   ========================================================= */
+function renderGridMovies(filmList, containerId) {
+  const container = $(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  if (!filmList.length) {
+    container.innerHTML = '<p style="color:var(--text-muted); grid-column:1/-1;">Aucun film trouvé.</p>';
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  filmList.forEach((movie, mIndex) => {
+    const movieSeances = db.seances.filter(s => String(s.id_film) === String(movie.id_film));
+    let slotsListHtml = '';
+    const limit = 2;
+    movieSeances.forEach((s, idx) => {
+      const isHidden = idx >= limit;
+      slotsListHtml += `
+        <div class="slot-pill ${isHidden ? 'extra-slot-' + containerId + '-' + mIndex : ''}"
+             style="${isHidden ? 'display:none;' : ''}"
+             onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}', '${s.id_seance}')">
+          <span class="town">${getCommune(s)}</span>
+          <span>${s.date_texte} à ${s.horaire_texte}</span>
+        </div>`;
+    });
+    let moreBtnHtml = '';
+    if (movieSeances.length > limit) {
+      const remaining = movieSeances.length - limit;
+      moreBtnHtml = `
+        <button class="btn-more-slots" id="btn-more-${containerId}-${mIndex}"
+                onclick="event.stopPropagation(); toggleExtraSlots('${containerId}', ${mIndex}, ${remaining})">
+          + ${remaining} autre(s) séance(s)
+        </button>`;
+    }
+    const card = document.createElement('div');
+    card.className = 'card-movie';
+    card.onclick = () => openMovieDetails(movie.id_film);
+    card.innerHTML = `
+      <div class="card-poster">
+        <img src="${movie.affiche_url}" alt="${esc(movie.titre)}" loading="lazy" decoding="async" fetchpriority="low"
+             onload="this.classList.add('loaded')" onerror="this.classList.add('loaded')">
+      </div>
+      <div class="card-content">
+        <div class="card-title">${movie.titre}</div>
+        <div class="card-meta">
+          <span>${movie.duree}</span> • <span>${movie.genre}</span>
+          <span class="badge-2k">2K</span>
+          ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
+        </div>
+        <div class="card-slots-area">
+          <div class="slots-label">Prochaines séances :</div>
+          <div class="slots-list">${slotsListHtml}</div>
+          ${moreBtnHtml}
+        </div>
+      </div>`;
+    frag.appendChild(card);
+  });
+  container.appendChild(frag);
+}
+
+function toggleExtraSlots(prefix, movieIndex, count) {
+  const extraPills = document.querySelectorAll(`.extra-slot-${prefix}-${movieIndex}`);
+  const btn = $(`btn-more-${prefix}-${movieIndex}`);
+  let isCollapsed = false;
+  extraPills.forEach(el => {
+    if (el.style.display === 'none') el.style.display = 'flex';
+    else { el.style.display = 'none'; isCollapsed = true; }
+  });
+  if (btn) btn.textContent = isCollapsed ? `+ ${count} autre(s) séance(s)` : 'Voir moins';
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+function switchView(targetViewId, cb) {
+  const overlay = $('page-transition-overlay');
+  overlay.classList.add('active');
+  setTimeout(() => {
+    document.querySelectorAll('.view-page').forEach(el => el.classList.remove('active-view'));
+    const target = $(targetViewId);
+    if (target) { target.classList.add('active-view'); window.scrollTo(0, 0); }
+    document.body.classList.toggle('view-venue-active', targetViewId === 'view-venue');
+
+    // Surbrillance du menu
+    let key = targetViewId.replace('view-', '');
+    if (key === 'activite') key = 'activites';
+    if (key === 'movie') key = 'home';
+    if (key === 'venue') key = 'salles';
+    document.querySelectorAll('.header-nav .nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === key));
+
+    const dd = $('searchDropdown');
+    if (dd) dd.classList.remove('open');
+    if (cb) cb();
+    setTimeout(() => overlay.classList.remove('active'), 40);
+  }, 180);
+}
+
+function goHome() {
+  currentLieuId = null;
+  isSearchActive = false;
+  $('searchInput').value = '';
+  $('locationSelect').value = 'all';
+  $('catalog-title').textContent = 'Toute la programmation réseau';
+  $('mobileMenu').classList.remove('open');
+  switchView('view-home');
+  renderGridMovies(db.films, 'home-grid');
+}
+
+/* Navigation générale : home, salles, activites, tarifs, apropos, benevolat, contact, mentions */
+function go(page) {
+  $('mobileMenu').classList.remove('open');
+  if (page === 'home') { goHome(); return; }
+  if (page === 'salles') { switchView('view-salles', initSalles); return; }
+  if (page === 'activites') { renderActivitesGrid(); switchView('view-activites'); return; }
+  switchView('view-' + page);
+}
+
+function handleLocationChange(val) {
+  if (val === 'all') goHome(); else openVenueDetails(val);
+}
+
+/* =========================================================
+   RECHERCHE FILMS
+   ========================================================= */
+function handleSearchInput(val) {
+  const q = val.toLowerCase().trim();
+  const dropdown = $('searchDropdown');
+  if (!q) { dropdown.classList.remove('open'); dropdown.innerHTML = ''; return; }
+  const matches = db.films.filter(f => f.titre && f.titre.toLowerCase().includes(q));
+  if (matches.length) {
+    dropdown.innerHTML = matches.map(f => `
+      <a class="search-dropdown-item" onclick="event.stopPropagation(); openMovieDetails('${f.id_film}');">${f.titre}</a>`).join('');
+    dropdown.classList.add('open');
+  } else {
+    dropdown.classList.remove('open');
+  }
+}
+
+function triggerSearchExecution() {
+  const input = $('searchInput');
+  const q = input.value.toLowerCase().trim();
+  $('searchDropdown').classList.remove('open');
+  if (!q) return;
+  isSearchActive = true;
+  const filtered = db.films.filter(f =>
+    (f.titre && f.titre.toLowerCase().includes(q)) ||
+    (f.genre && f.genre.toLowerCase().includes(q)) ||
+    (f.casting && f.casting.toLowerCase().includes(q)));
+  const active = document.querySelector('.view-page.active-view');
+  if (!active || active.id !== 'view-home') switchView('view-home');
+  renderGridMovies(filtered, 'home-grid');
+  $('catalog-title').textContent = `Résultats de recherche pour "${q}"`;
+  $('home-grid').scrollIntoView({ behavior: 'smooth' });
+  input.value = '';
+}
+
+document.addEventListener('click', e => {
+  const c = $('searchContainer');
+  if (c && !c.contains(e.target)) $('searchDropdown').classList.remove('open');
+  const sc = document.querySelector('.salles-search');
+  if (sc && !sc.contains(e.target)) $('sallesSuggest').classList.remove('open');
+});
+
+function toggleMenu() { $('mobileMenu').classList.toggle('open'); }
+
+/* =========================================================
+   COULEUR DOMINANTE (voile teinté du hero film)
+   ========================================================= */
+const tintCache = {};
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0; const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h /= 6;
+  }
+  return [h, s, l];
+}
+function hslToRgb(h, s, l) {
+  if (s === 0) { const v = Math.round(l * 255); return [v, v, v]; }
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+  const f = t => {
+    if (t < 0) t += 1; if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  };
+  return [Math.round(f(h + 1 / 3) * 255), Math.round(f(h) * 255), Math.round(f(h - 1 / 3) * 255)];
+}
+
+function computeTint(imgEl) {
+  try {
+    const W = 48, H = 27;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(imgEl, 0, 0, W, H);
+    const d = ctx.getImageData(0, 0, W, H).data; // lève une erreur si l'image est "tainted" (CORS)
+    let r = 0, g = 0, b = 0, ws = 0;
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4;
+        const R = d[i], G = d[i + 1], B = d[i + 2];
+        const mx = Math.max(R, G, B), mn = Math.min(R, G, B);
+        const sat = mx ? (mx - mn) / mx : 0;
+        const lum = (R + G + B) / 3;
+        let w = 0.15 + sat * sat * 3;          // les couleurs saturées comptent davantage
+        if (lum < 20 || lum > 240) w *= 0.2;   // on ignore noirs et blancs purs
+        w *= 0.6 + (y / H) * 0.8;              // le bas de l'image compte davantage (zone du texte)
+        r += R * w; g += G * w; b += B * w; ws += w;
+      }
+    }
+    r /= ws; g /= ws; b /= ws;
+    const [h, s] = rgbToHsl(r, g, b);
+    // Teinte du voile : même couleur, très assombrie (assez pour garder la lisibilité)
+    const vs = s < 0.06 ? 0 : Math.min(s * 0.85, 0.55);
+    const vl = s < 0.06 ? 0.06 : 0.13;
+    const veil = hslToRgb(h, vs, vl);
+    const bg = [15, 15, 18];
+    const mid = veil.map((v, i) => Math.round((v + bg[i]) / 2));
+    return { t: veil.join(','), t2: mid.join(',') };
+  } catch (e) {
+    return null;
+  }
+}
+
+function setTint(heroSec, tint) {
+  if (!tint) return;
+  heroSec.style.setProperty('--tint', tint.t);
+  heroSec.style.setProperty('--tint2', tint.t2);
+}
+
+/* =========================================================
+   OUVERTURE FILM
+   ========================================================= */
+function openMovieDetails(filmId, selectedSeanceId = null) {
+  const cleanId = String(filmId).trim();
+  const movie = db.films.find(f => String(f.id_film) === cleanId);
+  if (!movie) return;
+
+  $('searchInput').value = '';
+  previousView = (document.querySelector('.view-page.active-view') || {}).id || 'view-home';
+  switchView('view-movie');
+
+  const heroSec = $('movie-detail-hero');
+  const bgUrl = movie.fond_url || movie.affiche_url || '';
+  const fullSynopsisText = movie.synopsis_long || movie.synopsis || '';
+  const isMobile = window.innerWidth <= 768;
+  const backAction = isSearchActive ? 'goHome()' : `switchView('${previousView}')`;
+
+  // Voile neutre par défaut ; remplacé par la teinte dominante dès que l'image est lue
+  heroSec.style.setProperty('--tint', '15,15,18');
+  heroSec.style.setProperty('--tint2', '15,15,18');
+
+  heroSec.innerHTML = `
+    <img class="movie-hero-img" id="movieHeroImg" alt="" crossorigin="anonymous" decoding="async" fetchpriority="high" src="${bgUrl}">
+    <div class="movie-hero-content">
+      <div style="margin-bottom:18px;">
+        <button class="btn-back-home" onclick="${backAction}">← Retour</button>
+      </div>
+      <h1 class="movie-title">${movie.titre}</h1>
+      <div class="movie-quick-meta">
+        <span>${movie.annee || ''}</span> • <span>${movie.duree}</span> • <span>${movie.genre}</span>
+        <span class="badge-2k">2K</span>
+        ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
+      </div>
+      <div class="synopsis-wrapper">
+        <span class="synopsis-text ${isMobile ? 'collapsed' : ''}" id="synopsisText">${isMobile ? (movie.synopsis || fullSynopsisText) : fullSynopsisText}</span>
+        <button class="btn-toggle-synopsis" id="synopsisToggleBtn" onclick="toggleSynopsis('${movie.id_film}')">Lire la suite</button>
+      </div>
+      <div class="movie-credits-text">
+        ${movie.realisateur ? `<span class="credit-block"><strong>De</strong> ${movie.realisateur}</span>` : ''}
+        ${movie.casting ? `<span class="credit-block"><strong>Avec</strong> ${movie.casting}</span>` : ''}
+      </div>
     </div>
+    ${movie.bande_annonce ? `
+      <div class="trailer-btn-wrapper">
+        <a href="${movie.bande_annonce}" target="_blank" rel="noopener noreferrer" class="btn-play-trailer" title="Voir la bande-annonce">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span class="mobile-trailer-text">Bande-annonce</span>
+        </a>
+      </div>` : ''}`;
 
-
-    <section class="venue-details-section">
-
-      <div
-        class="venue-grid"
-        id="venue-info-container"
-      ></div>
-
-    </section>
-
-  </div>
-
-
-  <!-- =========================================================
-       JAVASCRIPT
-       ========================================================= -->
-
-  <script>
-
-    const GOOGLE_SHEET_API_URL =
-      "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
-
-
-    let db = {
-      films: [],
-      seances: []
+  const heroImg = $('movieHeroImg');
+  if (tintCache[bgUrl]) {
+    setTint(heroSec, tintCache[bgUrl]);
+  } else {
+    let retried = false;
+    heroImg.onload = () => {
+      const t = computeTint(heroImg);
+      if (t) { tintCache[bgUrl] = t; setTint(heroSec, t); }
     };
-
-
-    let previousView = 'view-home';
-
-    let currentLieuId = null;
-
-    let isSearchActive = false;
-
-
-    let heroCarouselTimer = null;
-
-    let heroCarouselIndex = 0;
-
-    let heroFeaturedFilms = [];
-
-
-    /* =========================================================
-       GOOGLE MAPS
-       ========================================================= */
-
-    /*
-      IMPORTANT :
-
-      La colonne "google_maps_url" de l'onglet Seances
-      contient directement l'URL Google Maps souhaitée.
-
-      On ne transforme PLUS cette URL en coordonnées GPS.
-
-      Si l'URL est valide, elle est renvoyée telle quelle.
-
-      Si elle est absente ou invalide, on crée un lien
-      Google Maps de secours à partir du nom du lieu.
-    */
-
-    function sanitizeGoogleMapsUrl(rawUrl, queryFallback) {
-
-      if (
-        rawUrl &&
-        typeof rawUrl === "string"
-      ) {
-
-        const url =
-          rawUrl.trim();
-
-
-        /*
-          On accepte les principales formes d'URL
-          Google Maps.
-        */
-
-        if (
-          url.includes("google.com/maps") ||
-          url.includes("maps.google.com")
-        ) {
-
-          return url;
-
-        }
-
-      }
-
-
-      /*
-        URL de secours si google_maps_url est vide.
-      */
-
-      return (
-        "https://www.google.com/maps/search/?api=1&query=" +
-        encodeURIComponent(
-          queryFallback || ""
-        )
-      );
-
-    }
-
-
-    /* =========================================================
-       FORMATAGE
-       ========================================================= */
-
-    function formatTime(val) {
-
-      if (!val) return "";
-
-      let str =
-        String(val).trim();
-
-
-      if (str.includes("T")) {
-
-        const d =
-          new Date(str);
-
-
-        if (!isNaN(d.getTime())) {
-
-          let hours =
-            d.getUTCHours();
-
-          let minutes =
-            d.getUTCMinutes() + 10;
-
-
-          if (minutes >= 60) {
-
-            minutes -= 60;
-
-            hours += 1;
-
-          }
-
-
-          if (hours >= 24) {
-
-            hours = 0;
-
-          }
-
-
-          return (
-            hours +
-            "h" +
-            (
-              minutes < 10
-                ? "0"
-                : ""
-            ) +
-            minutes
-          );
-
-        }
-
-      }
-
-
-      const timeMatch =
-        str.match(
-          /^(\d{1,2})[:h](\d{2})(?::\d{2})?$/
-        );
-
-
-      if (timeMatch) {
-
-        let hours =
-          parseInt(
-            timeMatch[1],
-            10
-          );
-
-        let minutes =
-          parseInt(
-            timeMatch[2],
-            10
-          );
-
-
-        minutes += 10;
-
-
-        if (minutes >= 60) {
-
-          minutes -= 60;
-
-          hours += 1;
-
-        }
-
-
-        if (hours >= 24) {
-
-          hours = 0;
-
-        }
-
-
-        return (
-          hours +
-          "h" +
-          (
-            minutes < 10
-              ? "0"
-              : ""
-          ) +
-          minutes
-        );
-
-      }
-
-
-      return str;
-
-    }
-
-
-    function formatDate(val) {
-
-      if (!val) return "";
-
-      let str = String(val).trim();
-
-
-      if (
-        str.includes("T") &&
-        str.length > 20
-      ) {
-
-        const d = new Date(str);
-
-
-        if (!isNaN(d.getTime())) {
-
-          const jours = [
-            'dim.',
-            'lun.',
-            'mar.',
-            'mer.',
-            'jeu.',
-            'ven.',
-            'sam.'
-          ];
-
-
-          const mois = [
-            'janv.',
-            'févr.',
-            'mars',
-            'avril',
-            'mai',
-            'juin',
-            'juil.',
-            'août',
-            'sept.',
-            'oct.',
-            'nov.',
-            'déc.'
-          ];
-
-
-          return `
-            ${jours[d.getDay()]}
-            ${d.getDate()}
-            ${mois[d.getMonth()]}
-          `;
-
-        }
-
-      }
-
-
-      return str;
-
-    }
-
-
-    function formatYear(val) {
-
-      if (!val) return "";
-
-      let str = String(val).trim();
-
-
-      if (str.includes("T")) {
-
-        const d = new Date(str);
-
-
-        if (!isNaN(d.getTime())) {
-
-          return d.getFullYear();
-
-        }
-
-      }
-
-
-      const match =
-        str.match(/\b(19|20)\d{2}\b/);
-
-
-      return match
-        ? match[0]
-        : str;
-
-    }
-
-
-    function getCommune(seance) {
-
-      return (
-        seance.lieu_id ||
-        seance.commune ||
-        seance.lieu_nom
-      );
-
-    }
-
-
-    /* =========================================================
-       CHARGEMENT DES DONNEES
-       ========================================================= */
-
-    async function loadDataFromSheet() {
-
-      try {
-
-        const cachedData =
-          sessionStorage.getItem(
-            'balad_data_cache'
-          );
-
-
-        if (cachedData) {
-
-          db = JSON.parse(cachedData);
-
-          initAppUI();
-
-        }
-
-
-        const response =
-          await fetch(GOOGLE_SHEET_API_URL);
-
-
-        const freshData =
-          await response.json();
-
-
-        db = freshData;
-
-
-        db.films =
-          (db.films || [])
-          .filter(
-            f =>
-              f &&
-              f.titre &&
-              String(f.titre).trim() !== ""
-          );
-
-
-        db.films.forEach(f => {
-
-          f.id_film =
-            String(f.id_film).trim();
-
-
-          f.duree =
-            formatTime(f.duree) ||
-            f.duree;
-
-
-          f.annee =
-            formatYear(f.annee);
-
-
-          f.realisateur =
-            f.real ||
-            f.realisateur ||
-            '';
-
-
-          f.bande_annonce =
-            f.trailer_url ||
-            f.bande_annonce ||
-            '';
-
-
-          f.synopsis_long =
-            f.synopsis_long ||
-            f.synopsis_complet ||
-            '';
-
-        });
-
-
-        db.seances =
-          (db.seances || [])
-          .filter(
-            s =>
-              s &&
-              s.id_film
-          );
-
-
-        db.seances.forEach(
-          (s, idx) => {
-
-            s.id_film =
-              String(s.id_film).trim();
-
-
-            s.horaire_texte =
-              formatTime(
-                s.horaire_texte
-              ) ||
-              s.horaire_texte;
-
-
-            s.date_texte =
-              formatDate(
-                s.date_texte
-              ) ||
-              s.date_texte;
-
-
-            /*
-              On conserve volontairement
-              s.google_maps_url intact.
-            */
-
-
-            if (!s.id_seance) {
-
-              s.id_seance =
-                'seance_' + idx;
-
-            }
-
-          }
-        );
-
-
-        sessionStorage.setItem(
-          'balad_data_cache',
-          JSON.stringify(db)
-        );
-
-
-        if (!cachedData) {
-
-          initAppUI();
-
-        }
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "Erreur de chargement Google Sheets:",
-          error
-        );
-
-
-        if (!db.films.length) {
-
-          document.getElementById(
-            'home-grid'
-          ).innerHTML =
-            '<p style="color:red;">Erreur lors du chargement des films.</p>';
-
-        }
-
-      }
-
-      finally {
-
-        const loader =
-          document.getElementById(
-            'app-loader'
-          );
-
-
-        if (loader) {
-
-          loader.classList.add(
-            'hidden'
-          );
-
-        }
-
-      }
-
-    }
-
-
-    function initAppUI() {
-
-      populateLocationDropdown();
-
-      setupHeroCarousel();
-
-      renderGridMovies(
-        db.films,
-        'home-grid'
-      );
-
-    }
-
-
-    /* =========================================================
-       LOCATIONS
-       ========================================================= */
-
-    function populateLocationDropdown() {
-
-      const select =
-        document.getElementById(
-          'locationSelect'
-        );
-
-
-      select.innerHTML =
-        '<option value="all">Cinémas</option>';
-
-
-      const communesMap =
-        new Map();
-
-
-      db.seances.forEach(s => {
-
-        const lieuId =
-          getCommune(s);
-
-
-        if (
-          lieuId &&
-          !communesMap.has(lieuId)
-        ) {
-
-          communesMap.set(
-            lieuId,
-            {
-              id: lieuId,
-              nom: lieuId
-            }
-          );
-
-        }
-
-      });
-
-
-      communesMap.forEach(item => {
-
-        select.innerHTML += `
-          <option value="${item.id}">
-            ${item.nom}
-          </option>
-        `;
-
-      });
-
-    }
-
-
-    /* =========================================================
-       HERO CAROUSEL
-       ========================================================= */
-
-    function setupHeroCarousel() {
-
-      if (
-        !db.films ||
-        !db.films.length
-      ) return;
-
-
-      heroFeaturedFilms =
-        [...db.films]
-        .sort(
-          () => 0.5 - Math.random()
-        )
-        .slice(0, 5);
-
-
-      heroCarouselIndex = 0;
-
-
-      renderHeroCarouselContainer();
-
-      startHeroAutoPlay();
-
-    }
-
-
-    function renderHeroCarouselContainer() {
-
-      const container =
-        document.getElementById(
-          'home-hero-container'
-        );
-
-
-      if (
-        !container ||
-        !heroFeaturedFilms.length
-      ) return;
-
-
-      const isMobile =
-        window.innerWidth <= 768;
-
-
-      let slidesHtml =
-        heroFeaturedFilms
-        .map(
-          (movie, index) => {
-
-            const movieSeances =
-              db.seances.filter(
-                s =>
-                  String(s.id_film) ===
-                  String(movie.id_film)
-              );
-
-
-            const maxSlots =
-              isMobile
-                ? 1
-                : 3;
-
-
-            const slotsToShow =
-              movieSeances.slice(
-                0,
-                maxSlots
-              );
-
-
-            let slotsHtml =
-              slotsToShow
-              .map(
-                s => `
-                  <a
-                    onclick="
-                      event.stopPropagation();
-                      openMovieDetails(
-                        '${movie.id_film}',
-                        '${s.id_seance}'
-                      )
-                    "
-                    class="btn-glass-slot"
-                  >
-                    ${getCommune(s)}
-                    -
-                    ${s.date_texte}
-                    à
-                    ${s.horaire_texte}
-                  </a>
-                `
-              )
-              .join('');
-
-
-            if (
-              movieSeances.length >
-              maxSlots
-            ) {
-
-              const rest =
-                movieSeances.length -
-                maxSlots;
-
-
-              slotsHtml += `
-                <a
-                  onclick="
-                    event.stopPropagation();
-                    openMovieDetails(
-                      '${movie.id_film}'
-                    )
-                  "
-                  class="btn-glass-slot"
-                  style="border-style:dashed;"
-                >
-                  + ${rest} séance(s)
-                </a>
-              `;
-
-            }
-
-
-            return `
-              <div
-                class="
-                  hero-slide
-                  ${index === 0 ? 'active' : ''}
-                "
-                id="hero-slide-${index}"
-                onclick="
-                  openMovieDetails(
-                    '${movie.id_film}'
-                  )
-                "
-              >
-
-                <div
-                  class="hero-bg-layer"
-                  style="
-                    background-image:
-                      url('${movie.fond_url || movie.affiche_url}');
-                  "
-                ></div>
-
-
-                <div class="hero-overlay-gradient"></div>
-
-
-                <div class="hero-content">
-
-                  <h1 class="hero-title">
-                    ${movie.titre}
-                  </h1>
-
-
-                  <div class="hero-meta">
-
-                    <span>
-                      ${movie.annee || ''}
-                    </span>
-
-                    •
-
-                    <span>
-                      ${movie.duree}
-                    </span>
-
-
-                    <span class="badge-2k">
-                      2K
-                    </span>
-
-
-                    ${
-                      movie.age
-                        ? `
-                          <span class="age-badge">
-                            ${movie.age}
-                          </span>
-                        `
-                        : ''
-                    }
-
-                  </div>
-
-
-                  <p class="hero-synopsis">
-                    ${movie.synopsis || ''}
-                  </p>
-
-
-                  <div class="hero-slots-container">
-                    ${slotsHtml}
-                  </div>
-
-                </div>
-
-              </div>
-            `;
-
-          }
-        )
-        .join('');
-
-
-      let dotsHtml =
-        heroFeaturedFilms
-        .map(
-          (_, i) => `
-            <div
-              class="
-                dot-item
-                ${i === 0 ? 'active' : ''}
-              "
-              id="hero-dot-${i}"
-              onclick="
-                event.stopPropagation();
-                setHeroSlide(${i})
-              "
-            >
-
-              <div class="dot-item-fill"></div>
-
-            </div>
-          `
-        )
-        .join('');
-
-
-      container.innerHTML = `
-
-        <div class="hero-slider-wrapper">
-
-          ${slidesHtml}
-
-          <div class="hero-dots-indicator">
-            ${dotsHtml}
-          </div>
-
+    heroImg.onerror = () => {
+      // Le serveur de l'image n'autorise pas la lecture des pixels : on recharge l'image sans cette option
+      if (!retried) { retried = true; heroImg.removeAttribute('crossorigin'); heroImg.src = bgUrl; }
+    };
+  }
+
+  const movieSeances = db.seances.filter(s => String(s.id_film) === cleanId);
+  const strip = $('movie-showtimes-strip');
+  strip.innerHTML = '';
+
+  if (!movieSeances.length) {
+    strip.innerHTML = '<p style="color:var(--text-muted);">Aucune séance programmée pour ce film.</p>';
+    $('details-panel').innerHTML = '';
+    return;
+  }
+
+  movieSeances.forEach((s, idx) => {
+    const isActive = selectedSeanceId ? String(s.id_seance) === String(selectedSeanceId) : idx === 0;
+    const card = document.createElement('div');
+    card.className = `showtime-horizontal-card ${isActive ? 'active' : ''}`;
+    card.onclick = e => selectShowtime(e, s, movie);
+    card.innerHTML = `
+      <div class="town-tag">${getCommune(s)}</div>
+      <div class="card-date">${s.date_texte}</div>
+      <div class="card-venue">${s.horaire_texte}</div>`;
+    strip.appendChild(card);
+    if (isActive) renderShowtimePanel(s, movie);
+  });
+
+  if (isMobile) {
+    setTimeout(() => {
+      const sec = document.querySelector('.showtimes-section');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+  }
+}
+
+function toggleSynopsis(filmId) {
+  const movie = db.films.find(f => String(f.id_film) === String(filmId));
+  if (!movie) return;
+  const synEl = $('synopsisText');
+  const btnEl = $('synopsisToggleBtn');
+  if (synEl.classList.contains('collapsed')) {
+    synEl.classList.remove('collapsed');
+    synEl.textContent = movie.synopsis_long || movie.synopsis || '';
+    btnEl.textContent = 'Réduire';
+  } else {
+    synEl.classList.add('collapsed');
+    synEl.textContent = movie.synopsis || '';
+    btnEl.textContent = 'Lire la suite';
+  }
+}
+
+/* =========================================================
+   SEANCE
+   ========================================================= */
+function selectShowtime(evt, seance, movie) {
+  document.querySelectorAll('.showtime-horizontal-card').forEach(c => c.classList.remove('active'));
+  if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+  const panel = $('details-panel');
+  panel.classList.add('changing');
+  setTimeout(() => {
+    renderShowtimePanel(seance, movie);
+    panel.classList.remove('changing');
+  }, 150);
+}
+
+/* Tarifs : si la colonne "tarif" est vide ou vaut "habituel" -> tarifs standards ;
+   sinon on affiche uniquement ce qui est écrit dans la colonne. */
+function tarifsHtml(seance) {
+  const t = String(seance.tarif == null ? '' : seance.tarif).trim();
+  if (t && norm(t) !== 'habituel') {
+    return `<div class="item-value">${esc(t).replace(/\n/g, '<br>')}</div>`;
+  }
+  return TARIFS_COURTS.map(x => `<div class="tarif-line"><span>${x.label}</span><span>${x.prix}</span></div>`).join('') +
+    `<a class="tarif-link" onclick="go('tarifs')">Voir le détail des tarifs</a>`;
+}
+
+function renderShowtimePanel(seance, movie) {
+  const lieuAffichage = seance.lieu_nom || getCommune(seance);
+  const mapsUrl = sanitizeGoogleMapsUrl(seance.google_maps_url, `${lieuAffichage} France`);
+  const mapsBadge = `
+    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="badge-salle">📍 ${lieuAffichage}</a>`;
+
+  $('details-panel').innerHTML = `
+    <div class="panel-header">
+      <div class="panel-title">Séance à <span>${getCommune(seance)}</span></div>
+      <div class="item-value">${seance.date_texte} à ${seance.horaire_texte}</div>
+    </div>
+    <div class="practical-grid">
+      <div class="practical-item">
+        <div class="item-label">Lieu & Adresse</div>
+        <div class="item-value" style="margin-top:4px;">${mapsBadge}</div>
+      </div>
+      <div class="practical-item">
+        <div class="item-label">Tarifs</div>
+        <div>${tarifsHtml(seance)}</div>
+      </div>
+      <div class="practical-item">
+        <div class="item-label">Services</div>
+        <div class="item-value">${seance.info_services || 'Projection numérique 2K'}</div>
+      </div>
+      <div class="practical-item">
+        <div class="item-label">Paiements</div>
+        <div class="item-value">${seance.info_paiement || 'CB, Espèces, Chèques'}</div>
+      </div>
+    </div>
+    <div class="actions-row">
+      <a class="btn-agenda" onclick="openVenueDetails(${jsq(getCommune(seance))})">Voir la salle & infos</a>
+    </div>`;
+}
+
+/* =========================================================
+   LIEU
+   ========================================================= */
+function openVenueDetails(lieuId) {
+  currentLieuId = lieuId;
+  switchView('view-venue');
+  $('venue-page-title').textContent = lieuId;
+
+  const venueSeances = db.seances.filter(s => getCommune(s) === lieuId);
+  const firstSeance = venueSeances[0];
+  const salleNom = (firstSeance && (firstSeance.salle_lieu || firstSeance.lieu_nom)) || lieuId;
+  const mapsUrl = sanitizeGoogleMapsUrl(firstSeance && firstSeance.google_maps_url, `${salleNom} ${lieuId} France`);
+  const bgUrl = (firstSeance && firstSeance.salle_url) || '';
+  const filmIds = [...new Set(venueSeances.map(s => String(s.id_film)))];
+  const venueFilms = db.films.filter(f => filmIds.includes(String(f.id_film)));
+
+  const mapsBadge = `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="badge-salle">📍 ${salleNom}</a>`;
+
+  $('venue-hero-container').innerHTML = `
+    <div class="hero-slider-wrapper venue-grain" style="background-image:url('${bgUrl}'); background-size:cover; background-position:center top; background-color:var(--bg-card);">
+      <div class="hero-overlay-gradient"></div>
+      <div class="hero-content">
+        <div style="margin-bottom:14px;">
+          <button class="btn-back-home" onclick="goHome()">← Retour à l'accueil</button>
         </div>
+        ${mapsBadge}
+        <h1 class="hero-title">${lieuId}</h1>
+        <p class="hero-subtitle">Retrouvez la programmation Familles Rurales à ${lieuId}.</p>
+      </div>
+    </div>`;
 
-      `;
+  renderGridMovies(venueFilms, 'venue-grid');
 
+  $('venue-info-container').innerHTML = `
+    <div class="venue-info-box">
+      <h3>Informations pratiques — ${lieuId}</h3>
+      <div class="info-item"><strong>Salle :</strong> ${salleNom}</div>
+      <div class="info-item"><strong>Réseau :</strong> Balad'Images (Familles Rurales)</div>
+      <div class="info-item"><strong>Services :</strong> ${(firstSeance && firstSeance.info_services) || 'Écran géant, Son Digital'}</div>
+      <div class="info-item"><strong>Paiement :</strong> ${(firstSeance && firstSeance.info_paiement) || 'CB, Espèces'}</div>
+      <div class="badge-pmr">♿ Accessibilité PMR garantie</div>
+    </div>`;
+}
+
+/* =========================================================
+   ACTIVITES
+   ========================================================= */
+function renderActivitesGrid() {
+  $('activites-grid').innerHTML = ACTIVITES.map(a => `
+    <div class="card-activite" onclick="openActivite('${a.id}')">
+      <div class="ico">${a.ico}</div>
+      <h3>${a.titre}</h3>
+      <p>${a.resume}</p>
+    </div>`).join('');
+}
+
+function openActivite(id) {
+  const a = ACTIVITES.find(x => x.id === id);
+  if (!a) return;
+  $('activite-title').textContent = a.titre;
+  $('activite-content').innerHTML = a.contenu;
+  switchView('view-activite');
+}
+
+/* =========================================================
+   CONTACT (mailto)
+   ========================================================= */
+function submitContact(e) {
+  e.preventDefault();
+  const nom = $('c-nom').value.trim();
+  const prenom = $('c-prenom').value.trim();
+  const email = $('c-email').value.trim();
+  const objet = $('c-objet').value.trim();
+  const message = $('c-message').value.trim();
+  const body = `Nom : ${nom}\nPrénom : ${prenom}\nEmail : ${email}\n\n${message}`;
+  window.location.href = 'mailto:' + SITE.email + '?subject=' + encodeURIComponent(objet) + '&body=' + encodeURIComponent(body);
+}
+
+/* =========================================================
+   NOS SALLES (carte OpenStreetMap via Leaflet, chargée à la demande)
+   ========================================================= */
+let sallesMap = null, sallesLayer = null, sallesMarkers = {}, sallesVenues = [];
+let sallesDirty = true, leafletPromise = null, searchMarker = null;
+
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (leafletPromise) return leafletPromise;
+  leafletPromise = new Promise((resolve, reject) => {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css';
+    document.head.appendChild(css);
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    s.onload = resolve;
+    s.onerror = () => { leafletPromise = null; reject(); };
+    document.head.appendChild(s);
+  });
+  return leafletPromise;
+}
+
+// Accepte "47.4784, -0.5632", "47,4784 ; -0,5632", etc.
+function parseCoords(v) {
+  if (!v) return null;
+  const m = String(v).match(/-?\d+(?:[.,]\d+)?/g);
+  if (!m || m.length < 2) return null;
+  const lat = parseFloat(m[0].replace(',', '.'));
+  const lng = parseFloat(m[1].replace(',', '.'));
+  if (isNaN(lat) || isNaN(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+  return [lat, lng];
+}
+
+function buildVenues() {
+  const map = new Map();
+  db.seances.forEach(s => {
+    const id = getCommune(s);
+    if (!id) return;
+    let v = map.get(id);
+    if (!v) {
+      v = { id, nom: s.salle_lieu || s.lieu_nom || id, img: s.salle_url || '', adresse: s.adresse || '', coords: null, seances: [] };
+      map.set(id, v);
     }
+    if (!v.coords) v.coords = parseCoords(s.coordonnees || s['coordonnées'] || s.coords);
+    if (!v.img && s.salle_url) v.img = s.salle_url;
+    if (!v.adresse && s.adresse) v.adresse = s.adresse;
+    v.seances.push(s);
+  });
+  return [...map.values()];
+}
 
+// Itinéraire Google Maps sans point de départ (l'utilisateur le choisit)
+function directionsUrl(v) {
+  const dest = v.adresse || (v.coords ? v.coords.join(',') : `${v.nom} ${v.id} France`);
+  return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(dest);
+}
 
-    function startHeroAutoPlay() {
+function popupHtml(v) {
+  const first = v.seances[0];
+  const film = first && db.films.find(f => String(f.id_film) === String(first.id_film));
+  const nbFilms = new Set(v.seances.map(s => String(s.id_film))).size;
+  const img = v.img ? `style="background-image:url('${esc(v.img)}')"` : '';
+  return `
+    <div class="popup-img" ${img}></div>
+    <div class="popup-body">
+      <h4>${esc(v.id)}</h4>
+      <div class="popup-sub">${esc(v.nom)}</div>
+      <div class="popup-info">🎬 ${nbFilms} film${nbFilms > 1 ? 's' : ''} à l'affiche</div>
+      ${first && film ? `<div class="popup-info">🕒 Prochaine séance : ${esc(first.date_texte)} à ${esc(first.horaire_texte)}</div>
+      <div class="popup-info">« ${esc(film.titre)} »</div>` : ''}
+      <div class="popup-actions">
+        <button class="btn-agenda" onclick="openVenueDetails(${jsq(v.id)})">En savoir plus</button>
+        <a class="btn-agenda filled" href="${directionsUrl(v)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Y aller</a>
+      </div>
+    </div>`;
+}
 
-      clearInterval(
-        heroCarouselTimer
-      );
+const PIN_SVG = '<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="4.6" fill="#fff"/></svg>';
 
+function drawSallesMarkers() {
+  sallesVenues = buildVenues();
+  sallesLayer.clearLayers();
+  sallesMarkers = {};
+  const icon = L.divIcon({ className: 'pin-icon', html: PIN_SVG, iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -38], tooltipAnchor: [0, -34] });
+  const pts = [];
+  let missing = 0;
+  sallesVenues.forEach(v => {
+    if (!v.coords) { missing++; return; }
+    const m = L.marker(v.coords, { icon, title: v.id }).bindPopup(popupHtml(v), { minWidth: 250, maxWidth: 250, autoPanPaddingTopLeft: [20, 90], autoPanPaddingBottomRight: [20, 20] });
+    m.bindTooltip(v.id, { direction: 'top' });
+    m.addTo(sallesLayer);
+    sallesMarkers[v.id] = m;
+    pts.push(v.coords);
+  });
+  if (pts.length) sallesMap.fitBounds(pts, { padding: [40, 40], maxZoom: 11 });
+  $('sallesNote').textContent = missing
+    ? `${missing} salle(s) sans coordonnées dans le tableau (colonne « coordonnees ») : elles n'apparaissent pas sur la carte.`
+    : '';
+  sallesDirty = false;
+}
 
-      heroCarouselTimer =
-        setInterval(
-          () => {
+async function initSalles() {
+  sallesVenues = buildVenues();
+  const box = $('sallesMap');
+  try {
+    await loadLeaflet();
+  } catch (e) {
+    box.innerHTML = '<p style="padding:20px;color:var(--text-muted);">Impossible de charger la carte. Vérifiez votre connexion.</p>';
+    return;
+  }
+  if (!sallesMap) {
+    sallesMap = L.map('sallesMap', { scrollWheelZoom: false }).setView([47.45, -0.55], 9);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+    }).addTo(sallesMap);
+    sallesLayer = L.layerGroup().addTo(sallesMap);
+    sallesMap.on('focus', () => sallesMap.scrollWheelZoom.enable());
+    sallesMap.on('blur', () => sallesMap.scrollWheelZoom.disable());
+  }
+  if (sallesDirty) drawSallesMarkers();
+  setTimeout(() => sallesMap.invalidateSize(), 60);
+}
 
-            const nextIndex =
-              (
-                heroCarouselIndex + 1
-              ) %
-              heroFeaturedFilms.length;
+function focusVenue(id) {
+  const m = sallesMarkers[id];
+  const v = sallesVenues.find(x => x.id === id);
+  if (!m || !sallesMap) {
+    $('sallesResult').innerHTML = `<div class="result-box">Cette salle n'a pas encore de coordonnées sur la carte. <a class="btn-mini" onclick="openVenueDetails(${jsq(id)})">Voir la page de la salle</a></div>`;
+    return;
+  }
+  sallesMap.flyTo(v.coords, 13, { duration: 0.8 });
+  setTimeout(() => m.openPopup(), 850);
+  $('sallesMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
+function clearSallesResult() {
+  $('sallesResult').innerHTML = '';
+  if (searchMarker && sallesMap) { sallesMap.removeLayer(searchMarker); searchMarker = null; }
+}
 
-            setHeroSlide(
-              nextIndex
-            );
+function sallesSuggest(val) {
+  const q = norm(val);
+  const dd = $('sallesSuggest');
+  if (!q) { dd.classList.remove('open'); dd.innerHTML = ''; return; }
+  const matches = sallesVenues.filter(v => norm(v.id).includes(q) || norm(v.nom).includes(q)).slice(0, 6);
+  let html = matches.map(v => `<a class="search-dropdown-item" onclick="pickSalle(${jsq(v.id)})">📍 ${esc(v.id)}</a>`).join('');
+  if (q.length >= 2) html += `<a class="search-dropdown-item" onclick="sallesSearchGo(true)">🔎 Chercher « ${esc(val.trim())} » : 3 salles les plus proches</a>`;
+  dd.innerHTML = html;
+  dd.classList.add('open');
+}
 
-          },
-          7000
-        );
+function pickSalle(id) {
+  $('sallesSuggest').classList.remove('open');
+  $('sallesSearch').value = id;
+  clearSallesResult();
+  focusVenue(id);
+}
 
+async function sallesSearchGo(forceNearest) {
+  const val = $('sallesSearch').value.trim();
+  $('sallesSuggest').classList.remove('open');
+  if (!val) return;
+  const q = norm(val);
+  if (!forceNearest) {
+    const exact = sallesVenues.find(v => norm(v.id) === q);
+    if (exact) { pickSalle(exact.id); return; }
+    const partial = sallesVenues.filter(v => norm(v.id).includes(q));
+    if (partial.length === 1) { pickSalle(partial[0].id); return; }
+  }
+  await nearestTo(val);
+}
+
+function haversine(a, b) {
+  const R = 6371, rad = x => x * Math.PI / 180;
+  const dLat = rad(b[0] - a[0]), dLng = rad(b[1] - a[1]);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+async function nearestTo(val) {
+  const res = $('sallesResult');
+  res.innerHTML = '<div class="result-box">Recherche de « ' + esc(val) + ' »...</div>';
+  try {
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=fr&q=' + encodeURIComponent(val + ', France');
+    const data = await (await fetch(url, { headers: { 'Accept-Language': 'fr' } })).json();
+    if (!data || !data.length) {
+      res.innerHTML = '<div class="result-box">Commune introuvable. Essayez avec une autre orthographe.</div>';
+      return;
     }
-
-
-    function setHeroSlide(index) {
-
-      const slides =
-        document.querySelectorAll(
-          '.hero-slide'
-        );
-
-
-      const dots =
-        document.querySelectorAll(
-          '.dot-item'
-        );
-
-
-      slides.forEach(
-        (s, i) => {
-
-          if (i === index) {
-
-            s.classList.add(
-              'active'
-            );
-
-          }
-          else {
-
-            s.classList.remove(
-              'active'
-            );
-
-          }
-
-        }
-      );
-
-
-      dots.forEach(
-        (d, i) => {
-
-          if (i === index) {
-
-            d.classList.remove(
-              'active'
-            );
-
-
-            void d.offsetWidth;
-
-
-            d.classList.add(
-              'active'
-            );
-
-          }
-          else {
-
-            d.classList.remove(
-              'active'
-            );
-
-          }
-
-        }
-      );
-
-
-      heroCarouselIndex =
-        index;
-
+    const here = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+    const placed = sallesVenues.filter(v => v.coords).map(v => ({ v, d: haversine(here, v.coords) })).sort((a, b) => a.d - b.d).slice(0, 3);
+    if (!placed.length) {
+      res.innerHTML = '<div class="result-box">Aucune salle n\'a de coordonnées pour le moment.</div>';
+      return;
     }
-
-
-    /* =========================================================
-       GRILLE FILMS
-       ========================================================= */
-
-    function renderGridMovies(
-      filmList,
-      containerId
-    ) {
-
-      const container =
-        document.getElementById(
-          containerId
-        );
-
-
-      if (!container) return;
-
-
-      container.innerHTML = '';
-
-
-      if (!filmList.length) {
-
-        container.innerHTML =
-          '<p style="color:var(--text-muted); grid-column:1/-1;">Aucun film trouvé.</p>';
-
-        return;
-
-      }
-
-
-      filmList.forEach(
-        (movie, mIndex) => {
-
-          const movieSeances =
-            db.seances.filter(
-              s =>
-                String(s.id_film) ===
-                String(movie.id_film)
-            );
-
-
-          let slotsListHtml = '';
-
-          const limit = 2;
-
-
-          movieSeances.forEach(
-            (s, idx) => {
-
-              const isHidden =
-                idx >= limit;
-
-
-              slotsListHtml += `
-
-                <div
-                  class="
-                    slot-pill
-                    ${
-                      isHidden
-                        ? 'extra-slot-' +
-                          containerId +
-                          '-' +
-                          mIndex
-                        : ''
-                    }
-                  "
-                  style="
-                    ${
-                      isHidden
-                        ? 'display:none;'
-                        : ''
-                    }
-                  "
-                  onclick="
-                    event.stopPropagation();
-                    openMovieDetails(
-                      '${movie.id_film}',
-                      '${s.id_seance}'
-                    )
-                  "
-                >
-
-                  <span class="town">
-                    ${getCommune(s)}
-                  </span>
-
-
-                  <span>
-                    ${s.date_texte}
-                    à
-                    ${s.horaire_texte}
-                  </span>
-
-                </div>
-
-              `;
-
-            }
-          );
-
-
-          let moreBtnHtml = '';
-
-
-          if (
-            movieSeances.length >
-            limit
-          ) {
-
-            const remaining =
-              movieSeances.length -
-              limit;
-
-
-            moreBtnHtml = `
-
-              <button
-                class="btn-more-slots"
-                id="
-                  btn-more-${containerId}-${mIndex}
-                "
-                onclick="
-                  event.stopPropagation();
-                  toggleExtraSlots(
-                    '${containerId}',
-                    ${mIndex},
-                    ${remaining}
-                  )
-                "
-              >
-                + ${remaining}
-                autre(s) séance(s)
-              </button>
-
-            `;
-
-          }
-
-
-          const card =
-            document.createElement(
-              'div'
-            );
-
-
-          card.className =
-            'card-movie';
-
-
-          card.onclick =
-            () =>
-              openMovieDetails(
-                movie.id_film
-              );
-
-
-          card.innerHTML = `
-
-            <div class="card-poster">
-
-              <img
-                src="${movie.affiche_url}"
-                alt="${movie.titre}"
-                loading="lazy"
-              >
-
-            </div>
-
-
-            <div class="card-content">
-
-              <div class="card-title">
-                ${movie.titre}
-              </div>
-
-
-              <div class="card-meta">
-
-                <span>
-                  ${movie.duree}
-                </span>
-
-                •
-
-                <span>
-                  ${movie.genre}
-                </span>
-
-
-                <span class="badge-2k">
-                  2K
-                </span>
-
-
-                ${
-                  movie.age
-                    ? `
-                      <span class="age-badge">
-                        ${movie.age}
-                      </span>
-                    `
-                    : ''
-                }
-
-              </div>
-
-
-              <div class="card-slots-area">
-
-                <div class="slots-label">
-                  Prochaines séances :
-                </div>
-
-
-                <div class="slots-list">
-                  ${slotsListHtml}
-                </div>
-
-
-                ${moreBtnHtml}
-
-              </div>
-
-            </div>
-
-          `;
-
-
-          container.appendChild(
-            card
-          );
-
-        }
-      );
-
-    }
-
-
-    function toggleExtraSlots(
-      prefix,
-      movieIndex,
-      count
-    ) {
-
-      const extraPills =
-        document.querySelectorAll(
-          `.extra-slot-${prefix}-${movieIndex}`
-        );
-
-
-      const btn =
-        document.getElementById(
-          `btn-more-${prefix}-${movieIndex}`
-        );
-
-
-      let isCollapsed = false;
-
-
-      extraPills.forEach(
-        el => {
-
-          if (
-            el.style.display ===
-            'none'
-          ) {
-
-            el.style.display =
-              'flex';
-
-          }
-          else {
-
-            el.style.display =
-              'none';
-
-            isCollapsed = true;
-
-          }
-
-        }
-      );
-
-
-      if (btn) {
-
-        btn.textContent =
-          isCollapsed
-            ? `+ ${count} autre(s) séance(s)`
-            : "Voir moins";
-
-      }
-
-    }
-
-
-    /* =========================================================
-       NAVIGATION
-       ========================================================= */
-
-    function switchView(
-      targetViewId
-    ) {
-
-      const overlay =
-        document.getElementById(
-          'page-transition-overlay'
-        );
-
-
-      overlay.classList.add(
-        'active'
-      );
-
-
-      setTimeout(
-        () => {
-
-          document
-            .querySelectorAll(
-              '.view-page'
-            )
-            .forEach(
-              el =>
-                el.classList.remove(
-                  'active-view'
-                )
-            );
-
-
-          const target =
-            document.getElementById(
-              targetViewId
-            );
-
-
-          if (target) {
-
-            target.classList.add(
-              'active-view'
-            );
-
-
-            window.scrollTo(
-              0,
-              0
-            );
-
-          }
-
-
-          if (
-            targetViewId ===
-            'view-venue'
-          ) {
-
-            document.body.classList.add(
-              'view-venue-active'
-            );
-
-          }
-          else {
-
-            document.body.classList.remove(
-              'view-venue-active'
-            );
-
-          }
-
-
-          document
-            .getElementById(
-              'searchDropdown'
-            )
-            ?.classList.remove(
-              'open'
-            );
-
-
-          setTimeout(
-            () => {
-
-              overlay.classList.remove(
-                'active'
-              );
-
-            },
-            40
-          );
-
-        },
-        180
-      );
-
-    }
-
-
-    function goHome() {
-
-      currentLieuId = null;
-
-      isSearchActive = false;
-
-
-      document.getElementById(
-        'searchInput'
-      ).value = '';
-
-
-      document.getElementById(
-        'locationSelect'
-      ).value = 'all';
-
-
-      document.getElementById(
-        'catalog-title'
-      ).textContent =
-        "Toute la programmation réseau";
-
-
-      switchView(
-        'view-home'
-      );
-
-
-      renderGridMovies(
-        db.films,
-        'home-grid'
-      );
-
-    }
-
-
-    function handleLocationChange(
-      val
-    ) {
-
-      if (
-        val === 'all'
-      ) {
-
-        goHome();
-
-      }
-      else {
-
-        openVenueDetails(
-          val
-        );
-
-      }
-
-    }
-
-
-    /* =========================================================
-       RECHERCHE
-       ========================================================= */
-
-    function handleSearchInput(
-      val
-    ) {
-
-      const q =
-        val
-        .toLowerCase()
-        .trim();
-
-
-      const dropdown =
-        document.getElementById(
-          'searchDropdown'
-        );
-
-
-      if (!q) {
-
-        dropdown.classList.remove(
-          'open'
-        );
-
-        dropdown.innerHTML = '';
-
-        return;
-
-      }
-
-
-      const matches =
-        db.films.filter(
-          f =>
-            f.titre &&
-            f.titre
-              .toLowerCase()
-              .includes(q)
-        );
-
-
-      if (matches.length) {
-
-        dropdown.innerHTML =
-          matches
-          .map(
-            f => `
-
-              <a
-                class="search-dropdown-item"
-                onclick="
-                  event.stopPropagation();
-                  openMovieDetails(
-                    '${f.id_film}'
-                  );
-                "
-              >
-                ${f.titre}
-              </a>
-
-            `
-          )
-          .join('');
-
-
-        dropdown.classList.add(
-          'open'
-        );
-
-      }
-      else {
-
-        dropdown.classList.remove(
-          'open'
-        );
-
-      }
-
-    }
-
-
-    function triggerSearchExecution() {
-
-      const input =
-        document.getElementById(
-          'searchInput'
-        );
-
-
-      const q =
-        input.value
-        .toLowerCase()
-        .trim();
-
-
-      document
-        .getElementById(
-          'searchDropdown'
-        )
-        .classList.remove(
-          'open'
-        );
-
-
-      if (!q) return;
-
-
-      isSearchActive = true;
-
-
-      const filtered =
-        db.films.filter(
-          f =>
-            (
-              f.titre &&
-              f.titre
-                .toLowerCase()
-                .includes(q)
-            ) ||
-
-            (
-              f.genre &&
-              f.genre
-                .toLowerCase()
-                .includes(q)
-            ) ||
-
-            (
-              f.casting &&
-              f.casting
-                .toLowerCase()
-                .includes(q)
-            )
-        );
-
-
-      if (
-        document
-          .querySelector(
-            '.view-page.active-view'
-          )
-          ?.id !==
-        'view-home'
-      ) {
-
-        switchView(
-          'view-home'
-        );
-
-      }
-
-
-      renderGridMovies(
-        filtered,
-        'home-grid'
-      );
-
-
-      document.getElementById(
-        'catalog-title'
-      ).textContent =
-        `Résultats de recherche pour "${q}"`;
-
-
-      document.getElementById(
-        'home-grid'
-      ).scrollIntoView({
-        behavior: 'smooth'
-      });
-
-
-      input.value = '';
-
-    }
-
-
-    document.addEventListener(
-      'click',
-      e => {
-
-        const container =
-          document.getElementById(
-            'searchContainer'
-          );
-
-
-        if (
-          container &&
-          !container.contains(
-            e.target
-          )
-        ) {
-
-          document
-            .getElementById(
-              'searchDropdown'
-            )
-            .classList.remove(
-              'open'
-            );
-
-        }
-
-      }
-    );
-
-
-    function toggleMenu() {
-
-      document
-        .getElementById(
-          'mobileMenu'
-        )
-        .classList.toggle(
-          'open'
-        );
-
-    }
-
-
-    /* =========================================================
-       OUVERTURE FILM
-       ========================================================= */
-
-    function openMovieDetails(
-      filmId,
-      selectedSeanceId = null
-    ) {
-
-      const cleanId =
-        String(filmId).trim();
-
-
-      const movie =
-        db.films.find(
-          f =>
-            String(f.id_film) ===
-            cleanId
-        );
-
-
-      if (!movie) return;
-
-
-      document.getElementById(
-        'searchInput'
-      ).value = '';
-
-
-      previousView =
-        document
-          .querySelector(
-            '.view-page.active-view'
-          )
-          ?.id ||
-        'view-home';
-
-
-      switchView(
-        'view-movie'
-      );
-
-
-      const heroSec =
-        document.getElementById(
-          'movie-detail-hero'
-        );
-
-
-      heroSec.style.backgroundImage =
-        `url('${movie.fond_url || movie.affiche_url}')`;
-
-
-      const fullSynopsisText =
-        movie.synopsis_long ||
-        movie.synopsis ||
-        '';
-
-
-      const isMobile =
-        window.innerWidth <= 768;
-
-
-      const backAction =
-        isSearchActive
-          ? 'goHome()'
-          : `switchView('${previousView}')`;
-
-
-      heroSec.innerHTML = `
-
-        <div
-          class="hero-overlay-gradient"
-          style="
-            display:none;
-          "
-        ></div>
-
-
-        <div
-          style="
-            position:relative;
-            z-index:3;
-            max-width:720px;
-          "
-        >
-
-          <div
-            style="
-              margin-bottom:18px;
-            "
-          >
-
-            <button
-              class="btn-back-home"
-              onclick="${backAction}"
-            >
-              ← Retour
-            </button>
-
-          </div>
-
-
-          <h1 class="movie-title">
-            ${movie.titre}
-          </h1>
-
-
-          <div class="movie-quick-meta">
-
-            <span>
-              ${movie.annee || ''}
+    res.innerHTML = `
+      <div class="result-box">
+        <h3>Les 3 salles les plus proches de « ${esc(val)} »</h3>
+        ${placed.map(p => `
+          <div class="result-item">
+            <span><strong>${esc(p.v.id)}</strong> <span class="dist">à ${Math.round(p.d)} km</span></span>
+            <span class="result-actions">
+              <a class="btn-mini" onclick="focusVenue(${jsq(p.v.id)})">Voir sur la carte</a>
+              <a class="btn-mini" href="${directionsUrl(p.v)}" target="_blank" rel="noopener noreferrer">Y aller</a>
             </span>
-
-            •
-
-            <span>
-              ${movie.duree}
-            </span>
-
-            •
-
-            <span>
-              ${movie.genre}
-            </span>
-
-
-            <span class="badge-2k">
-              2K
-            </span>
-
-
-            ${
-              movie.age
-                ? `
-                  <span class="age-badge">
-                    ${movie.age}
-                  </span>
-                `
-                : ''
-            }
-
-          </div>
-
-
-          <div class="synopsis-wrapper">
-
-            <span
-              class="
-                synopsis-text
-                ${
-                  isMobile
-                    ? 'collapsed'
-                    : ''
-                }
-              "
-              id="synopsisText"
-            >
-              ${
-                isMobile
-                  ? (
-                      movie.synopsis ||
-                      fullSynopsisText
-                    )
-                  : fullSynopsisText
-              }
-            </span>
-
-
-            <button
-              class="btn-toggle-synopsis"
-              id="synopsisToggleBtn"
-              onclick="
-                toggleSynopsis(
-                  '${movie.id_film}'
-                )
-              "
-            >
-              Lire la suite
-            </button>
-
-          </div>
-
-
-          <div class="movie-credits-text">
-
-            ${
-              movie.realisateur
-                ? `
-                  <span class="credit-block">
-                    <strong>De</strong>
-                    ${movie.realisateur}
-                  </span>
-                `
-                : ''
-            }
-
-
-            ${
-              movie.casting
-                ? `
-                  <span class="credit-block">
-                    <strong>Avec</strong>
-                    ${movie.casting}
-                  </span>
-                `
-                : ''
-            }
-
-          </div>
-
-        </div>
-
-
-        ${
-          movie.bande_annonce
-            ? `
-
-              <div
-                class="trailer-btn-wrapper"
-              >
-
-                <a
-                  href="${movie.bande_annonce}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn-play-trailer"
-                  title="Voir la bande-annonce"
-                >
-
-                  <svg viewBox="0 0 24 24">
-
-                    <path d="
-                      M8 5v14l11-7z
-                    "/>
-
-                  </svg>
-
-
-                  <span class="mobile-trailer-text">
-                    Bande-annonce
-                  </span>
-
-                </a>
-
-              </div>
-
-            `
-            : ''
-        }
-
-      `;
-
-
-      const movieSeances =
-        db.seances.filter(
-          s =>
-            String(s.id_film) ===
-            cleanId
-        );
-
-
-      const strip =
-        document.getElementById(
-          'movie-showtimes-strip'
-        );
-
-
-      strip.innerHTML = '';
-
-
-      if (!movieSeances.length) {
-
-        strip.innerHTML =
-          '<p style="color:var(--text-muted);">Aucune séance programmée pour ce film.</p>';
-
-
-        document.getElementById(
-          'details-panel'
-        ).innerHTML = '';
-
-
-        return;
-
-      }
-
-
-      movieSeances.forEach(
-        (s, idx) => {
-
-          const isActive =
-            selectedSeanceId
-              ? (
-                  String(s.id_seance) ===
-                  String(selectedSeanceId)
-                )
-              : (
-                  idx === 0
-                );
-
-
-          const card =
-            document.createElement(
-              'div'
-            );
-
-
-          card.className =
-            `
-              showtime-horizontal-card
-              ${
-                isActive
-                  ? 'active'
-                  : ''
-              }
-            `;
-
-
-          card.onclick =
-            e =>
-              selectShowtime(
-                e,
-                s,
-                movie
-              );
-
-
-          card.innerHTML = `
-
-            <div class="town-tag">
-              ${getCommune(s)}
-            </div>
-
-
-            <div class="card-date">
-              ${s.date_texte}
-            </div>
-
-
-            <div class="card-venue">
-              ${s.horaire_texte}
-            </div>
-
-          `;
-
-
-          strip.appendChild(
-            card
-          );
-
-
-          if (isActive) {
-
-            renderShowtimePanel(
-              s,
-              movie
-            );
-
-          }
-
-        }
-      );
-
-
-      if (isMobile) {
-
-        setTimeout(
-          () => {
-
-            document
-              .querySelector(
-                '.showtimes-section'
-              )
-              ?.scrollIntoView({
-                behavior: 'smooth'
-              });
-
-          },
-          300
-        );
-
-      }
-
+          </div>`).join('')}
+      </div>`;
+    if (sallesMap) {
+      if (searchMarker) sallesMap.removeLayer(searchMarker);
+      searchMarker = L.circleMarker(here, { radius: 8, color: '#fff', weight: 2, fillColor: '#3b82f6', fillOpacity: 1 }).addTo(sallesMap).bindTooltip(val, { permanent: false });
+      sallesMap.fitBounds([here, ...placed.map(p => p.v.coords)], { padding: [50, 50], maxZoom: 12 });
     }
-
-
-    /* =========================================================
-       SYNOPSIS
-       ========================================================= */
-
-    function toggleSynopsis(
-      filmId
-    ) {
-
-      const movie =
-        db.films.find(
-          f =>
-            String(f.id_film) ===
-            String(filmId)
-        );
-
-
-      if (!movie) return;
-
-
-      const synEl =
-        document.getElementById(
-          'synopsisText'
-        );
-
-
-      const btnEl =
-        document.getElementById(
-          'synopsisToggleBtn'
-        );
-
-
-      if (
-        synEl.classList.contains(
-          'collapsed'
-        )
-      ) {
-
-        synEl.classList.remove(
-          'collapsed'
-        );
-
-
-        synEl.textContent =
-          movie.synopsis_long ||
-          movie.synopsis ||
-          '';
-
-
-        btnEl.textContent =
-          'Réduire';
-
-      }
-
-      else {
-
-        synEl.classList.add(
-          'collapsed'
-        );
-
-
-        synEl.textContent =
-          movie.synopsis ||
-          '';
-
-
-        btnEl.textContent =
-          'Lire la suite';
-
-      }
-
-    }
-
-
-    /* =========================================================
-       SEANCE
-       ========================================================= */
-
-    function selectShowtime(
-      evt,
-      seance,
-      movie
-    ) {
-
-      document
-        .querySelectorAll(
-          '.showtime-horizontal-card'
-        )
-        .forEach(
-          c =>
-            c.classList.remove(
-              'active'
-            )
-        );
-
-
-      if (
-        evt &&
-        evt.currentTarget
-      ) {
-
-        evt.currentTarget.classList.add(
-          'active'
-        );
-
-      }
-
-
-      const panel =
-        document.getElementById(
-          'details-panel'
-        );
-
-
-      panel.classList.add(
-        'changing'
-      );
-
-
-      setTimeout(
-        () => {
-
-          renderShowtimePanel(
-            seance,
-            movie
-          );
-
-
-          panel.classList.remove(
-            'changing'
-          );
-
-        },
-        150
-      );
-
-    }
-
-
-    function renderShowtimePanel(
-      seance,
-      movie
-    ) {
-
-      const lieuAffichage =
-        seance.lieu_nom ||
-        getCommune(seance);
-
-
-      /*
-        ICI :
-
-        On récupère directement la valeur
-        de la colonne google_maps_url
-        correspondant à cette séance.
-
-        Aucune conversion en coordonnées GPS.
-      */
-
-      const mapsUrl =
-        sanitizeGoogleMapsUrl(
-          seance.google_maps_url,
-          `${lieuAffichage} France`
-        );
-
-
-      const mapsBadge = `
-
-        <a
-          href="${mapsUrl}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="badge-salle"
-        >
-          📍 ${lieuAffichage}
-        </a>
-
-      `;
-
-
-      let tarifText =
-        '5,00 €';
-
-
-      if (seance.tarif_plein) {
-
-        tarifText =
-          `Plein : ${seance.tarif_plein}`;
-
-
-        if (seance.tarif_reduit) {
-
-          tarifText +=
-            ` | Réduit : ${seance.tarif_reduit}`;
-
-        }
-
-      }
-
-      else if (seance.tarif) {
-
-        tarifText =
-          seance.tarif;
-
-      }
-
-
-      const panel =
-        document.getElementById(
-          'details-panel'
-        );
-
-
-      panel.innerHTML = `
-
-        <div class="panel-header">
-
-          <div class="panel-title">
-
-            Séance à
-            <span>
-              ${getCommune(seance)}
-            </span>
-
-          </div>
-
-
-          <div class="item-value">
-
-            ${seance.date_texte}
-            à
-            ${seance.horaire_texte}
-
-          </div>
-
-        </div>
-
-
-        <div class="practical-grid">
-
-          <div class="practical-item">
-
-            <div class="item-label">
-              Lieu & Adresse
-            </div>
-
-
-            <div
-              class="item-value"
-              style="margin-top:4px;"
-            >
-              ${mapsBadge}
-            </div>
-
-          </div>
-
-
-          <div class="practical-item">
-
-            <div class="item-label">
-              Tarifs
-            </div>
-
-
-            <div class="item-value">
-              ${tarifText}
-            </div>
-
-          </div>
-
-
-          <div class="practical-item">
-
-            <div class="item-label">
-              Services
-            </div>
-
-
-            <div class="item-value">
-              ${
-                seance.info_services ||
-                'Projection numérique 2K'
-              }
-            </div>
-
-          </div>
-
-
-          <div class="practical-item">
-
-            <div class="item-label">
-              Paiements
-            </div>
-
-
-            <div class="item-value">
-              ${
-                seance.info_paiement ||
-                'CB, Espèces, Chèques'
-              }
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="actions-row">
-
-          <a
-            class="btn-agenda"
-            onclick="
-              openVenueDetails(
-                '${getCommune(seance)}'
-              )
-            "
-          >
-            Voir la salle & infos
-          </a>
-
-        </div>
-
-      `;
-
-    }
-
-
-    /* =========================================================
-       LIEU
-       ========================================================= */
-
-    function openVenueDetails(
-      lieuId
-    ) {
-
-      currentLieuId =
-        lieuId;
-
-
-      switchView(
-        'view-venue'
-      );
-
-
-      document.getElementById(
-        'venue-page-title'
-      ).textContent =
-        lieuId;
-
-
-      const venueSeances =
-        db.seances.filter(
-          s =>
-            getCommune(s) ===
-            lieuId
-        );
-
-
-      const firstSeance =
-        venueSeances[0];
-
-
-      const salleNom =
-        firstSeance?.salle_lieu ||
-        firstSeance?.lieu_nom ||
-        lieuId;
-
-
-      /*
-        IMPORTANT :
-
-        On utilise ici directement le
-        google_maps_url de la première séance
-        du lieu.
-
-        L'URL n'est pas convertie en GPS.
-      */
-
-      const mapsUrl =
-        sanitizeGoogleMapsUrl(
-          firstSeance?.google_maps_url,
-          `${salleNom} ${lieuId} France`
-        );
-
-
-      const bgUrl =
-        firstSeance?.salle_url ||
-        '';
-
-
-      const filmIds =
-        [
-          ...new Set(
-            venueSeances.map(
-              s =>
-                String(
-                  s.id_film
-                )
-            )
-          )
-        ];
-
-
-      const venueFilms =
-        db.films.filter(
-          f =>
-            filmIds.includes(
-              String(
-                f.id_film
-              )
-            )
-        );
-
-
-      const mapsBadge = `
-
-        <a
-          href="${mapsUrl}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="badge-salle"
-        >
-          📍 ${salleNom}
-        </a>
-
-      `;
-
-
-      const heroContainer =
-        document.getElementById(
-          'venue-hero-container'
-        );
-
-
-      heroContainer.innerHTML = `
-
-        <div
-          class="hero-slider-wrapper"
-          style="
-            background-image:url('${bgUrl}');
-            background-size:cover;
-            background-position:center top !important;
-            background-color:var(--bg-card);
-          "
-        >
-
-          <div class="hero-overlay-gradient"></div>
-
-
-          <div class="hero-content">
-
-            <div
-              style="
-                margin-bottom:14px;
-              "
-            >
-
-              <button
-                class="btn-back-home"
-                onclick="goHome()"
-              >
-                ← Retour à l'accueil
-              </button>
-
-            </div>
-
-
-            ${mapsBadge}
-
-
-            <h1 class="hero-title">
-              ${lieuId}
-            </h1>
-
-
-            <p class="hero-subtitle">
-              Retrouvez la programmation
-              Familles Rurales à
-              ${lieuId}.
-            </p>
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      renderGridMovies(
-        venueFilms,
-        'venue-grid'
-      );
-
-
-      const infoContainer =
-        document.getElementById(
-          'venue-info-container'
-        );
-
-
-      infoContainer.innerHTML = `
-
-        <div class="venue-info-box">
-
-          <h3>
-            Informations pratiques —
-            ${lieuId}
-          </h3>
-
-
-          <div class="info-item">
-
-            <strong>
-              Salle :
-            </strong>
-
-            ${salleNom}
-
-          </div>
-
-
-          <div class="info-item">
-
-            <strong>
-              Réseau :
-            </strong>
-
-            Balad'Images
-            (Familles Rurales)
-
-          </div>
-
-
-          <div class="info-item">
-
-            <strong>
-              Services :
-            </strong>
-
-            ${
-              firstSeance?.info_services ||
-              'Écran géant, Son Digital'
-            }
-
-          </div>
-
-
-          <div class="info-item">
-
-            <strong>
-              Paiement :
-            </strong>
-
-            ${
-              firstSeance?.info_paiement ||
-              'CB, Espèces'
-            }
-
-          </div>
-
-
-          <div class="badge-pmr">
-            ♿ Accessibilité PMR garantie
-          </div>
-
-        </div>
-
-      `;
-
-    }
-
-
-    /* =========================================================
-       RESIZE
-       ========================================================= */
-
-    window.addEventListener(
-      'resize',
-      () => {
-
-        if (
-          document
-            .getElementById(
-              'view-home'
-            )
-            ?.classList.contains(
-              'active-view'
-            )
-        ) {
-
-          renderHeroCarouselContainer();
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       INITIALISATION
-       ========================================================= */
-
-    window.addEventListener(
-      'DOMContentLoaded',
-      loadDataFromSheet
-    );
-
-  </script>
-
+  } catch (e) {
+    res.innerHTML = '<div class="result-box">La recherche a échoué. Réessayez dans un instant.</div>';
+  }
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+function initFooter() {
+  $('footer-year').textContent = new Date().getFullYear();
+  $('footer-socials').innerHTML = SITE.socials.map(s =>
+    `<a class="social-btn" href="${s.url}" target="_blank" rel="noopener noreferrer" aria-label="${s.nom}" title="${s.nom}">${s.svg}</a>`).join('');
+}
+
+/* =========================================================
+   RESIZE & INIT
+   ========================================================= */
+window.addEventListener('resize', () => {
+  const home = $('view-home');
+  if (home && home.classList.contains('active-view')) renderHeroCarouselContainer();
+});
+
+initFooter();
+loadDataFromSheet();
+</script>
 </body>
 </html>
