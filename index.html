@@ -511,6 +511,24 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 .modal-box p { font-size: .88rem; color: #d1d1d6; line-height: 1.6; margin-bottom: 10px; }
 .modal-close { position: absolute; top: 8px; right: 12px; background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; }
 
+/* ===== v3 ===== */
+.page-simple.hero-view { padding-left: 0; padding-right: 0; }
+.hero-view .page-wrap { padding-left: 5%; padding-right: 5%; }
+.tarifs-grid .tarif-card:nth-child(1) { order: 1; }
+.tarifs-grid .tarif-card:nth-child(2) { order: 3; }
+.tarifs-grid .tarif-card:nth-child(3) { order: 2; }
+.tarifs-grid .tarif-card:nth-child(4) { order: 4; }
+.movie-extend-inner { -webkit-mask-image: none; mask-image: none; background: var(--field, rgb(var(--tint2))); }
+.movie-extend-img { display: none; }
+.movie-extend-inner::after { background: linear-gradient(180deg, rgba(var(--tint2), .55) 0%, rgba(var(--tint2), .72) 26%, rgba(var(--bg-dark-rgb), .93) 56%, var(--bg-dark) 86%); }
+.movie-hero::before { -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%); mask-image: linear-gradient(180deg, #000 50%, transparent 100%); }
+.map-btn { display: flex; align-items: center; justify-content: center; width: 130px; height: 62px; border-radius: 30px; border: 1px solid rgba(255,255,255,.3); text-decoration: none; overflow: hidden; transition: transform .18s; background: #e6e2d6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='62'%3E%3Crect width='130' height='62' fill='%23e6e2d6'/%3E%3Crect x='5' y='5' width='28' height='22' fill='%23cfe3c0'/%3E%3Crect x='100' y='38' width='24' height='18' fill='%23b9d9e8'/%3E%3Cpath d='M0 40L130 20' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M40 0L60 62' stroke='%23fff' stroke-width='5'/%3E%3Cpath d='M95 0L85 62' stroke='%23f3d99b' stroke-width='4'/%3E%3C/svg%3E") center/cover; }
+.map-btn:hover { transform: scale(1.04); }
+.map-btn .pin { font-size: 1.7rem; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+.addr { margin-top: 8px; font-size: .84rem; font-weight: 600; line-height: 1.4; }
+.lang-btn { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); color: #fff; border-radius: 22px; padding: 7px 12px; font-size: .78rem; font-weight: 800; cursor: pointer; flex-shrink: 0; }
+.lang-btn:hover { border-color: var(--brand-orange); }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) { .logo-text { display: none !important; } }
 @media (max-width: 960px) {
@@ -605,6 +623,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
     <a onclick="go('benevolat')" class="nav-link" data-page="benevolat">Bénévolat</a>
   </nav>
 
+  <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-label="Language">EN</button>
   <button class="menu-burger-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
 </header>
 
@@ -778,10 +797,20 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   <div id="phero-plein-air"></div>
   <div class="page-wrap">
     <div class="prose">
-      <!-- TEXTE PROVISOIRE : à remplacer par celui de https://baladimages.spread.name/Plein-Air -->
-      <h2>Le cinéma sous les étoiles</h2>
-      <p>Balad'Images vient projeter un film en plein air dans votre commune : écran et matériel de projection numérique installés pour une soirée conviviale, ouverte à toutes et tous.</p>
-      <p>Communes, associations, comités des fêtes : demandez un devis, nous vous aidons à choisir le film et à organiser la séance.</p>
+      <h2>Le Cinéma Plein air Balad’images</h2>
+      <p>Le cinéma plein air est l’animation par excellence des nuits d’été ! Dans une ambiance festive et conviviale, ce rendez-vous populaire est un évènement culturel pour un public familial. Il participe à renforcer le lien social, animer les communes et mettre en valeur les territoires.</p>
+      <p>Parce que le cinéma de plein air nécessite souvent des moyens financiers importants (2500€ à 3000€), nous mettons à disposition des associations du circuit Balad’Images mais aussi aux autres structures extérieures notre projecteur cinéma numérique permettant de réaliser une séance pour un coût réduit : généralement en dessous des 1250€, coût du film inclus.</p>
+      <p>La réglementation en vigueur autorise la diffusion en plein air des films de plus d’un an.</p>
+      <h2>Ce que nous effectuons</h2>
+      <ul>
+        <li>La relation avec les distributeurs.</li>
+        <li>L’obtention des droits de projection.</li>
+        <li>La mise à disposition du film.</li>
+        <li>L’obtention du film.</li>
+        <li>L’obtention des fichiers de déchiffrage du film “KDMs”.</li>
+        <li>La mise à disposition, à la carte, du projecteur cinéma numérique, ainsi que le système de sonorisation (2x 400W RMS et amplificateur basses 1200W RMS) et l’écran gonflable 10m / écran simple 8m.</li>
+      </ul>
+      <p>Concernant les déclarations auprès de la SACEM, nous laissons l’organisateur s’en charger, tandis que nous assurons la déclaration auprès du CNC (centre national du cinéma et de l’image animée).</p>
       <p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Demande de devis – cinéma plein air')">Demander un devis</a></p>
     </div>
   </div>
@@ -926,15 +955,15 @@ const findPoster = (t) => { const f = db.films.find(x => norm(x.titre).includes(
 const filmCard = (t, cycle, ico, txt) => { const u = findPoster(t); return `<div class="film-card"><div class="fc-img" ${u ? `style="background-image:url('${esc(u)}')"` : ''}>${u ? '' : ico}</div><div class="fc-body"><h3>${t}</h3><div class="fc-cycle">${cycle}</div><p>${txt}</p></div></div>`; };
 const ACTIVITES = [
   { id: 'ecole-cinema', ico: '🎒', titre: 'École et cinéma', resume: 'Le dispositif de l\'Éducation nationale pour les classes de la maternelle au CM2.',
-    contenu: () => `<p>« École et cinéma » fait partie du dispositif national « Ma classe au cinéma » de l'Éducation nationale. Chaque année, les classes participantes découvrent plusieurs films en salle, avec un travail préparatoire et prolongé en classe par les enseignants.</p><p>Balad'Images accueille ces séances dans ses salles, avec un tarif et un accueil adaptés aux écoles.</p>${fiche([['29', 'séances au total'], ['14,5', 'séances par an'], ['1 418', 'spectateurs par an']], 'Doué-la-Fontaine, Longué-Jumelles, Pouancé, Tiercé')}${CNC}` },
+    contenu: () => `<p>« École et cinéma » fait partie du dispositif national « Ma classe au cinéma » de l'Éducation nationale. Chaque année, les classes participantes découvrent plusieurs films en salle, avec un travail préparatoire et prolongé en classe par les enseignants.</p><p>Balad'Images accueille ces séances dans ses salles, avec un tarif et un accueil adaptés aux écoles.</p>${fiche([['14,5', 'séances par an'], ['1 418', 'spectateurs par an']], 'Doué-la-Fontaine, Longué-Jumelles, Pouancé, Tiercé')}${CNC}` },
   { id: 'college-cinema', ico: '🎓', titre: 'Collège et cinéma', resume: 'Trois films par an pour les collégiens, projetés en salle.',
-    contenu: () => `<p>« Collège et cinéma » permet aux élèves de collège de voir et d'analyser des films de référence dans une vraie salle de cinéma, en lien avec leurs professeurs. C'est l'un des dispositifs de « Ma classe au cinéma ».</p>${fiche([['7', 'séances au total'], ['3,5', 'séances par an'], ['289', 'spectateurs par an']], 'Longué-Jumelles')}${CNC}` },
+    contenu: () => `<p>« Collège et cinéma » permet aux élèves de collège de voir et d'analyser des films de référence dans une vraie salle de cinéma, en lien avec leurs professeurs. C'est l'un des dispositifs de « Ma classe au cinéma ».</p>${fiche([['3,5', 'séances par an'], ['289', 'spectateurs par an']], 'Longué-Jumelles')}${CNC}` },
   { id: 'lyceens', ico: '🎞️', titre: 'Lycéens au cinéma', resume: 'Le dispositif pour les lycéens en Pays de la Loire.',
     contenu: () => `<p>« Lycéens au cinéma » propose aux lycéens des Pays de la Loire, dont le Maine-et-Loire, de découvrir des films en salle sur le temps scolaire, accompagnés par leurs enseignants. Il s'inscrit dans « Ma classe au cinéma ».</p><p>Chiffres Balad'Images : à compléter.</p>${CNC}` },
   { id: 'cine-ecole', ico: '🦊', titre: 'Ciné-école', resume: 'Notre dispositif maison, avec une sélection locale de films.',
-    contenu: () => `<p>Ciné-école reprend le principe d'École et cinéma, avec une sélection locale et d'autres choix de films, pensée par notre équipe pour chaque cycle scolaire.</p><h2>Les films de cette année</h2><div class="film-cards">${filmCard('Fantastic Mr Fox', 'Cycle 3', '🦊', 'Un renard rusé, père de famille, ne peut s\'empêcher de dévaliser trois fermiers, qui décident de se venger. Un film d\'animation en volume plein d\'humour.')}${filmCard('Ponyo sur la falaise', 'Cycle 2', '🐟', 'Ponyo, petite poisson rouge, rêve de devenir humaine après sa rencontre avec Sosuke, un petit garçon qui vit au bord de la mer.')}${filmCard('La Baleine et l\'escargote', 'Cycle 1', '🐋', 'Une petite escargote s\'accroche à la queue d\'une baleine pour voyager et découvrir le monde.')}</div>${fiche([['107', 'séances au total'], ['53,5', 'séances par an'], ['4 153', 'spectateurs par an']], 'Bécon-les-Granits, Chatelais, Corné, Gennes, Jallais, La Cornuaille, La Pouëze, Le Louroux Béconnais, Longué-Jumelles, Loué, Missillac, Noyant-Villages, Pouancé, Saint Clément-de-la-place, Saint Léger-de-Linières, Saint-Aubin-de-Luigné, Saint-Lyphard, Soulaire-et-Bourg, Tennie, Tiercé, Yzernay')}` },
+    contenu: () => `<p>Ciné-école reprend le principe d'École et cinéma, avec une sélection locale et d'autres choix de films, pensée par notre équipe pour chaque cycle scolaire.</p><h2>Les films de cette année</h2><div class="film-cards">${filmCard('Fantastic Mr Fox', 'Cycle 3', '🦊', 'Un renard rusé, père de famille, ne peut s\'empêcher de dévaliser trois fermiers, qui décident de se venger. Un film d\'animation en volume plein d\'humour.')}${filmCard('Ponyo sur la falaise', 'Cycle 2', '🐟', 'Ponyo, petite poisson rouge, rêve de devenir humaine après sa rencontre avec Sosuke, un petit garçon qui vit au bord de la mer.')}${filmCard('La Baleine et l\'escargote', 'Cycle 1', '🐋', 'Une petite escargote s\'accroche à la queue d\'une baleine pour voyager et découvrir le monde.')}</div>${fiche([['53,5', 'séances par an'], ['4 153', 'spectateurs par an']], 'Bécon-les-Granits, Chatelais, Corné, Gennes, Jallais, La Cornuaille, La Pouëze, Le Louroux Béconnais, Longué-Jumelles, Loué, Missillac, Noyant-Villages, Pouancé, Saint Clément-de-la-place, Saint Léger-de-Linières, Saint-Aubin-de-Luigné, Saint-Lyphard, Soulaire-et-Bourg, Tennie, Tiercé, Yzernay')}` },
   { id: 'scolaires', ico: '🚌', titre: 'Séances scolaires', resume: 'Organisez une séance pour votre classe.',
-    contenu: () => `<p>Enseignants, vous pouvez aussi organiser une séance pour votre classe en dehors des dispositifs, avec un film de votre choix.</p>${fiche([['50', 'séances au total'], ['25', 'séances par an'], ['1 884', 'spectateurs par an']], 'Beaumont-sur-Sarthe, Chemillé, La Chapelle-des-Marais, Longué-Jumelles, Loué, Missillac, Méral, Pouancé, Saint Gildas-des-bois, Saint-Lyphard, Saint-Ouen-en-Belin, Tiercé')}<p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Séance scolaire')">Nous contacter</a></p>` },
+    contenu: () => `<p>Enseignants, vous pouvez aussi organiser une séance pour votre classe en dehors des dispositifs, avec un film de votre choix.</p>${fiche([['25', 'séances par an'], ['1 884', 'spectateurs par an']], 'Beaumont-sur-Sarthe, Chemillé, La Chapelle-des-Marais, Longué-Jumelles, Loué, Missillac, Méral, Pouancé, Saint Gildas-des-bois, Saint-Lyphard, Saint-Ouen-en-Belin, Tiercé')}<p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Séance scolaire')">Nous contacter</a></p>` },
   { id: 'plein-air', ico: '🌙', titre: 'Cinéma en plein air', resume: 'Des séances sous les étoiles, près de chez vous.', contenu: () => '' }
 ];
 
@@ -1464,6 +1493,7 @@ function computeTint(imgEl) {
     ctx.drawImage(imgEl, 0, 0, W, H);
     const d = ctx.getImageData(0, 0, W, H).data; // lève une erreur si l'image est "tainted" (CORS)
     let r = 0, g = 0, b = 0, ws = 0, tl = 0, tn = 0;
+    const ca = Array.from({ length: 8 }, () => [0, 0, 0, 0]);
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < W; x++) {
         const i = (y * W + x) * 4;
@@ -1472,6 +1502,7 @@ function computeTint(imgEl) {
         const sat = mx ? (mx - mn) / mx : 0;
         const lum = (R + G + B) / 3;
         if (y < H * 0.14) { tl += lum; tn++; }
+        if (y >= H - 3) { const q = ca[Math.min(7, Math.floor(x / (W / 8)))]; q[0] += R; q[1] += G; q[2] += B; q[3]++; }
         let w = 0.15 + sat * sat * 3;          // les couleurs saturées comptent davantage
         if (lum < 20 || lum > 240) w *= 0.2;   // on ignore noirs et blancs purs
         w *= 0.6 + (y / H) * 0.8;              // le bas de l'image compte davantage (zone du texte)
@@ -1486,7 +1517,7 @@ function computeTint(imgEl) {
     const veil = hslToRgb(h, vs, vl);
     const bg = [15, 15, 18];
     const mid = veil.map((v, i) => Math.round((v + bg[i]) / 2));
-    return { t: veil.join(','), t2: mid.join(','), h: (Math.min(Math.max((tl / tn - 70) / 150, 0), 1) * 0.5).toFixed(2) };
+    return { t: veil.join(','), t2: mid.join(','), h: (Math.min(Math.max((tl / tn - 70) / 150, 0), 1) * 0.5).toFixed(2), f: 'linear-gradient(90deg,' + ca.map(c => `rgb(${Math.round(c[0] / c[3])},${Math.round(c[1] / c[3])},${Math.round(c[2] / c[3])})`).join(',') + ')' };
   } catch (e) {
     return null;
   }
@@ -1497,7 +1528,7 @@ function setTint(heroSec, tint) {
   heroSec.style.setProperty('--tint', tint.t);
   heroSec.style.setProperty('--tint2', tint.t2);
   const ext = heroSec.nextElementSibling;
-  if (ext && ext.classList.contains('movie-extend')) ext.style.setProperty('--tint2', tint.t2);
+  if (ext && ext.classList.contains('movie-extend')) { ext.style.setProperty('--tint2', tint.t2); if (tint.f) ext.style.setProperty('--field', tint.f); }
   const h = document.querySelector('header');
   if (h) h.style.setProperty('--hdr-dark', tint.h); // header plus sombre si le haut de l'image est clair
 }
@@ -1557,9 +1588,9 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
         ${movie.casting ? `<span class="credit-block"><strong>Avec</strong> ${movie.casting}</span>` : ''}
       </div>
     </div>
-    ${movie.bande_annonce ? `
+    ${true ? `
       <div class="trailer-btn-wrapper">
-        <a href="${movie.bande_annonce}" target="_blank" rel="noopener noreferrer" class="btn-play-trailer" title="Voir la bande-annonce">
+        <a id="trailerLink" href="${trailerFor(movie)}" target="_blank" rel="noopener noreferrer" class="btn-play-trailer" title="Voir la bande-annonce">
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <span class="mobile-trailer-text">Bande-annonce</span>
         </a>
@@ -1569,6 +1600,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
   extEl.style.setProperty('--tint2', '15,15,18');
   extEl.innerHTML = bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : '';
   loadCast(movie);
+  upgradeTrailer(movie);
   const heroImg = $('movieHeroImg');
   heroImg.addEventListener('load', async () => {
     const faces = await detectFaces(heroImg, bgUrl);
@@ -1667,7 +1699,7 @@ function renderShowtimePanel(seance, movie) {
   const lieuAffichage = seance.lieu_nom || getCommune(seance);
   const mapsUrl = sanitizeGoogleMapsUrl(seance.google_maps_url, `${lieuAffichage} France`);
   const mapsBadge = `
-    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="badge-salle">📍 ${lieuAffichage}</a>`;
+    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" aria-label="Ouvrir dans Google Maps"><span class="pin">📍</span></a><div class="addr">${lieuAffichage}</div>`;
 
   const sp = String(seance.type_special || '').trim();
   const dsp = String(seance.detail_special || '').trim();
@@ -2119,6 +2151,149 @@ function applyFocus(img, faces) {
 }
 window.addEventListener('resize', () => { if (window._focus) applyFocus(window._focus.img, window._focus.faces); });
 
+const TMDB_KEY = ''; // optionnel : clé gratuite TMDB pour retrouver automatiquement la bande-annonce
+function trailerFor(m) { return m.bande_annonce || 'https://www.youtube.com/results?search_query=' + encodeURIComponent(`${m.titre} ${m.annee || ''} bande annonce vf`); }
+async function upgradeTrailer(m) {
+  if (m.bande_annonce || !TMDB_KEY) return;
+  try {
+    const d = await (await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&language=fr-FR&query=${encodeURIComponent(m.titre)}${m.annee ? '&year=' + m.annee : ''}`)).json();
+    const id = d.results && d.results[0] && d.results[0].id; if (!id) return;
+    for (const lang of ['fr-FR', 'en-US']) {
+      const v = await (await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${TMDB_KEY}&language=${lang}`)).json();
+      const t = (v.results || []).find(x => x.site === 'YouTube' && x.type === 'Trailer');
+      if (t) { m.bande_annonce = 'https://www.youtube.com/watch?v=' + t.key; const a = $('trailerLink'); if (a) a.href = m.bande_annonce; return; }
+    }
+  } catch (e) {}
+}
+
+/* ================= VERSION ANGLAISE (EN/FR) ================= */
+const EN = {
+"Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
+"Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
+"Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
+"Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
+"Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
+"Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
+"Film":"Film","Salle":"Venue","Dispositif":"Programme","Page":"Page","Aide":"Help","Buvette":"Refreshments","Snack":"Snacks","TPE":"Card terminal","PMR":"Accessible","Espèces":"Cash","Chèque":"Cheque",
+"Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.":"Find all our screening venues. Click a pin to discover the venue, or search for your town: if it has no screenings, we show you the 3 nearest venues.",
+"Chercher":"Search","Rechercher une commune...":"Search for a town...","En savoir plus":"Learn more","Y aller":"Directions","Commune introuvable. Essayez avec une autre orthographe.":"Town not found. Try another spelling.","Voir sur la carte":"See on map","Voir la page de la salle":"See the venue page",
+"Au-delà des séances en salle, Balad'Images propose d'autres dispositifs et rendez-vous cinéma.":"Beyond screenings in our venues, Balad'Images offers other schemes and cinema events.",
+"Des places accessibles à tous, dans toutes nos salles.":"Affordable seats for everyone, in all our venues.","Tarif plein":"Full price","Adulte":"Adult","Tarif enfant adhérent":"Member child price","Enfant de moins de 14 ans avec carte Familles Rurales à jour":"Child under 14 with a valid Familles Rurales card","Adulte adhérent Familles Rurales (carte à jour)":"Adult Familles Rurales member (valid card)","Demandeur d'emploi":"Job seeker","Étudiant":"Student","Enfant de moins de 14 ans":"Child under 14","Tarif groupes":"Group price","Sur demande":"On request",
+"Certaines séances (avant-premières, événements...) peuvent avoir un tarif spécifique : il est alors indiqué dans l'encart de la séance, sur la page du film.":"Some screenings (previews, events...) may have a specific price: it is then shown in the screening box on the film page.",
+"Balad'Images, le cinéma itinérant de Familles Rurales.":"Balad'Images, the mobile cinema of Familles Rurales.","Qui sommes-nous ?":"Who are we?",
+"Balad'Images est le circuit de cinéma itinérant porté par Familles Rurales. Des séances de cinéma sont organisées au plus près des habitants, dans des salles de communes, par des associations locales Familles Rurales et leurs équipes de bénévoles.":"Balad'Images is the mobile cinema circuit run by Familles Rurales. Screenings are held close to residents, in town halls and village venues, by local Familles Rurales associations and their volunteer teams.",
+"Familles Rurales est un mouvement familial associatif et d'éducation populaire. Il rassemble des femmes et des hommes qui agissent au quotidien pour répondre aux besoins des familles dans leur milieu de vie.":"Familles Rurales is a family-oriented, community-based popular education movement. It brings together women and men who work every day to meet the needs of families where they live.",
+"Notre projection":"Our projection","Nous projetons en numérique 2K, avec un écran et un son de qualité, dans des salles accessibles aux personnes à mobilité réduite.":"We screen in 2K digital, with a quality screen and sound, in venues accessible to people with reduced mobility.",
+"Fédération départementale Familles Rurales Maine et Loire, au service des territoires et des familles":"Familles Rurales Maine-et-Loire departmental federation, serving territories and families",
+"Notre fédération accompagne et fédère les associations locales œuvrant en milieu rural. Nous développons des actions éducatives, sociales et culturelles, dont le cinéma itinérant Balad'Images, afin de favoriser l'accès aux services, à la culture et de renforcer la cohésion sociale sur l'ensemble du territoire.":"Our federation supports and unites local associations working in rural areas. We run educational, social and cultural initiatives, including the Balad'Images mobile cinema, to promote access to services and culture and strengthen social cohesion across the territory.",
+"En savoir + sur Familles Rurales":"Learn more about Familles Rurales","Une question ?":"A question?","Écrivez-nous":"Write to us",": nous vous répondons du lundi au vendredi.":": we reply Monday to Friday.",
+"Rejoignez l'équipe de bénévoles de votre salle.":"Join the volunteer team at your venue.","Le cinéma près de chez vous repose sur des bénévoles":"Cinema near you relies on volunteers",
+"Chaque séance Balad'Images est rendue possible par des bénévoles de l'association Familles Rurales locale. Vous aimez le cinéma, vous avez un peu de temps ? Vous pouvez nous aider, selon vos envies :":"Every Balad'Images screening is made possible by volunteers from the local Familles Rurales association. Love cinema and have a little time? You can help, as you wish:",
+"accueil du public et billetterie":"welcoming the audience and ticketing","installation de la salle et du matériel de projection":"setting up the room and projection equipment","communication locale (affiches, réseaux sociaux)":"local communication (posters, social media)","animation de la séance":"hosting the screening","Les bénévoles sont accompagnés et formés par la fédération.":"Volunteers are supported and trained by the federation.","Devenir bénévole":"Become a volunteer",
+"Cinéma en plein air":"Open-air cinema","Des séances sous les étoiles, près de chez vous.":"Screenings under the stars, close to home.","Demander un devis":"Request a quote",
+"Le Cinéma Plein air Balad'images":"Balad'images Open-Air Cinema",
+"Le cinéma plein air est l'animation par excellence des nuits d'été ! Dans une ambiance festive et conviviale, ce rendez-vous populaire est un évènement culturel pour un public familial. Il participe à renforcer le lien social, animer les communes et mettre en valeur les territoires.":"Open-air cinema is the summer night entertainment par excellence! In a festive, friendly atmosphere, this popular event is a cultural occasion for families. It helps strengthen social ties, bring towns to life and showcase local areas.",
+"Parce que le cinéma de plein air nécessite souvent des moyens financiers importants (2500€ à 3000€), nous mettons à disposition des associations du circuit Balad'Images mais aussi aux autres structures extérieures notre projecteur cinéma numérique permettant de réaliser une séance pour un coût réduit : généralement en dessous des 1250€, coût du film inclus.":"Because open-air cinema often requires significant funds (€2,500 to €3,000), we lend our digital cinema projector to associations of the Balad'Images circuit and to outside organisations, making a screening possible at a reduced cost: generally under €1,250, film included.",
+"La réglementation en vigueur autorise la diffusion en plein air des films de plus d'un an.":"Current regulations allow open-air screening of films that are more than one year old.","Ce que nous effectuons":"What we take care of",
+"La relation avec les distributeurs.":"Dealing with distributors.","L'obtention des droits de projection.":"Obtaining screening rights.","La mise à disposition du film.":"Providing the film.","L'obtention du film.":"Obtaining the film.","L'obtention des fichiers de déchiffrage du film “KDMs”.":"Obtaining the film's decryption files (“KDMs”).",
+"La mise à disposition, à la carte, du projecteur cinéma numérique, ainsi que le système de sonorisation (2x 400W RMS et amplificateur basses 1200W RMS) et l'écran gonflable 10m / écran simple 8m.":"Providing, à la carte, the digital cinema projector, the sound system (2x 400W RMS and 1200W RMS bass amplifier) and the 10m inflatable screen / 8m simple screen.",
+"Concernant les déclarations auprès de la SACEM, nous laissons l'organisateur s'en charger, tandis que nous assurons la déclaration auprès du CNC (centre national du cinéma et de l'image animée).":"The organiser handles the SACEM declarations, while we take care of the declaration to the CNC (French national centre for cinema and the moving image).",
+"Une question, une demande de séance pour un groupe ? Écrivez-nous.":"A question, or a screening request for a group? Write to us.","Nom":"Last name","Prénom":"First name","Email":"Email","Objet":"Subject","Message":"Message","Envoyer":"Send","Nos horaires":"Opening hours","Du lundi au vendredi":"Monday to Friday","9h30 – 17h":"9:30am – 5pm","Notre adresse":"Our address",
+"L'envoi ouvre votre application de messagerie avec le message prêt à partir. Voir les":"Sending opens your email app with the message ready to go. See the","mentions légales":"legal notice","pour l'usage de vos données.":"for how your data is used.",
+"Le cinéma itinérant Familles Rurales, au plus près de chez vous.":"The Familles Rurales mobile cinema, close to home.","Centre d'aide":"Help centre","Balad'Images – Familles Rurales Maine-et-Loire":"Balad'Images – Familles Rurales Maine-et-Loire",
+"Nos chiffres":"Our figures","Communes participantes":"Participating towns","séances par an":"screenings per year","spectateurs par an":"viewers per year","Les films de cette année":"This year's films",
+"École et cinéma":"École et cinéma (School and cinema)","Le dispositif de l'Éducation nationale pour les classes de la maternelle au CM2.":"The national education scheme for classes from nursery to year 6.",
+"« École et cinéma » fait partie du dispositif national « Ma classe au cinéma » de l'Éducation nationale. Chaque année, les classes participantes découvrent plusieurs films en salle, avec un travail préparatoire et prolongé en classe par les enseignants.":"“École et cinéma” is part of the national “Ma classe au cinéma” scheme run by the French education ministry. Each year, participating classes watch several films in a cinema, with preparation and follow-up work in class led by teachers.",
+"Balad'Images accueille ces séances dans ses salles, avec un tarif et un accueil adaptés aux écoles.":"Balad'Images hosts these screenings in its venues, with pricing and a welcome adapted to schools.",
+"Collège et cinéma":"Collège et cinéma (Middle school and cinema)","Trois films par an pour les collégiens, projetés en salle.":"Three films a year for middle-school pupils, shown in a cinema.",
+"« Collège et cinéma » permet aux élèves de collège de voir et d'analyser des films de référence dans une vraie salle de cinéma, en lien avec leurs professeurs. C'est l'un des dispositifs de « Ma classe au cinéma ».":"“Collège et cinéma” lets middle-school pupils watch and analyse landmark films in a real cinema, together with their teachers. It is one of the “Ma classe au cinéma” schemes.",
+"Lycéens au cinéma":"Lycéens au cinéma (High-school pupils at the cinema)","Le dispositif pour les lycéens en Pays de la Loire.":"The scheme for high-school pupils in the Pays de la Loire.",
+"« Lycéens au cinéma » propose aux lycéens des Pays de la Loire, dont le Maine-et-Loire, de découvrir des films en salle sur le temps scolaire, accompagnés par leurs enseignants. Il s'inscrit dans « Ma classe au cinéma ».":"“Lycéens au cinéma” lets high-school pupils in the Pays de la Loire, including Maine-et-Loire, discover films in a cinema during school time, guided by their teachers. It is part of “Ma classe au cinéma”.",
+"Chiffres Balad'Images : à compléter.":"Balad'Images figures: to be added.","En savoir plus sur « Ma classe au cinéma » (CNC)":"Learn more about “Ma classe au cinéma” (CNC)",
+"Ciné-école":"Ciné-école","Notre dispositif maison, avec une sélection locale de films.":"Our own scheme, with a local film selection.",
+"Ciné-école reprend le principe d'École et cinéma, avec une sélection locale et d'autres choix de films, pensée par notre équipe pour chaque cycle scolaire.":"Ciné-école follows the principle of École et cinéma, with a local selection and different film choices, designed by our team for each school cycle.",
+"Un renard rusé, père de famille, ne peut s'empêcher de dévaliser trois fermiers, qui décident de se venger. Un film d'animation en volume plein d'humour.":"A cunning fox and family man can't help raiding three farmers, who decide to take revenge. A funny stop-motion animated film.",
+"Ponyo, petite poisson rouge, rêve de devenir humaine après sa rencontre avec Sosuke, un petit garçon qui vit au bord de la mer.":"Ponyo, a little goldfish, dreams of becoming human after meeting Sosuke, a young boy who lives by the sea.",
+"Une petite escargote s'accroche à la queue d'une baleine pour voyager et découvrir le monde.":"A little snail hitches a ride on a whale's tail to travel and discover the world.",
+"Séances scolaires":"School screenings","Organisez une séance pour votre classe.":"Organise a screening for your class.","Enseignants, vous pouvez aussi organiser une séance pour votre classe en dehors des dispositifs, avec un film de votre choix.":"Teachers, you can also organise a screening for your class outside these schemes, with a film of your choice.",
+"Quels sont les tarifs pour une place de cinéma ?":"How much is a cinema ticket?","Comment payer en salle ?":"How can I pay at the venue?","Comment nous contacter ?":"How can I contact you?","Proposons-nous des abonnements ?":"Do you offer subscriptions?","Peut-on réserver en ligne ?":"Can I book online?","Comment recevoir la programmation régulièrement ?":"How can I get the programme regularly?",
+": tarif plein (adulte)":": full price (adult)",": tarif réduit (adhérent Familles Rurales avec carte à jour, demandeur d'emploi, étudiant, enfant de moins de 14 ans)":": reduced price (Familles Rurales member with a valid card, job seeker, student, child under 14)",": enfant de moins de 14 ans avec carte adhérent Familles Rurales à jour":": child under 14 with a valid Familles Rurales member card",": groupes, sur demande":": groups, on request",
+"Certaines séances spéciales ont un tarif particulier, indiqué sur la fiche de la séance.":"Some special screenings have their own price, shown on the screening page.","Voir la page Tarifs":"See the Prices page",
+"Les moyens de paiement acceptés sont indiqués sur la fiche de chaque séance, rubrique « Paiements » (par exemple espèces, chèque, carte bancaire sur TPE). Ils peuvent varier d'une salle à l'autre : pensez à vérifier avant de venir.":"Accepted payment methods are shown on each screening page under “Payment” (for example cash, cheque, card on a card terminal). They can vary from one venue to another: please check before you come.",
+"Par e-mail :":"By email:","ou via le formulaire de la page Contact.":"or through the form on the Contact page.","Nous sommes joignables du lundi au vendredi, de 9h30 à 17h, au 14 rue Savary, 49100 Angers.":"We can be reached Monday to Friday, 9:30am to 5pm, at 14 rue Savary, 49100 Angers.",
+"Non, nous ne proposons pas d'abonnement. En revanche, la carte d'adhérent Familles Rurales à jour donne droit au tarif réduit à chaque séance (et à 4 € pour les enfants de moins de 14 ans).":"No, we do not offer subscriptions. However, a valid Familles Rurales member card gives you the reduced price at every screening (and €4 for children under 14).",
+"Pour les écoles, centres de loisirs et autres groupes, un tarif de 3,60 € par personne est possible sur demande : contactez-nous.":"For schools, leisure centres and other groups, a price of €3.60 per person is available on request: contact us.",
+"Pas encore : la réservation en ligne n'est pas disponible. Les places se prennent sur place, le jour de la séance, et nous vous conseillons d'arriver un peu en avance.":"Not yet: online booking is not available. Tickets are bought on site on the day of the screening, and we recommend arriving a little early.",
+"Pour un groupe, contactez-nous avant la séance afin que nous puissions vous accueillir dans de bonnes conditions.":"For a group, contact us before the screening so we can welcome you properly.",
+"Ajoutez le site sur votre écran d'accueil, comme une application :":"Add the site to your home screen, like an app:","iPhone / iPad (Safari)":"iPhone / iPad (Safari)",": touchez le bouton Partager, puis « Sur l'écran d'accueil ».":": tap the Share button, then “Add to Home Screen”.","Android (Chrome)":"Android (Chrome)",": touchez le menu ⋮, puis « Ajouter à l'écran d'accueil » (ou « Installer l'application »).":": tap the ⋮ menu, then “Add to Home screen” (or “Install app”).",
+"Nous allons prochainement recommencer à envoyer une newsletter. En attendant, vous pouvez nous écrire pour demander votre inscription.":"We will soon start sending a newsletter again. In the meantime, you can write to us to ask to be signed up.","Demander mon inscription":"Request my sign-up",
+"ÉDITEUR":"PUBLISHER","Responsable de la publication : Bernard GAZON":"Publication manager: Bernard GAZON","Téléphone : 02 41 18 20 00":"Telephone: +33 2 41 18 20 00","HÉBERGÉ PAR SPREADSIMPLE":"HOSTED BY SPREADSIMPLE",
+"SITE RÉALISÉ ET GÉRÉ PAR LA FÉDÉRATION FAMILLES RURALES DU MAINE ET LOIRE":"SITE BUILT AND MANAGED BY THE FAMILLES RURALES MAINE-ET-LOIRE FEDERATION","Siège social : 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ":"Head office: 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ",
+"PROPRIÉTÉ":"OWNERSHIP","Propriétaire du site : Familles Rurales":"Site owner: Familles Rurales","PROPRIÉTÉS INTELLECTUELLES":"INTELLECTUAL PROPERTY",
+"Le propriétaire détient les droits de propriété intellectuelle ou détient les droits d'usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logo, icônes, sons, logiciels.":"The owner holds the intellectual property rights, or the right of use, over all elements accessible on the site, including texts, images, graphics, logo, icons, sounds and software.",
+"Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable du propriétaire.":"Any reproduction, representation, modification, publication or adaptation of all or part of the site's elements, by any means, is prohibited without the owner's prior written permission.",
+"Toute exploitation non autorisée du site ou de l'un des éléments qu'il contient sera considérée comme constitutive d'une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de la Propriété Intellectuelle.":"Any unauthorised use of the site or of any of its elements will be considered an infringement and prosecuted in accordance with articles L.335-2 et seq. of the French Intellectual Property Code.",
+"LIENS HYPERTEXTES":"HYPERLINKS","Ne pouvant vérifier l'ensemble des liens hypertextes pointant vers le site web, le propriétaire décline toute responsabilité concernant le contenu des sites liés à son Site.":"As it cannot check all hyperlinks pointing to the website, the owner declines any responsibility for the content of sites linking to it.",
+"GESTION DES DONNÉES PERSONNELLES":"PERSONAL DATA MANAGEMENT",
+"En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6 janvier 1978, la loi n° 2004-801 du 6 août 2004, l'article L. 226-13 du Code pénal et la Directive Européenne du 24 octobre 1995.":"In France, personal data is protected in particular by law no. 78-87 of 6 January 1978, law no. 2004-801 of 6 August 2004, article L. 226-13 of the Criminal Code and the European Directive of 24 October 1995.",
+"À l'occasion de l'utilisation certaines données peuvent être recueillies : Origine géographique, page visite, temps resté sur la page…":"When using the site, some data may be collected: geographic origin, pages visited, time spent on a page…",
+"En tout état de cause le site ne collecte des informations personnelles relatives à l'utilisateur que pour le besoin de certains services proposés. L'utilisateur fournit ces informations en toute connaissance de cause, notamment lorsqu'il procède par lui-même à leur saisie. Il est alors précisé à l'utilisateur l'obligation ou non de fournir ces informations.":"In any case, the site only collects personal information about the user as needed for certain services offered. The user provides this information knowingly, in particular when entering it themselves. The user is then told whether or not providing it is mandatory.",
+"DROIT D'ACCÈS, DE RECTIFICATION ET D'OPPOSITION AUX DONNÉES":"RIGHT OF ACCESS, RECTIFICATION AND OBJECTION",
+"Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, tout utilisateur dispose d'un droit d'accès, de rectification et d'opposition aux données personnelles le concernant, en effectuant sa demande à":"In accordance with articles 38 et seq. of law 78-17 of 6 January 1978 on information technology, files and freedoms, every user has the right to access, rectify and object to personal data concerning them, by making a request to",
+"Aucune information personnelle de l'utilisateur n'est publiée à son insu, échangée, transférée, cédée ou vendue sur un support quelconque à des tiers.":"No personal information about the user is published without their knowledge, exchanged, transferred, assigned or sold to third parties on any medium.",
+"FORMULAIRES DE CONTACT":"CONTACT FORMS","Les informations recueillies sur ces formulaires sont enregistrées dans un email et sont conservées pendant 3 ans. Elles sont utilisées uniquement pour recontacter l'utilisateur et répondre à sa demande.":"Information collected through these forms is recorded in an email and kept for 3 years. It is used only to contact the user back and answer their request.",
+"Conformément à la loi « informatique et libertés », vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier en contactant la fédération départementale familles rurales du Maine et Loire":"In accordance with the French “Data Protection” law, you may exercise your right of access to your data and have it corrected by contacting the Familles Rurales Maine-et-Loire departmental federation.",
+"DROIT APPLICABLE ET ATTRIBUTION DE JURIDICTION":"APPLICABLE LAW AND JURISDICTION","Tout litige en relation avec l'utilisation du site est soumis au droit français. Il est fait attribution exclusive de juridiction aux tribunaux compétents de Paris.":"Any dispute relating to the use of the site is subject to French law. The competent courts of Paris have exclusive jurisdiction."
+};
+const EN_RX = [
+ [/^Retrouvez la programmation Familles Rurales à (.+)\.$/, 'Find the Familles Rurales programme in $1.'],
+ [/^\+ (\d+) autre\(s\) séance\(s\)$/, '+ $1 more screening(s)'], [/^\+ (\d+) séance\(s\)$/, '+ $1 screening(s)'],
+ [/^🎬 (\d+) films? à l'affiche$/, '🎬 $1 film(s) showing'], [/^🕒 Prochaine séance : (.+) à (\d+h\d+)$/, '🕒 Next screening: $1 at $2'],
+ [/^Les 3 salles les plus proches de « (.+) »$/, 'The 3 nearest venues to “$1”'], [/^à (\d+) km$/, '$1 km away'],
+ [/^Résultats de recherche pour "(.+)"$/, 'Search results for "$1"'], [/^(.*\d) à (\d{1,2}h\d{2})$/, '$1 at $2'],
+ [/^🔎 Chercher « (.+) » : 3 salles les plus proches$/, '🔎 Search “$1”: 3 nearest venues']
+];
+let LANG = 'fr', i18nBusy = false;
+const origTxt = new WeakMap();
+const normK = x => x.replace(/\s+/g, ' ').trim().replace(/[’]/g, "'");
+function enFor(k) { if (EN[k] !== undefined) return EN[k]; for (const [re, rep] of EN_RX) if (re.test(k)) return k.replace(re, rep); return null; }
+function translateTree(root) {
+  i18nBusy = true;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = []; let n;
+  while ((n = w.nextNode())) nodes.push(n);
+  nodes.forEach(n => {
+    const par = n.parentNode; if (par && /^(SCRIPT|STYLE)$/.test(par.nodeName)) return;
+    if (LANG === 'en') {
+      const base = origTxt.has(n) ? origTxt.get(n) : n.nodeValue, k = normK(base); if (!k) return;
+      const t = enFor(k);
+      if (t !== null) { if (!origTxt.has(n)) origTxt.set(n, n.nodeValue); const nv = base.replace(base.trim(), () => t); if (n.nodeValue !== nv) n.nodeValue = nv; }
+    } else if (origTxt.has(n)) { n.nodeValue = origTxt.get(n); origTxt.delete(n); }
+  });
+  (root.querySelectorAll ? root : document).querySelectorAll('[placeholder]').forEach(el => {
+    if (!el.dataset.fr) el.dataset.fr = el.placeholder;
+    const t = LANG === 'en' ? enFor(normK(el.dataset.fr)) : null; el.placeholder = t !== null ? t : el.dataset.fr;
+  });
+  i18nBusy = false;
+}
+let i18nObs = null;
+function setLang(l) {
+  LANG = l; try { localStorage.setItem('balad_lang', l); } catch (e) {}
+  document.documentElement.lang = l; $('langBtn').textContent = l === 'en' ? 'FR' : 'EN';
+  if (l === 'en' && !i18nObs) {
+    i18nObs = new MutationObserver(ms => {
+      if (i18nBusy || LANG !== 'en') return;
+      ms.forEach(m => {
+        m.addedNodes.forEach(a => { if (a.nodeType === 1) translateTree(a); else if (a.parentNode) translateTree(a.parentNode); });
+        if (m.type === 'characterData' && m.target.parentNode) translateTree(m.target.parentNode);
+      });
+    });
+    i18nObs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+  translateTree(document.body);
+}
+function toggleLang() { setLang(LANG === 'fr' ? 'en' : 'fr'); }
+
 function initFooter() {
   $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
   $('footer-year').textContent = new Date().getFullYear();
@@ -2136,6 +2311,7 @@ window.addEventListener('resize', () => {
 
 initFooter();
 loadDataFromSheet();
+try { if (localStorage.getItem('balad_lang') === 'en') setLang('en'); } catch (e) {}
 </script>
 </body>
 </html>
