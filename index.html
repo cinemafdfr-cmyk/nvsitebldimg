@@ -214,19 +214,19 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   --tint: 15, 15, 18;
   --tint2: 15, 15, 18;
   position: relative; width: 100%; min-height: 82vh; display: flex; align-items: flex-end; justify-content: space-between;
-  overflow: hidden; padding: 225px 5% 95px 5%; background-color: var(--bg-dark);
+  overflow: hidden; padding: 225px 5% 95px 5%; z-index: 1;
 }
-.movie-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+.movie-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; -webkit-mask-image: linear-gradient(180deg,#000 0%,#000 52%,transparent 100%); mask-image: linear-gradient(180deg,#000 0%,#000 52%,transparent 100%); }
 /* Voile teinté : couleur dominante de l'image, assombrie, qui tend vers le noir en bas */
 .movie-hero::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 65% at 12% 68%,
+    radial-gradient(ellipse 70% 55% at 12% 60%,
       rgba(var(--tint), 0.94) 0%, rgba(var(--tint), 0.78) 28%, rgba(var(--tint), 0.48) 52%,
       rgba(var(--tint), 0.18) 72%, rgba(var(--tint), 0) 100%),
     linear-gradient(180deg,
-      rgba(var(--tint), 0.26) 0%, rgba(var(--tint), 0.36) 30%, rgba(var(--tint), 0.58) 55%,
-      rgba(var(--tint2), 0.66) 80%, rgba(var(--tint2), 0.58) 100%);
+      rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.42) 50%,
+      rgba(var(--tint2), 0.68) 76%, rgba(var(--tint2), 0) 100%);
 }
 .movie-hero-content { position: relative; z-index: 3; max-width: 720px; }
 .trailer-btn-wrapper { z-index: 3; display: flex; align-items: center; justify-content: center; margin: auto; flex-shrink: 0; }
@@ -446,12 +446,12 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 .footer-bottom { max-width: 1100px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-size: 0.76rem; color: var(--text-muted); text-align: center; }
 
 /* ===== Prolongement du hero (continuité de l'image vers le noir) ===== */
-#view-movie, #view-venue { position: relative; overflow: hidden; }
+#view-movie, #view-venue, .hero-view { position: relative; overflow: clip; }
 .movie-extend { --tint2: 15, 15, 18; position: relative; height: 0; z-index: 0; }
 .movie-extend-inner {
-  position: absolute; top: 0; left: 0; right: 0; height: 1150px; overflow: hidden; pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 8%, rgba(0,0,0,.55) 40%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 8%, rgba(0,0,0,.55) 40%, transparent 100%);
+  position: absolute; top: -320px; left: 0; right: 0; height: 1470px; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0,0,0,.5) 52%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0,0,0,.5) 52%, transparent 100%);
 }
 .movie-extend-img {
   position: absolute; top: -60px; left: -60px; width: calc(100% + 120px); height: calc(100% + 120px);
@@ -469,6 +469,47 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 .showtime-horizontal-card.special .town-tag, .special-label { color: var(--sc); }
 .special-label { font-size: 0.72rem; font-weight: 800; }
 .practical-details-panel.special { border-color: var(--sc); background: color-mix(in srgb, var(--sc) 12%, rgba(24,24,28,0.55)); }
+
+/* ===== Divers ===== */
+.tarifs-grid .tarif-card:nth-child(2) { order: 3; }
+.tarifs-grid .tarif-card:nth-child(3) { order: 2; }
+.hero-slide { transform: translateX(var(--from, 0)); transition: opacity .7s ease, visibility .7s ease, transform .7s ease; }
+.hero-slide.active { transform: none; }
+.page-simple.hero-view { padding-top: 0; }
+.hero-view .page-wrap { position: relative; z-index: 3; padding-top: 10px; }
+.hero-view .page-title, .hero-view .page-wrap > .page-lead { display: none; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 10px 0 16px; max-width: 760px; }
+.kpi { background: rgba(24,24,28,.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; }
+.kpi strong { display: block; font-size: 1.5rem; font-weight: 900; color: var(--brand-orange); }
+.kpi span { font-size: .8rem; color: #d1d1d6; }
+.film-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 10px 0 16px; max-width: 860px; }
+.film-card { background: rgba(24,24,28,.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; }
+.film-card .fc-img { height: 150px; background: linear-gradient(135deg,#3a2a1a,#1c1c21) center/cover; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; }
+.film-card div.fc-body { padding: 12px 14px; }
+.film-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+.film-card .fc-cycle { font-size: .75rem; color: var(--brand-orange); font-weight: 800; margin-bottom: 6px; }
+.film-card p { font-size: .82rem; color: #d1d1d6; line-height: 1.5; margin: 0; }
+.svc-icons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.svc { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); border-radius: 14px; padding: 5px 12px; font-size: .8rem; font-weight: 600; }
+.footer-help { max-width: 1100px; margin: 26px auto 0; padding-top: 18px; border-top: 1px solid var(--border-subtle); }
+.footer-help h4 { font-size: .9rem; font-weight: 800; margin-bottom: 10px; }
+.footer-help div { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.footer-help a { color: #d1d1d6; font-size: .82rem; cursor: pointer; text-decoration: none; }
+.footer-help a:hover { color: var(--brand-orange); }
+.cast-row { display: flex; gap: 14px; overflow-x: auto; margin: 12px 0 6px; padding-bottom: 4px; scrollbar-width: none; }
+.cast-item { flex: 0 0 auto; width: 66px; text-align: center; cursor: pointer; background: none; border: none; color: #fff; }
+.cast-photo { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.18) center/cover; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 800; margin: 0 auto 4px; border: 1px solid rgba(255,255,255,.3); }
+.cast-name { font-size: .62rem; line-height: 1.15; opacity: .85; display: block; }
+.btn-note { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: 7px 14px; border-radius: 18px; font-size: .8rem; font-weight: 700; text-decoration: none; }
+.btn-note:hover { background: var(--brand-orange); border-color: var(--brand-orange); }
+.btn-note svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 10001; display: none; align-items: center; justify-content: center; padding: 18px; }
+.modal.open { display: flex; }
+.modal-box { background: #1c1c21; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 22px; position: relative; }
+.modal-box img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; float: left; margin: 0 16px 8px 0; }
+.modal-box h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 8px; }
+.modal-box p { font-size: .88rem; color: #d1d1d6; line-height: 1.6; margin-bottom: 10px; }
+.modal-close { position: absolute; top: 8px; right: 12px; background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) { .logo-text { display: none !important; } }
@@ -498,8 +539,8 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .movie-hero { min-height: 88vh; padding: 180px 5% 105px 5%; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
   .movie-hero::after {
     background: linear-gradient(180deg,
-      rgba(var(--tint), 0.30) 0%, rgba(var(--tint), 0.38) 30%, rgba(var(--tint), 0.62) 52%,
-      rgba(var(--tint2), 0.68) 72%, rgba(var(--tint2), 0.58) 100%);
+      rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.45) 52%,
+      rgba(var(--tint2), 0.70) 76%, rgba(var(--tint2), 0) 100%);
   }
   .trailer-btn-wrapper { width: 100%; margin: 14px 0 0 0; justify-content: flex-start; }
   .btn-play-trailer {
@@ -688,7 +729,8 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 </div>
 
 <!-- ===== A PROPOS ===== -->
-<div id="view-apropos" class="view-page page-simple">
+<div id="view-apropos" class="view-page page-simple hero-view">
+  <div id="phero-apropos"></div>
   <div class="page-wrap">
     <h1 class="page-title">À propos</h1>
     <!-- TEXTE PROVISOIRE : à remplacer par le contenu de https://baladimages.spread.name/APropos -->
@@ -699,6 +741,10 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
       <p>Familles Rurales est un mouvement familial associatif et d'éducation populaire. Il rassemble des femmes et des hommes qui agissent au quotidien pour répondre aux besoins des familles dans leur milieu de vie.</p>
       <h2>Notre projection</h2>
       <p>Nous projetons en numérique 2K, avec un écran et un son de qualité, dans des salles accessibles aux personnes à mobilité réduite.</p>
+      <h2>Fédération départementale Familles Rurales Maine et Loire, au service des territoires et des familles</h2>
+      <p><img src="https://fd.maine-et-loire.portail-defi.net/uploads/logo/5ecb915092eea_logo_fd49_quadri.png" alt="Familles Rurales Maine-et-Loire" style="height:80px;background:#fff;border-radius:10px;padding:8px;margin-bottom:8px;display:block;" loading="lazy"></p>
+      <p>Notre fédération accompagne et fédère les associations locales œuvrant en milieu rural. Nous développons des actions éducatives, sociales et culturelles, dont le cinéma itinérant Balad’Images, afin de favoriser l’accès aux services, à la culture et de renforcer la cohésion sociale sur l’ensemble du territoire.</p>
+      <p><a href="https://maine-et-loire.famillesrurales.org/90/notre-organisation-notre-accompagnement" target="_blank" rel="noopener noreferrer">En savoir + sur Familles Rurales</a></p>
       <h2>Une question ?</h2>
       <p><a onclick="go('contact')" style="cursor:pointer;">Écrivez-nous</a> : nous vous répondons du lundi au vendredi.</p>
     </div>
@@ -706,7 +752,8 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 </div>
 
 <!-- ===== BENEVOLAT ===== -->
-<div id="view-benevolat" class="view-page page-simple">
+<div id="view-benevolat" class="view-page page-simple hero-view">
+  <div id="phero-benevolat"></div>
   <div class="page-wrap">
     <h1 class="page-title">Bénévolat</h1>
     <!-- TEXTE PROVISOIRE : à remplacer par le contenu de https://baladimages.spread.name/benevolat -->
@@ -723,6 +770,28 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
       <p>Les bénévoles sont accompagnés et formés par la fédération.</p>
       <p><a class="btn-agenda filled" href="mailto:cinema49@famillesrurales.org?subject=Devenir%20b%C3%A9n%C3%A9vole" style="text-decoration:none;color:#fff;">Devenir bénévole</a></p>
     </div>
+  </div>
+</div>
+
+<!-- ===== PLEIN AIR ===== -->
+<div id="view-plein-air" class="view-page page-simple hero-view">
+  <div id="phero-plein-air"></div>
+  <div class="page-wrap">
+    <div class="prose">
+      <!-- TEXTE PROVISOIRE : à remplacer par celui de https://baladimages.spread.name/Plein-Air -->
+      <h2>Le cinéma sous les étoiles</h2>
+      <p>Balad'Images vient projeter un film en plein air dans votre commune : écran et matériel de projection numérique installés pour une soirée conviviale, ouverte à toutes et tous.</p>
+      <p>Communes, associations, comités des fêtes : demandez un devis, nous vous aidons à choisir le film et à organiser la séance.</p>
+      <p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Demande de devis – cinéma plein air')">Demander un devis</a></p>
+    </div>
+  </div>
+</div>
+
+<div id="view-aide" class="view-page page-simple">
+  <div class="page-wrap">
+    <div style="margin-bottom:18px;"><button class="btn-back-home" onclick="history.length&&go('home')">← Accueil</button></div>
+    <h1 class="page-title" id="aide-title"></h1>
+    <div class="prose" id="aide-content"></div>
   </div>
 </div>
 
@@ -794,6 +863,8 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   </div>
 </div>
 
+<div class="modal" id="personModal" onclick="if(event.target===this)this.classList.remove('open')"><div class="modal-box" id="personBox"></div></div>
+
 <!-- ===== FOOTER UNIVERSEL ===== -->
 <footer class="site-footer">
   <div class="footer-inner">
@@ -817,6 +888,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
       </ul>
     </div>
   </div>
+  <div class="footer-help"><h4>Centre d'aide</h4><div id="footer-help"></div></div>
   <div class="footer-bottom">© <span id="footer-year"></span> Balad'Images – Familles Rurales Maine-et-Loire</div>
 </footer>
 
@@ -847,10 +919,23 @@ const TARIFS_COURTS = [
 ];
 
 // Sous-pages de "Activités" : à compléter
+const CNC = '<p><a href="https://www.cnc.fr/cinema/ma-classe-au-cinema" target="_blank" rel="noopener noreferrer">En savoir plus sur « Ma classe au cinéma » (CNC)</a></p>';
+const kp = (arr) => '<div class="kpis">' + arr.map(x => `<div class="kpi"><strong>${x[0]}</strong><span>${x[1]}</span></div>`).join('') + '</div>';
+const fiche = (k, com) => `<h2>Nos chiffres</h2>${kp(k)}<h2>Communes participantes</h2><p>${com}</p>`;
+const findPoster = (t) => { const f = db.films.find(x => norm(x.titre).includes(norm(t))); return f ? f.affiche_url : ''; };
+const filmCard = (t, cycle, ico, txt) => { const u = findPoster(t); return `<div class="film-card"><div class="fc-img" ${u ? `style="background-image:url('${esc(u)}')"` : ''}>${u ? '' : ico}</div><div class="fc-body"><h3>${t}</h3><div class="fc-cycle">${cycle}</div><p>${txt}</p></div></div>`; };
 const ACTIVITES = [
-  { id: 'dispositifs', ico: '🎓', titre: 'Nos dispositifs', resume: 'Les actions et dispositifs portés par Balad\'Images.', contenu: '<p>Contenu à venir.</p>' },
-  { id: 'plein-air',   ico: '🌙', titre: 'Cinéma en plein air', resume: 'Des séances sous les étoiles, près de chez vous.', contenu: '<p>Contenu à venir.</p>' },
-  { id: 'autres',      ico: '🎞️', titre: 'Autres activités', resume: 'Événements, rencontres et projections spéciales.', contenu: '<p>Contenu à venir.</p>' }
+  { id: 'ecole-cinema', ico: '🎒', titre: 'École et cinéma', resume: 'Le dispositif de l\'Éducation nationale pour les classes de la maternelle au CM2.',
+    contenu: () => `<p>« École et cinéma » fait partie du dispositif national « Ma classe au cinéma » de l'Éducation nationale. Chaque année, les classes participantes découvrent plusieurs films en salle, avec un travail préparatoire et prolongé en classe par les enseignants.</p><p>Balad'Images accueille ces séances dans ses salles, avec un tarif et un accueil adaptés aux écoles.</p>${fiche([['29', 'séances au total'], ['14,5', 'séances par an'], ['1 418', 'spectateurs par an']], 'Doué-la-Fontaine, Longué-Jumelles, Pouancé, Tiercé')}${CNC}` },
+  { id: 'college-cinema', ico: '🎓', titre: 'Collège et cinéma', resume: 'Trois films par an pour les collégiens, projetés en salle.',
+    contenu: () => `<p>« Collège et cinéma » permet aux élèves de collège de voir et d'analyser des films de référence dans une vraie salle de cinéma, en lien avec leurs professeurs. C'est l'un des dispositifs de « Ma classe au cinéma ».</p>${fiche([['7', 'séances au total'], ['3,5', 'séances par an'], ['289', 'spectateurs par an']], 'Longué-Jumelles')}${CNC}` },
+  { id: 'lyceens', ico: '🎞️', titre: 'Lycéens au cinéma', resume: 'Le dispositif pour les lycéens en Pays de la Loire.',
+    contenu: () => `<p>« Lycéens au cinéma » propose aux lycéens des Pays de la Loire, dont le Maine-et-Loire, de découvrir des films en salle sur le temps scolaire, accompagnés par leurs enseignants. Il s'inscrit dans « Ma classe au cinéma ».</p><p>Chiffres Balad'Images : à compléter.</p>${CNC}` },
+  { id: 'cine-ecole', ico: '🦊', titre: 'Ciné-école', resume: 'Notre dispositif maison, avec une sélection locale de films.',
+    contenu: () => `<p>Ciné-école reprend le principe d'École et cinéma, avec une sélection locale et d'autres choix de films, pensée par notre équipe pour chaque cycle scolaire.</p><h2>Les films de cette année</h2><div class="film-cards">${filmCard('Fantastic Mr Fox', 'Cycle 3', '🦊', 'Un renard rusé, père de famille, ne peut s\'empêcher de dévaliser trois fermiers, qui décident de se venger. Un film d\'animation en volume plein d\'humour.')}${filmCard('Ponyo sur la falaise', 'Cycle 2', '🐟', 'Ponyo, petite poisson rouge, rêve de devenir humaine après sa rencontre avec Sosuke, un petit garçon qui vit au bord de la mer.')}${filmCard('La Baleine et l\'escargote', 'Cycle 1', '🐋', 'Une petite escargote s\'accroche à la queue d\'une baleine pour voyager et découvrir le monde.')}</div>${fiche([['107', 'séances au total'], ['53,5', 'séances par an'], ['4 153', 'spectateurs par an']], 'Bécon-les-Granits, Chatelais, Corné, Gennes, Jallais, La Cornuaille, La Pouëze, Le Louroux Béconnais, Longué-Jumelles, Loué, Missillac, Noyant-Villages, Pouancé, Saint Clément-de-la-place, Saint Léger-de-Linières, Saint-Aubin-de-Luigné, Saint-Lyphard, Soulaire-et-Bourg, Tennie, Tiercé, Yzernay')}` },
+  { id: 'scolaires', ico: '🚌', titre: 'Séances scolaires', resume: 'Organisez une séance pour votre classe.',
+    contenu: () => `<p>Enseignants, vous pouvez aussi organiser une séance pour votre classe en dehors des dispositifs, avec un film de votre choix.</p>${fiche([['50', 'séances au total'], ['25', 'séances par an'], ['1 884', 'spectateurs par an']], 'Beaumont-sur-Sarthe, Chemillé, La Chapelle-des-Marais, Longué-Jumelles, Loué, Missillac, Méral, Pouancé, Saint Gildas-des-bois, Saint-Lyphard, Saint-Ouen-en-Belin, Tiercé')}<p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Séance scolaire')">Nous contacter</a></p>` },
+  { id: 'plein-air', ico: '🌙', titre: 'Cinéma en plein air', resume: 'Des séances sous les étoiles, près de chez vous.', contenu: () => '' }
 ];
 
 /* =========================================================
@@ -1141,7 +1226,7 @@ function renderHeroCarouselContainer() {
 function heroStep(dir) {
   if (!heroFeaturedFilms.length) return;
   const n = heroFeaturedFilms.length;
-  setHeroSlide((heroCarouselIndex + dir + n) % n);
+  setHeroSlide((heroCarouselIndex + dir + n) % n, dir);
   startHeroAutoPlay();
 }
 
@@ -1152,9 +1237,17 @@ function startHeroAutoPlay() {
   }, HERO_DELAY);
 }
 
-function setHeroSlide(index) {
+function setHeroSlide(index, dir = 1) {
   loadHeroImage(index);
-  document.querySelectorAll('.hero-slide').forEach((s, i) => s.classList.toggle('active', i === index));
+  document.querySelectorAll('.hero-slide').forEach((s, i) => {
+    if (i === index) {
+      s.style.transition = 'none'; s.style.setProperty('--from', (dir * 12) + '%'); void s.offsetWidth; s.style.transition = '';
+      s.classList.add('active');
+    } else {
+      if (s.classList.contains('active')) s.style.setProperty('--from', (-dir * 12) + '%');
+      s.classList.remove('active');
+    }
+  });
   document.querySelectorAll('.dot-item').forEach((d, i) => {
     if (i === index) { d.classList.remove('active'); void d.offsetWidth; d.classList.add('active'); }
     else d.classList.remove('active');
@@ -1245,7 +1338,7 @@ function switchView(targetViewId, cb) {
     const target = $(targetViewId);
     if (target) { target.classList.add('active-view'); window.scrollTo(0, 0); }
     document.body.classList.toggle('view-venue-active', targetViewId === 'view-venue');
-    if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue') document.querySelector('header').style.removeProperty('--hdr-dark');
+    if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue' && !PAGE_BG[targetViewId.replace('view-', '')]) document.querySelector('header').style.removeProperty('--hdr-dark');
 
     // Surbrillance du menu
     let key = targetViewId.replace('view-', '');
@@ -1275,6 +1368,7 @@ function goHome() {
 /* Navigation générale : home, salles, activites, tarifs, apropos, benevolat, contact, mentions */
 function go(page) {
   $('mobileMenu').classList.remove('open');
+  buildPageHero(page);
   if (page === 'home') { goHome(); return; }
   if (page === 'salles') { switchView('view-salles', initSalles); return; }
   if (page === 'activites') { renderActivitesGrid(); switchView('view-activites'); return; }
@@ -1288,18 +1382,18 @@ function handleLocationChange(val) {
 /* =========================================================
    RECHERCHE FILMS
    ========================================================= */
+const PAGES_SEARCH = [['tarifs', 'Tarifs'], ['salles', 'Nos salles'], ['apropos', 'À propos'], ['benevolat', 'Bénévolat'], ['contact', 'Nous contacter'], ['mentions', 'Mentions légales'], ['plein-air', 'Cinéma en plein air']];
 function handleSearchInput(val) {
-  const q = val.toLowerCase().trim();
-  const dropdown = $('searchDropdown');
-  if (!q) { dropdown.classList.remove('open'); dropdown.innerHTML = ''; return; }
-  const matches = db.films.filter(f => f.titre && f.titre.toLowerCase().includes(q));
-  if (matches.length) {
-    dropdown.innerHTML = matches.map(f => `
-      <a class="search-dropdown-item" onclick="event.stopPropagation(); openMovieDetails('${f.id_film}');">${f.titre}</a>`).join('');
-    dropdown.classList.add('open');
-  } else {
-    dropdown.classList.remove('open');
-  }
+  const q = norm(val), dd = $('searchDropdown');
+  if (!q) { dd.classList.remove('open'); dd.innerHTML = ''; return; }
+  const it = [];
+  db.films.filter(f => norm(f.titre).includes(q)).slice(0, 5).forEach(f => it.push(['🎬', f.titre, `openMovieDetails('${f.id_film}')`, 'Film']));
+  [...new Set(db.seances.map(getCommune).filter(Boolean))].filter(c => norm(c).includes(q)).slice(0, 5).forEach(c => it.push(['📍', c, `openVenueDetails(${jsq(c)})`, 'Salle']));
+  ACTIVITES.filter(a => norm(a.titre + ' ' + a.resume).includes(q)).forEach(a => it.push([a.ico, a.titre, `openActivite('${a.id}')`, 'Dispositif']));
+  PAGES_SEARCH.filter(x => norm(x[1]).includes(q)).forEach(x => it.push(['📄', x[1], `go('${x[0]}')`, 'Page']));
+  HELP.filter(h => norm(h.q).includes(q)).forEach(h => it.push(['❓', h.q, `openHelp('${h.id}')`, 'Aide']));
+  dd.innerHTML = it.slice(0, 10).map(i => `<a class="search-dropdown-item" onclick="event.stopPropagation(); ${i[2]}; $('searchDropdown').classList.remove('open')">${i[0]} ${esc(i[1])} <small style="opacity:.55">· ${i[3]}</small></a>`).join('');
+  dd.classList.toggle('open', it.length > 0);
 }
 
 function triggerSearchExecution() {
@@ -1456,7 +1550,9 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
         <span class="synopsis-text ${isMobile ? 'collapsed' : ''}" id="synopsisText">${isMobile ? (movie.synopsis || fullSynopsisText) : fullSynopsisText}</span>
         <button class="btn-toggle-synopsis" id="synopsisToggleBtn" onclick="toggleSynopsis('${movie.id_film}')">Lire la suite</button>
       </div>
-      <div class="movie-credits-text">
+      <div class="cast-row" id="castRow"></div>
+      <a class="btn-note" href="https://www.imdb.com/find/?q=${encodeURIComponent(movie.titre)}&s=tt&ttype=ft" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M7 22H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3m0 11V11l4-8a2 2 0 0 1 2 2v4h5.6a2 2 0 0 1 2 2.3l-1.2 7.4a2 2 0 0 1-2 1.7H7z"/></svg> Noter ce film</a>
+      <div class="movie-credits-text" style="display:none">
         ${movie.realisateur ? `<span class="credit-block"><strong>De</strong> ${movie.realisateur}</span>` : ''}
         ${movie.casting ? `<span class="credit-block"><strong>Avec</strong> ${movie.casting}</span>` : ''}
       </div>
@@ -1472,7 +1568,13 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
   const extEl = $('movieExtend');
   extEl.style.setProperty('--tint2', '15,15,18');
   extEl.innerHTML = bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : '';
+  loadCast(movie);
   const heroImg = $('movieHeroImg');
+  heroImg.addEventListener('load', async () => {
+    const faces = await detectFaces(heroImg, bgUrl);
+    window._focus = { img: heroImg, faces };
+    applyFocus(heroImg, faces);
+  });
   if (tintCache[bgUrl]) {
     setTint(heroSec, tintCache[bgUrl]);
   } else {
@@ -1515,7 +1617,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
   if (isMobile) {
     setTimeout(() => {
       const sec = document.querySelector('.showtimes-section');
-      if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+      /* hero visible : pas de défilement automatique */
     }, 300);
   }
 }
@@ -1627,7 +1729,7 @@ function openVenueDetails(lieuId) {
         </div>
         ${mapsBadge}
         <h1 class="hero-title">${lieuId}</h1>
-        <p class="hero-subtitle">Retrouvez la programmation Familles Rurales à ${lieuId}.</p>
+        <p class="hero-subtitle">Retrouvez la programmation Familles Rurales à ${lieuId}.</p>${servicesIcons(firstSeance)}
       </div>
     </section>
     <div class="movie-extend">${bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : ''}</div>`;
@@ -1659,10 +1761,11 @@ function renderActivitesGrid() {
 }
 
 function openActivite(id) {
+  if (id === 'plein-air') { go('plein-air'); return; }
   const a = ACTIVITES.find(x => x.id === id);
   if (!a) return;
   $('activite-title').textContent = a.titre;
-  $('activite-content').innerHTML = a.contenu;
+  $('activite-content').innerHTML = typeof a.contenu === 'function' ? a.contenu() : a.contenu;
   switchView('view-activite');
 }
 
@@ -1909,7 +2012,115 @@ async function nearestTo(val) {
 /* =========================================================
    FOOTER
    ========================================================= */
+const PAGE_BG = {
+  'apropos': { url: 'https://www.architectes-pour-tous.fr/sites/cnoa/files/styles/max_2600x2600/public/2024-01/field_visuels/52777-3_tierce_cine_pax.webp?itok=X8MOU1JI', t: 'À propos', l: "Balad'Images, le cinéma itinérant de Familles Rurales." },
+  'benevolat': { url: 'https://i.spread.name/558b01e7-2c52-4f88-bc83-f68b35c8eb26_Sans-titre-_29_7-x-14-cm_-_2.png', t: 'Bénévolat', l: "Rejoignez l'équipe de bénévoles de votre salle." },
+  'plein-air': { url: 'https://i.spread.name/8317cb8a-9053-4562-98ef-709016bd7c7f_ChatGPT-Image-5-fevr_-2026_-17_32_30.png', t: 'Cinéma en plein air', l: 'Des séances sous les étoiles, près de chez vous.' }
+};
+function buildPageHero(key) {
+  const c = PAGE_BG[key], host = $('phero-' + key);
+  if (!c || !host) return;
+  host.innerHTML = `<section class="movie-hero venue-hero" id="ph-${key}"><img class="movie-hero-img" id="phi-${key}" alt="" crossorigin="anonymous" decoding="async" src="${c.url}"><div class="movie-hero-content"><h1 class="hero-title">${c.t}</h1><p class="hero-subtitle">${c.l}</p></div></section><div class="movie-extend"><div class="movie-extend-inner"><img class="movie-extend-img" alt="" src="${c.url}"></div></div>`;
+  attachTint($('phi-' + key), $('ph-' + key), c.url);
+}
+function goContact(obj) { go('contact'); setTimeout(() => { if (obj) $('c-objet').value = obj; }, 300); }
+
+const HELP = [
+  { id: 'tarifs', q: 'Quels sont les tarifs pour une place de cinéma ?', a: () => `<ul><li><strong>6 €</strong> : tarif plein (adulte)</li><li><strong>5 €</strong> : tarif réduit (adhérent Familles Rurales avec carte à jour, demandeur d'emploi, étudiant, enfant de moins de 14 ans)</li><li><strong>4 €</strong> : enfant de moins de 14 ans avec carte adhérent Familles Rurales à jour</li><li><strong>3,60 €</strong> : groupes, sur demande</li></ul><p>Certaines séances spéciales ont un tarif particulier, indiqué sur la fiche de la séance. <a onclick="go('tarifs')" style="cursor:pointer">Voir la page Tarifs</a>.</p>` },
+  { id: 'paiement', q: 'Comment payer en salle ?', a: () => `<p>Les moyens de paiement acceptés sont indiqués sur la fiche de chaque séance, rubrique « Paiements » (par exemple espèces, chèque, carte bancaire sur TPE). Ils peuvent varier d'une salle à l'autre : pensez à vérifier avant de venir.</p>` },
+  { id: 'contact', q: 'Comment nous contacter ?', a: () => `<p>Par e-mail : <a href="mailto:cinema49@famillesrurales.org">cinema49@famillesrurales.org</a>, ou via le formulaire de la page Contact.</p><p>Nous sommes joignables du lundi au vendredi, de 9h30 à 17h, au 14 rue Savary, 49100 Angers.</p><p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="go('contact')">Nous contacter</a></p>` },
+  { id: 'abonnements', q: 'Proposons-nous des abonnements ?', a: () => `<p>Non, nous ne proposons pas d'abonnement. En revanche, la carte d'adhérent Familles Rurales à jour donne droit au tarif réduit à chaque séance (et à 4 € pour les enfants de moins de 14 ans).</p><p>Pour les écoles, centres de loisirs et autres groupes, un tarif de 3,60 € par personne est possible sur demande : contactez-nous.</p>` },
+  { id: 'reservation', q: 'Peut-on réserver en ligne ?', a: () => `<p>Pas encore : la réservation en ligne n'est pas disponible. Les places se prennent sur place, le jour de la séance, et nous vous conseillons d'arriver un peu en avance.</p><p>Pour un groupe, contactez-nous avant la séance afin que nous puissions vous accueillir dans de bonnes conditions.</p>` },
+  { id: 'programmation', q: 'Comment recevoir la programmation régulièrement ?', a: () => `<p>Ajoutez le site sur votre écran d'accueil, comme une application :</p><ul><li><strong>iPhone / iPad (Safari)</strong> : touchez le bouton Partager, puis « Sur l'écran d'accueil ».</li><li><strong>Android (Chrome)</strong> : touchez le menu ⋮, puis « Ajouter à l'écran d'accueil » (ou « Installer l'application »).</li></ul><p>Nous allons prochainement recommencer à envoyer une newsletter. En attendant, vous pouvez nous écrire pour demander votre inscription.</p><p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Inscription à la newsletter')">Demander mon inscription</a></p>` }
+];
+function openHelp(id) {
+  const h = HELP.find(x => x.id === id); if (!h) return;
+  $('aide-title').textContent = h.q; $('aide-content').innerHTML = h.a();
+  switchView('view-aide');
+}
+
+function servicesIcons(seance) {
+  const t = norm(((seance && seance.info_paiement) || '') + ' ' + ((seance && seance.info_services) || ''));
+  const L = [['buvette', '🥤', 'Buvette'], ['snack|popcorn|confiserie', '🍿', 'Snack'], ['tpe|carte bancaire|\\bcb\\b', '💳', 'TPE'], ['pmr|accessib|mobilite reduite', '♿', 'PMR'], ['especes', '💶', 'Espèces'], ['cheque', '🧾', 'Chèque']];
+  const h = L.filter(x => new RegExp(x[0]).test(t)).map(x => `<span class="svc">${x[1]} ${x[2]}</span>`).join('');
+  return h ? `<div class="svc-icons">${h}</div>` : '';
+}
+
+/* ---- Casting (portraits via Wikipédia) ---- */
+const personCache = {};
+async function wikiPerson(name) {
+  if (name in personCache) return personCache[name];
+  let out = null;
+  for (const lang of ['fr', 'en']) {
+    try {
+      const r = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name.replace(/ /g, '_'))}`);
+      if (!r.ok) continue;
+      const d = await r.json();
+      if (d.type === 'standard') { out = { photo: d.thumbnail && d.thumbnail.source, bio: d.extract, url: d.content_urls && d.content_urls.desktop.page }; break; }
+    } catch (e) {}
+  }
+  return (personCache[name] = out);
+}
+function loadCast(movie) {
+  const row = $('castRow'); if (!row) return;
+  const names = [...new Set(String(movie.realisateur || '').split(/,| et /).concat(String(movie.casting || '').split(',')).map(x => x.trim()).filter(Boolean))].slice(0, 10);
+  const dirs = String(movie.realisateur || '').split(/,| et /).map(x => x.trim());
+  row.innerHTML = names.map((n, i) => `<button class="cast-item" onclick="openPerson(${jsq(n)})"><div class="cast-photo" id="cp-${i}">${n.split(' ').map(w => w[0]).slice(0, 2).join('')}</div><span class="cast-name">${esc(n)}${dirs.includes(n) ? '<br><em>réal.</em>' : ''}</span></button>`).join('');
+  names.forEach(async (n, i) => { const p = await wikiPerson(n); const el = $('cp-' + i); if (p && p.photo && el) { el.style.backgroundImage = `url('${p.photo}')`; el.textContent = ''; } });
+}
+async function openPerson(name) {
+  const m = $('personModal'), b = $('personBox');
+  b.innerHTML = `<button class="modal-close" onclick="$('personModal').classList.remove('open')">×</button><h3>${esc(name)}</h3><p>Chargement...</p>`;
+  m.classList.add('open');
+  const p = await wikiPerson(name);
+  const imdb = 'https://www.imdb.com/find/?s=nm&q=' + encodeURIComponent(name);
+  b.innerHTML = `<button class="modal-close" onclick="$('personModal').classList.remove('open')">×</button>${p && p.photo ? `<img src="${p.photo}" alt="">` : ''}<h3>${esc(name)}</h3><p>${p && p.bio ? esc(p.bio) : 'Pas de biographie trouvée.'}</p><p style="clear:both"><a href="${p && p.url ? p.url : imdb}" target="_blank" rel="noopener noreferrer" style="color:var(--brand-orange)">Biographie et filmographie (Wikipédia)</a> · <a href="${imdb}" target="_blank" rel="noopener noreferrer" style="color:var(--brand-orange)">IMDb</a></p>`;
+}
+
+/* ---- Cadrage sur les visages (BlazeFace, chargé à la demande) ---- */
+let faceModelP = null;
+function loadFaceModel() {
+  if (faceModelP) return faceModelP;
+  faceModelP = new Promise((res, rej) => {
+    const a = document.createElement('script');
+    a.src = 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js';
+    a.onload = () => { const b = document.createElement('script'); b.src = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.1.0/dist/blazeface.min.js'; b.onload = () => blazeface.load().then(res, rej); b.onerror = rej; document.head.appendChild(b); };
+    a.onerror = rej; document.head.appendChild(a);
+  });
+  return faceModelP;
+}
+let faceCache = {}; try { faceCache = JSON.parse(localStorage.getItem('balad_face_v1') || '{}'); } catch (e) {}
+async function detectFaces(img, url) {
+  if (url in faceCache) return faceCache[url];
+  try {
+    const model = await loadFaceModel();
+    const c = document.createElement('canvas'), sc = Math.min(1, 640 / img.naturalWidth);
+    c.width = Math.round(img.naturalWidth * sc); c.height = Math.round(img.naturalHeight * sc);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    const f = await model.estimateFaces(c, false);
+    const faces = f.filter(x => x.probability[0] > 0.8).map(x => ({ x0: x.topLeft[0] / c.width, y0: x.topLeft[1] / c.height, x1: x.bottomRight[0] / c.width, y1: x.bottomRight[1] / c.height }));
+    faceCache[url] = faces;
+    try { localStorage.setItem('balad_face_v1', JSON.stringify(faceCache)); } catch (e) {}
+    return faces;
+  } catch (e) { return null; }
+}
+function applyFocus(img, faces) {
+  if (!img || !img.naturalWidth || !faces || !faces.length) return;
+  const box = img.parentElement, bw = box.clientWidth, bh = box.clientHeight, mob = window.innerWidth <= 768;
+  const s = Math.max(bw / img.naturalWidth, bh / img.naturalHeight), iw = img.naturalWidth * s, ih = img.naturalHeight * s;
+  const u = { x0: Math.min(...faces.map(f => f.x0)), x1: Math.max(...faces.map(f => f.x1)), y0: Math.min(...faces.map(f => f.y0)), y1: Math.max(...faces.map(f => f.y1)) };
+  const big = faces.slice().sort((a, b) => (b.x1 - b.x0) * (b.y1 - b.y0) - (a.x1 - a.x0) * (a.y1 - a.y0))[0];
+  const f = (u.x1 - u.x0) < 0.65 ? u : big;
+  const fx = (f.x0 + f.x1) / 2, fy = (f.y0 + f.y1) / 2, top = f.y0 - (f.y1 - f.y0) * 0.7;
+  let offY = Math.min(Math.max(0, fy * ih - (mob ? 0.38 : 0.42) * bh), ih - bh);
+  offY = Math.max(0, Math.min(offY, top * ih - 0.12 * bh));
+  const offX = Math.min(Math.max(0, fx * iw - 0.5 * bw), iw - bw);
+  img.style.objectPosition = `${iw > bw ? offX / (iw - bw) * 100 : 50}% ${ih > bh ? offY / (ih - bh) * 100 : 50}%`;
+}
+window.addEventListener('resize', () => { if (window._focus) applyFocus(window._focus.img, window._focus.faces); });
+
 function initFooter() {
+  $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
   $('footer-year').textContent = new Date().getFullYear();
   $('footer-socials').innerHTML = SITE.socials.map(s =>
     `<a class="social-btn" href="${s.url}" target="_blank" rel="noopener noreferrer" aria-label="${s.nom}" title="${s.nom}">${s.svg}</a>`).join('');
