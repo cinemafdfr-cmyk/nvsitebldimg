@@ -67,7 +67,7 @@ button { font-family: inherit; }
 
 /* ===== HEADER ===== */
 header {
-  background: linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 100%);
+  background: linear-gradient(180deg, rgba(10,10,14,calc(.30 + var(--hdr-dark, 0))) 0%, rgba(10,10,14,calc(.10 + var(--hdr-dark, 0) * .4)) 100%);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   padding: 10px 4%; display: flex; justify-content: space-between; align-items: center; gap: 10px;
@@ -192,15 +192,15 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 /* Flèches du carrousel */
 .hero-arrow {
   position: absolute; top: 52%; transform: translateY(-50%); z-index: 10; width: 48px; height: 48px;
-  border-radius: 50%; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.28); color: #fff;
+  border-radius: 50%; background: none; border: none; opacity: .55; color: #fff;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background 0.18s, border-color 0.18s, transform 0.18s;
+  transition: opacity 0.18s;
 }
-.hero-arrow:hover { background: rgba(232,140,30,0.9); border-color: var(--brand-orange); }
+.hero-arrow:hover { opacity: 1; }
 .hero-arrow:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 2px; }
 .hero-arrow.prev { left: 1.5%; }
 .hero-arrow.next { right: 1.5%; }
-.hero-arrow svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.hero-arrow svg { filter: drop-shadow(0 1px 5px rgba(0,0,0,.8)); width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 
 .hero-dots-indicator { position: absolute; bottom: 15px; left: 84px; z-index: 10; display: flex; gap: 8px; align-items: center; }
 .dot-item { height: 4px; width: 22px; background: rgba(255,255,255,0.3); border-radius: 2px; cursor: pointer; transition: width 0.3s ease; position: relative; overflow: hidden; }
@@ -221,12 +221,12 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 .movie-hero::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 65% at 12% 82%,
+    radial-gradient(ellipse 70% 65% at 12% 68%,
       rgba(var(--tint), 0.94) 0%, rgba(var(--tint), 0.78) 28%, rgba(var(--tint), 0.48) 52%,
       rgba(var(--tint), 0.18) 72%, rgba(var(--tint), 0) 100%),
     linear-gradient(180deg,
       rgba(var(--tint), 0.26) 0%, rgba(var(--tint), 0.36) 30%, rgba(var(--tint), 0.58) 55%,
-      rgba(var(--tint2), 0.84) 76%, rgba(var(--bg-dark-rgb), 0.97) 91%, var(--bg-dark) 100%);
+      rgba(var(--tint2), 0.66) 80%, rgba(var(--tint2), 0.58) 100%);
 }
 .movie-hero-content { position: relative; z-index: 3; max-width: 720px; }
 .trailer-btn-wrapper { z-index: 3; display: flex; align-items: center; justify-content: center; margin: auto; flex-shrink: 0; }
@@ -296,16 +296,16 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   scrollbar-width: thin; scrollbar-color: var(--brand-orange) transparent;
 }
 .showtime-horizontal-card {
-  min-width: 210px; max-width: 250px; background: var(--bg-card); border: 1px solid var(--border-subtle);
+  min-width: 210px; max-width: 250px; background: rgba(24,24,28,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md); padding: 14px; cursor: pointer; transition: all 0.18s ease; flex-shrink: 0;
   display: flex; flex-direction: column; gap: 4px;
 }
-.showtime-horizontal-card:hover, .showtime-horizontal-card.active { border-color: var(--brand-orange); background: var(--bg-surface); }
+.showtime-horizontal-card:hover, .showtime-horizontal-card.active { border-color: var(--brand-orange); background: rgba(34,34,40,0.7); }
 .town-tag { color: var(--brand-orange); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; }
 .card-date { font-size: 0.92rem; font-weight: 800; color: white; }
 .card-venue { font-size: 0.78rem; color: var(--text-muted); }
 .practical-details-panel {
-  background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 22px;
+  background: rgba(24,24,28,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 22px;
   max-width: 850px; transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; opacity: 1; transform: translateY(0);
 }
 .practical-details-panel.changing { opacity: 0; transform: translateY(6px); }
@@ -412,9 +412,11 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 .btn-mini:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
 #sallesMap { position: relative; z-index: 0; height: 62vh; min-height: 420px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-subtle); background: var(--bg-card); }
 .salles-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 10px; }
-.leaflet-popup-content-wrapper { background: var(--bg-card); color: #fff; border-radius: 14px; padding: 0; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.55); }
-.leaflet-popup-content { margin: 0 !important; width: 250px !important; font-family: 'Inter', sans-serif; }
-.leaflet-popup-tip { background: var(--bg-card); }
+.leaflet-container .leaflet-popup-content-wrapper { background: #1c1c21; color: #fff; border-radius: 14px; padding: 0; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+.leaflet-container .leaflet-popup-content { margin: 0 !important; width: 250px !important; font-family: 'Inter', sans-serif; color: #fff; }
+.leaflet-container .leaflet-popup-tip { background: #1c1c21; }
+.leaflet-popup .popup-body h4 { color: #fff; }
+.leaflet-popup .popup-info { color: #ececf1; }
 .leaflet-container a.leaflet-popup-close-button { color: #fff; z-index: 5; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
 .popup-img { height: 110px; background: var(--bg-surface) center/cover no-repeat; }
 .popup-body { padding: 12px 14px 14px; }
@@ -443,6 +445,31 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 .footer-links a:hover { color: var(--brand-orange); }
 .footer-bottom { max-width: 1100px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-size: 0.76rem; color: var(--text-muted); text-align: center; }
 
+/* ===== Prolongement du hero (continuité de l'image vers le noir) ===== */
+#view-movie, #view-venue { position: relative; overflow: hidden; }
+.movie-extend { --tint2: 15, 15, 18; position: relative; height: 0; z-index: 0; }
+.movie-extend-inner {
+  position: absolute; top: 0; left: 0; right: 0; height: 1150px; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 8%, rgba(0,0,0,.55) 40%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 8%, rgba(0,0,0,.55) 40%, transparent 100%);
+}
+.movie-extend-img {
+  position: absolute; top: -60px; left: -60px; width: calc(100% + 120px); height: calc(100% + 120px);
+  object-fit: cover; transform: scaleY(-1); filter: blur(46px) saturate(1.15);
+}
+.movie-extend-inner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(var(--tint2), .58) 0%, rgba(var(--tint2), .40) 40%, rgba(var(--tint2), .25) 100%); }
+.venue-hero { min-height: 64vh; padding-bottom: 70px; }
+#view-venue .catalog-container, #view-venue .venue-details-section { position: relative; z-index: 3; }
+
+/* ===== Séances spéciales ===== */
+.special-badge { display: inline-block; background: var(--sc); color: #fff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.card-badges { position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.hero-badges { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.showtime-horizontal-card.special { border-color: var(--sc); background: color-mix(in srgb, var(--sc) 16%, rgba(24,24,28,0.55)); }
+.showtime-horizontal-card.special .town-tag, .special-label { color: var(--sc); }
+.special-label { font-size: 0.72rem; font-weight: 800; }
+.practical-details-panel.special { border-color: var(--sc); background: color-mix(in srgb, var(--sc) 12%, rgba(24,24,28,0.55)); }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) { .logo-text { display: none !important; } }
 @media (max-width: 960px) {
@@ -450,21 +477,21 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .menu-burger-btn { display: block; margin-left: 2px; }
 }
 @media (max-width: 768px) {
-  header { padding: 8px 12px; }
+  header { padding: 12px 14px; }
   .header-left { gap: 6px; }
-  .brand-logo-img { height: 28px; max-width: 105px; }
-  .header-center { gap: 6px; max-width: none; }
-  .header-location-select { max-width: 95px; font-size: 0.75rem; padding: 6px 18px 6px 8px; }
+  .brand-logo-img { height: 36px; max-width: 120px; }
+  .header-center { gap: 6px; max-width: none; justify-content: center; }
+  .header-location-wrapper { display: none; }
   .header-search-container { flex: 1; max-width: none; }
-  .header-search-input { padding: 6px 30px 6px 10px; font-size: 0.8rem; }
+  .header-search-input { padding: 11px 38px 11px 16px; font-size: 0.95rem; }
   .search-btn-trigger { right: 2px; padding: 4px; }
-  .search-dropdown { position: fixed; top: 54px; left: 10px; right: 10px; width: auto; }
+  .search-dropdown { position: fixed; top: 70px; left: 10px; right: 10px; width: auto; }
   .salles-search .search-dropdown { position: absolute; top: 100%; left: 0; right: 0; width: auto; }
   .hero-slide .badge-2k, .hero-slide .age-badge { display: none !important; }
   .hero-slider-wrapper { min-height: 470px; height: auto; }
   .hero-content { padding: 145px 5% 42px 5%; }
   .hero-dots-indicator { left: 5%; }
-  .hero-arrow { width: 36px; height: 36px; top: 40%; }
+  .hero-arrow { display: none; }
   .hero-arrow svg { width: 17px; height: 17px; }
   .hero-arrow.prev { left: 6px; }
   .hero-arrow.next { right: 6px; }
@@ -472,7 +499,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .movie-hero::after {
     background: linear-gradient(180deg,
       rgba(var(--tint), 0.30) 0%, rgba(var(--tint), 0.38) 30%, rgba(var(--tint), 0.62) 52%,
-      rgba(var(--tint2), 0.86) 72%, rgba(var(--bg-dark-rgb), 0.97) 90%, var(--bg-dark) 100%);
+      rgba(var(--tint2), 0.68) 72%, rgba(var(--tint2), 0.58) 100%);
   }
   .trailer-btn-wrapper { width: 100%; margin: 14px 0 0 0; justify-content: flex-start; }
   .btn-play-trailer {
@@ -563,6 +590,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 <!-- ===== VUE FILM ===== -->
 <div id="view-movie" class="view-page">
   <section class="movie-hero" id="movie-detail-hero"></section>
+  <div class="movie-extend" id="movieExtend"></div>
   <section class="showtimes-section">
     <div class="section-title">Prochaines projections</div>
     <div class="horizontal-cards-strip" id="movie-showtimes-strip"></div>
@@ -631,9 +659,14 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
         <div class="tarif-price">6<small>€</small></div>
         <ul><li>Adulte</li></ul>
       </div>
+      <div class="tarif-card">
+        <h3>Tarif enfant adhérent</h3>
+        <div class="tarif-price">4<small>€</small></div>
+        <ul><li>Enfant de moins de 14 ans avec carte Familles Rurales à jour</li></ul>
+      </div>
       <div class="tarif-card featured">
         <h3>Tarif réduit</h3>
-        <div class="tarif-price">4<small>€</small></div>
+        <div class="tarif-price">5<small>€</small></div>
         <ul>
           <li>Adulte adhérent Familles Rurales (carte à jour)</li>
           <li>Demandeur d'emploi</li>
@@ -808,7 +841,8 @@ const SITE = {
 // Tarifs courts affichés dans l'encart de chaque séance
 const TARIFS_COURTS = [
   { label: 'Plein tarif', prix: '6 €' },
-  { label: 'Tarif réduit', prix: '4 €' },
+  { label: 'Tarif réduit', prix: '5 €' },
+  { label: 'Enfant adhérent -14 ans', prix: '4 €' },
   { label: 'Groupes (sur demande)', prix: '3,60 €' }
 ];
 
@@ -896,6 +930,21 @@ function formatYear(val) {
   }
   const match = str.match(/\b(19|20)\d{2}\b/);
   return match ? match[0] : str;
+}
+
+function specialStyle(type) {
+  const k = norm(type);
+  const map = [['avant', '#8b5cf6'], ['debat', '#3b82f6'], ['rencontre', '#3b82f6'], ['gouter', '#ec4899'], ['plein', '#22c55e'], ['scolaire', '#eab308'], ['ecole', '#eab308']];
+  for (const [w, c] of map) if (k.includes(w)) return c;
+  let h = 0; for (const ch of k) h = (h * 31 + ch.charCodeAt(0)) % 360;
+  return `hsl(${h},70%,55%)`;
+}
+function filmSpecials(filmId) {
+  return [...new Set(db.seances.filter(s => String(s.id_film) === String(filmId) && String(s.type_special || '').trim()).map(s => String(s.type_special).trim()))];
+}
+function badgesHtml(filmId, cls) {
+  const l = filmSpecials(filmId);
+  return l.length ? `<div class="${cls}">` + l.slice(0, 2).map(t => `<span class="special-badge" style="--sc:${specialStyle(t)}">${esc(t)}</span>`).join('') + '</div>' : '';
 }
 
 function getCommune(seance) { return seance.lieu_id || seance.commune || seance.lieu_nom; }
@@ -1039,7 +1088,7 @@ function renderHeroCarouselContainer() {
       <img class="hero-bg-layer" alt="" decoding="async" ${imgAttrs}>
       <div class="hero-overlay-gradient"></div>
       <div class="hero-content">
-        <h1 class="hero-title">${movie.titre}</h1>
+        ${badgesHtml(movie.id_film, 'hero-badges')}<h1 class="hero-title">${movie.titre}</h1>
         <div class="hero-meta">
           <span>${movie.annee || ''}</span> • <span>${movie.duree}</span>
           <span class="badge-2k">2K</span>
@@ -1153,7 +1202,7 @@ function renderGridMovies(filmList, containerId) {
     card.onclick = () => openMovieDetails(movie.id_film);
     card.innerHTML = `
       <div class="card-poster">
-        <img src="${movie.affiche_url}" alt="${esc(movie.titre)}" loading="lazy" decoding="async" fetchpriority="low"
+        ${badgesHtml(movie.id_film, 'card-badges')}<img src="${movie.affiche_url}" alt="${esc(movie.titre)}" loading="lazy" decoding="async" fetchpriority="low"
              onload="this.classList.add('loaded')" onerror="this.classList.add('loaded')">
       </div>
       <div class="card-content">
@@ -1196,6 +1245,7 @@ function switchView(targetViewId, cb) {
     const target = $(targetViewId);
     if (target) { target.classList.add('active-view'); window.scrollTo(0, 0); }
     document.body.classList.toggle('view-venue-active', targetViewId === 'view-venue');
+    if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue') document.querySelector('header').style.removeProperty('--hdr-dark');
 
     // Surbrillance du menu
     let key = targetViewId.replace('view-', '');
@@ -1319,7 +1369,7 @@ function computeTint(imgEl) {
     const ctx = c.getContext('2d', { willReadFrequently: true });
     ctx.drawImage(imgEl, 0, 0, W, H);
     const d = ctx.getImageData(0, 0, W, H).data; // lève une erreur si l'image est "tainted" (CORS)
-    let r = 0, g = 0, b = 0, ws = 0;
+    let r = 0, g = 0, b = 0, ws = 0, tl = 0, tn = 0;
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < W; x++) {
         const i = (y * W + x) * 4;
@@ -1327,6 +1377,7 @@ function computeTint(imgEl) {
         const mx = Math.max(R, G, B), mn = Math.min(R, G, B);
         const sat = mx ? (mx - mn) / mx : 0;
         const lum = (R + G + B) / 3;
+        if (y < H * 0.14) { tl += lum; tn++; }
         let w = 0.15 + sat * sat * 3;          // les couleurs saturées comptent davantage
         if (lum < 20 || lum > 240) w *= 0.2;   // on ignore noirs et blancs purs
         w *= 0.6 + (y / H) * 0.8;              // le bas de l'image compte davantage (zone du texte)
@@ -1341,7 +1392,7 @@ function computeTint(imgEl) {
     const veil = hslToRgb(h, vs, vl);
     const bg = [15, 15, 18];
     const mid = veil.map((v, i) => Math.round((v + bg[i]) / 2));
-    return { t: veil.join(','), t2: mid.join(',') };
+    return { t: veil.join(','), t2: mid.join(','), h: (Math.min(Math.max((tl / tn - 70) / 150, 0), 1) * 0.5).toFixed(2) };
   } catch (e) {
     return null;
   }
@@ -1351,6 +1402,19 @@ function setTint(heroSec, tint) {
   if (!tint) return;
   heroSec.style.setProperty('--tint', tint.t);
   heroSec.style.setProperty('--tint2', tint.t2);
+  const ext = heroSec.nextElementSibling;
+  if (ext && ext.classList.contains('movie-extend')) ext.style.setProperty('--tint2', tint.t2);
+  const h = document.querySelector('header');
+  if (h) h.style.setProperty('--hdr-dark', tint.h); // header plus sombre si le haut de l'image est clair
+}
+
+function attachTint(img, hero, url) {
+  if (!img) return;
+  document.querySelector('header').style.removeProperty('--hdr-dark');
+  if (tintCache[url]) { setTint(hero, tintCache[url]); return; }
+  let retried = false;
+  img.onload = () => { const t = computeTint(img); if (t) { tintCache[url] = t; setTint(hero, t); } };
+  img.onerror = () => { if (!retried) { retried = true; img.removeAttribute('crossorigin'); img.src = url; } };
 }
 
 /* =========================================================
@@ -1372,6 +1436,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
   const backAction = isSearchActive ? 'goHome()' : `switchView('${previousView}')`;
 
   // Voile neutre par défaut ; remplacé par la teinte dominante dès que l'image est lue
+  document.querySelector('header').style.removeProperty('--hdr-dark');
   heroSec.style.setProperty('--tint', '15,15,18');
   heroSec.style.setProperty('--tint2', '15,15,18');
 
@@ -1381,7 +1446,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
       <div style="margin-bottom:18px;">
         <button class="btn-back-home" onclick="${backAction}">← Retour</button>
       </div>
-      <h1 class="movie-title">${movie.titre}</h1>
+      ${badgesHtml(movie.id_film, 'hero-badges')}<h1 class="movie-title">${movie.titre}</h1>
       <div class="movie-quick-meta">
         <span>${movie.annee || ''}</span> • <span>${movie.duree}</span> • <span>${movie.genre}</span>
         <span class="badge-2k">2K</span>
@@ -1404,6 +1469,9 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
         </a>
       </div>` : ''}`;
 
+  const extEl = $('movieExtend');
+  extEl.style.setProperty('--tint2', '15,15,18');
+  extEl.innerHTML = bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : '';
   const heroImg = $('movieHeroImg');
   if (tintCache[bgUrl]) {
     setTint(heroSec, tintCache[bgUrl]);
@@ -1434,10 +1502,12 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
     const card = document.createElement('div');
     card.className = `showtime-horizontal-card ${isActive ? 'active' : ''}`;
     card.onclick = e => selectShowtime(e, s, movie);
+    const sp = String(s.type_special || '').trim();
+    if (sp) { card.style.setProperty('--sc', specialStyle(sp)); card.classList.add('special'); }
     card.innerHTML = `
       <div class="town-tag">${getCommune(s)}</div>
       <div class="card-date">${s.date_texte}</div>
-      <div class="card-venue">${s.horaire_texte}</div>`;
+      <div class="card-venue">${s.horaire_texte}</div>${sp ? `<div class="special-label">${esc(sp)}</div>` : ''}`;
     strip.appendChild(card);
     if (isActive) renderShowtimePanel(s, movie);
   });
@@ -1497,9 +1567,14 @@ function renderShowtimePanel(seance, movie) {
   const mapsBadge = `
     <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="badge-salle">📍 ${lieuAffichage}</a>`;
 
-  $('details-panel').innerHTML = `
+  const sp = String(seance.type_special || '').trim();
+  const dsp = String(seance.detail_special || '').trim();
+  const panelEl = $('details-panel');
+  panelEl.classList.toggle('special', !!sp);
+  if (sp) panelEl.style.setProperty('--sc', specialStyle(sp));
+  panelEl.innerHTML = `
     <div class="panel-header">
-      <div class="panel-title">Séance à <span>${getCommune(seance)}</span></div>
+      <div class="panel-title">Séance à <span>${getCommune(seance)}</span> ${sp ? `<span class="special-badge" style="--sc:${specialStyle(sp)};color:#fff;margin-left:8px;">${esc(sp)}</span>` : ''}</div>
       <div class="item-value">${seance.date_texte} à ${seance.horaire_texte}</div>
     </div>
     <div class="practical-grid">
@@ -1520,6 +1595,7 @@ function renderShowtimePanel(seance, movie) {
         <div class="item-value">${seance.info_paiement || 'CB, Espèces, Chèques'}</div>
       </div>
     </div>
+    ${dsp ? `<div class="practical-item" style="margin-bottom:16px;"><div class="item-label">Détail de la séance</div><div class="item-value">${esc(dsp).replace(/\n/g, '<br>')}</div></div>` : ''}
     <div class="actions-row">
       <a class="btn-agenda" onclick="openVenueDetails(${jsq(getCommune(seance))})">Voir la salle & infos</a>
     </div>`;
@@ -1544,9 +1620,8 @@ function openVenueDetails(lieuId) {
   const mapsBadge = `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="badge-salle">📍 ${salleNom}</a>`;
 
   $('venue-hero-container').innerHTML = `
-    <div class="hero-slider-wrapper venue-grain" style="background-image:url('${bgUrl}'); background-size:cover; background-position:center top; background-color:var(--bg-card);">
-      <div class="hero-overlay-gradient"></div>
-      <div class="hero-content">
+    <section class="movie-hero venue-hero" id="venueHero">${bgUrl ? `<img class="movie-hero-img" id="venueHeroImg" alt="" crossorigin="anonymous" decoding="async" src="${bgUrl}">` : ''}
+      <div class="movie-hero-content">
         <div style="margin-bottom:14px;">
           <button class="btn-back-home" onclick="goHome()">← Retour à l'accueil</button>
         </div>
@@ -1554,7 +1629,9 @@ function openVenueDetails(lieuId) {
         <h1 class="hero-title">${lieuId}</h1>
         <p class="hero-subtitle">Retrouvez la programmation Familles Rurales à ${lieuId}.</p>
       </div>
-    </div>`;
+    </section>
+    <div class="movie-extend">${bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : ''}</div>`;
+  attachTint($('venueHeroImg'), $('venueHero'), bgUrl);
 
   renderGridMovies(venueFilms, 'venue-grid');
 
@@ -1607,7 +1684,7 @@ function submitContact(e) {
    NOS SALLES (carte OpenStreetMap via Leaflet, chargée à la demande)
    ========================================================= */
 let sallesMap = null, sallesLayer = null, sallesMarkers = {}, sallesVenues = [];
-let sallesDirty = true, leafletPromise = null, searchMarker = null;
+let sallesDirty = true, leafletPromise = null, searchMarker = null, sallesOrigin = null;
 
 function loadLeaflet() {
   if (window.L) return Promise.resolve();
@@ -1658,7 +1735,12 @@ function buildVenues() {
 // Itinéraire Google Maps sans point de départ (l'utilisateur le choisit)
 function directionsUrl(v) {
   const dest = v.adresse || (v.coords ? v.coords.join(',') : `${v.nom} ${v.id} France`);
-  return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(dest);
+  return 'https://www.google.com/maps/dir/?api=1' + (sallesOrigin ? '&origin=' + encodeURIComponent(sallesOrigin) : '') + '&destination=' + encodeURIComponent(dest);
+}
+
+function openDirections(id) {
+  const v = sallesVenues.find(x => x.id === id);
+  if (v) window.open(directionsUrl(v), '_blank', 'noopener');
 }
 
 function popupHtml(v) {
@@ -1676,7 +1758,7 @@ function popupHtml(v) {
       <div class="popup-info">« ${esc(film.titre)} »</div>` : ''}
       <div class="popup-actions">
         <button class="btn-agenda" onclick="openVenueDetails(${jsq(v.id)})">En savoir plus</button>
-        <a class="btn-agenda filled" href="${directionsUrl(v)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Y aller</a>
+        <button class="btn-agenda filled" onclick="openDirections(${jsq(v.id)})">Y aller</button>
       </div>
     </div>`;
 }
@@ -1741,6 +1823,7 @@ function focusVenue(id) {
 }
 
 function clearSallesResult() {
+  sallesOrigin = null;
   $('sallesResult').innerHTML = '';
   if (searchMarker && sallesMap) { sallesMap.removeLayer(searchMarker); searchMarker = null; }
 }
@@ -1795,6 +1878,7 @@ async function nearestTo(val) {
       return;
     }
     const here = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+    sallesOrigin = here.join(','); // point de départ = la commune recherchée
     const placed = sallesVenues.filter(v => v.coords).map(v => ({ v, d: haversine(here, v.coords) })).sort((a, b) => a.d - b.d).slice(0, 3);
     if (!placed.length) {
       res.innerHTML = '<div class="result-box">Aucune salle n\'a de coordonnées pour le moment.</div>';
