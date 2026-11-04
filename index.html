@@ -30,7 +30,7 @@
   --border-subtle: rgba(255, 255, 255, 0.12);
   --radius-sm: 8px;
   --radius-md: 14px;
-  --hero-delay: 10s;
+  --hero-delay: 30s;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -577,6 +577,34 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .footer-links { justify-items: start; text-align: left; }
   .page-simple { padding-top: 100px; }
 }
+
+/* ===== v4 ===== */
+.hero-video { position: absolute; inset: 0; z-index: 1; overflow: hidden; opacity: 0; transition: opacity .8s; pointer-events: none; }
+.hero-video.playing { opacity: 1; }
+.hero-video iframe { position: absolute; top: 50%; left: 50%; width: 1920px; height: 1080px; max-width: none; transform: translate(-50%, -50%) scale(var(--vk, 1)); pointer-events: none; border: 0; }
+.hero-sound { position: absolute; right: 2%; bottom: 18px; z-index: 10; width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.3); display: none; align-items: center; justify-content: center; cursor: pointer; color: #fff; }
+.hero-sound:hover { background: var(--brand-orange); border-color: var(--brand-orange); }
+.hero-sound svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hero-top-badge { position: absolute; top: 82px; left: 84px; z-index: 10; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 16px; font-size: .78rem; font-weight: 800; letter-spacing: .02em; }
+.hero-top-badge::before { content: "🎬 "; }
+.cast-role { display: block; font-size: .58rem; opacity: .6; line-height: 1.15; font-style: italic; }
+.cast-item { width: 74px; }
+.cast-row { max-width: 100%; }
+.mobile-only { display: none; }
+@keyframes fly { 0% { transform: translateY(0) rotate(0) scale(1); } 15% { transform: translateY(-4px) rotate(-5deg) scale(1.08,.92); } 30% { transform: translateY(-8px) rotate(4deg) scale(.94,1.08); } 45% { transform: translateY(-5px) rotate(-4deg) scale(1.08,.92); } 60% { transform: translateY(-9px) rotate(3deg) scale(.94,1.08); } 80% { transform: translateY(-3px) rotate(-2deg) scale(1.04,.96); } 100% { transform: translateY(0) rotate(0) scale(1); } }
+.brand-logo-img.fly { animation: fly 1.8s ease-in-out; }
+@media (max-width: 768px) {
+  .movie-hero-content { width: 100%; max-width: 100%; min-width: 0; }
+  .movie-title, .synopsis-text, .hero-title { overflow-wrap: anywhere; }
+  .movie-hero-img { height: 64%; object-position: 50% 20%; }
+  .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 62%, rgba(var(--tint2), 0) 100%); }
+  .desktop-only { display: none; }
+  .mobile-only { display: inline-flex; }
+  .trailer-btn-wrapper { flex-wrap: nowrap; gap: 10px; align-items: center; }
+  .trailer-btn-wrapper .btn-note { margin-top: 0; }
+  .hero-top-badge { left: 5%; top: 70px; }
+  .hero-sound { bottom: 14px; }
+}
 </style>
 </head>
 
@@ -927,7 +955,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
    ========================================================= */
 const GOOGLE_SHEET_API_URL = window.BALAD_API;
 const CACHE_KEY = 'balad_data_cache_v2';
-const HERO_DELAY = 10000; // durée d'affichage de chaque film à l'affiche (ms)
+const HERO_DELAY = 30000; // durée d'affichage de chaque film à l'affiche (ms)
 
 const SITE = {
   email: 'cinema49@famillesrurales.org',
@@ -1200,6 +1228,7 @@ function renderHeroCarouselContainer() {
     return `
     <div class="hero-slide ${index === 0 ? 'active' : ''}" id="hero-slide-${index}" onclick="openMovieDetails('${movie.id_film}')">
       <img class="hero-bg-layer" alt="" decoding="async" ${imgAttrs}>
+      <div class="hero-video" id="hv-${index}"></div>
       <div class="hero-overlay-gradient"></div>
       <div class="hero-content">
         ${badgesHtml(movie.id_film, 'hero-badges')}<h1 class="hero-title">${movie.titre}</h1>
@@ -1208,7 +1237,7 @@ function renderHeroCarouselContainer() {
           <span class="badge-2k">2K</span>
           ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
         </div>
-        <p class="hero-synopsis">${movie.synopsis || ''}</p>
+        <p class="hero-synopsis" data-syn="${movie.id_film}">${movie.synopsis || ''}</p>
         <div class="hero-slots-container">${slotsHtml}</div>
       </div>
     </div>`;
@@ -1222,11 +1251,16 @@ function renderHeroCarouselContainer() {
   container.innerHTML = `
     <div class="hero-slider-wrapper" id="heroWrapper">
       ${slidesHtml}
+      <div class="hero-top-badge">Films à l'affiche</div>
+      <button class="hero-sound" id="heroSound" onclick="toggleHeroSound(event)" aria-label="Activer le son"></button>
       <button class="hero-arrow prev" onclick="heroStep(-1)" aria-label="Film précédent">${ARROW_L}</button>
       <button class="hero-arrow next" onclick="heroStep(1)" aria-label="Film suivant">${ARROW_R}</button>
       <div class="hero-dots-indicator">${dotsHtml}</div>
     </div>`;
 
+  heroCarouselIndex = 0;
+  activateHeroVideo(0);
+  if (LANG === 'en') applySynopsisLang(container);
   // Balayage tactile
   const wrapper = $('heroWrapper');
   let touchX = null;
@@ -1282,6 +1316,7 @@ function setHeroSlide(index, dir = 1) {
     else d.classList.remove('active');
   });
   heroCarouselIndex = index;
+  activateHeroVideo(index);
 }
 
 /* =========================================================
@@ -1378,6 +1413,7 @@ function switchView(targetViewId, cb) {
 
     const dd = $('searchDropdown');
     if (dd) dd.classList.remove('open');
+    if (targetViewId !== 'view-home') stopHeroVideo();
     if (cb) cb();
     setTimeout(() => overlay.classList.remove('active'), 40);
   }, 180);
@@ -1392,6 +1428,7 @@ function goHome() {
   $('mobileMenu').classList.remove('open');
   switchView('view-home');
   renderGridMovies(db.films, 'home-grid');
+  setTimeout(() => activateHeroVideo(heroCarouselIndex), 300);
 }
 
 /* Navigation générale : home, salles, activites, tarifs, apropos, benevolat, contact, mentions */
@@ -1578,11 +1615,11 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
         ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
       </div>
       <div class="synopsis-wrapper">
-        <span class="synopsis-text ${isMobile ? 'collapsed' : ''}" id="synopsisText">${isMobile ? (movie.synopsis || fullSynopsisText) : fullSynopsisText}</span>
+        <span class="synopsis-text ${isMobile ? 'collapsed' : ''}" id="synopsisText" data-syn="${movie.id_film}">${isMobile ? (movie.synopsis || fullSynopsisText) : fullSynopsisText}</span>
         <button class="btn-toggle-synopsis" id="synopsisToggleBtn" onclick="toggleSynopsis('${movie.id_film}')">Lire la suite</button>
       </div>
       <div class="cast-row" id="castRow"></div>
-      <a class="btn-note" href="https://www.imdb.com/find/?q=${encodeURIComponent(movie.titre)}&s=tt&ttype=ft" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M7 22H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3m0 11V11l4-8a2 2 0 0 1 2 2v4h5.6a2 2 0 0 1 2 2.3l-1.2 7.4a2 2 0 0 1-2 1.7H7z"/></svg> Noter ce film</a>
+      <a class="btn-note desktop-only" href="https://www.imdb.com/find/?q=${encodeURIComponent(movie.titre)}&s=tt&ttype=ft" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M7 22H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3m0 11V11l4-8a2 2 0 0 1 2 2v4h5.6a2 2 0 0 1 2 2.3l-1.2 7.4a2 2 0 0 1-2 1.7H7z"/></svg> Noter ce film</a>
       <div class="movie-credits-text" style="display:none">
         ${movie.realisateur ? `<span class="credit-block"><strong>De</strong> ${movie.realisateur}</span>` : ''}
         ${movie.casting ? `<span class="credit-block"><strong>Avec</strong> ${movie.casting}</span>` : ''}
@@ -1594,6 +1631,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <span class="mobile-trailer-text">Bande-annonce</span>
         </a>
+        <a class="btn-note mobile-only" href="https://www.imdb.com/find/?q=${encodeURIComponent(movie.titre)}&s=tt&ttype=ft" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M7 22H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3m0 11V11l4-8a2 2 0 0 1 2 2v4h5.6a2 2 0 0 1 2 2.3l-1.2 7.4a2 2 0 0 1-2 1.7H7z"/></svg> Noter ce film</a>
       </div>` : ''}`;
 
   const extEl = $('movieExtend');
@@ -1601,6 +1639,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
   extEl.innerHTML = bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : '';
   loadCast(movie);
   upgradeTrailer(movie);
+  if (LANG === 'en') applySynopsisLang(heroSec);
   const heroImg = $('movieHeroImg');
   heroImg.addEventListener('load', async () => {
     const faces = await detectFaces(heroImg, bgUrl);
@@ -1661,11 +1700,11 @@ function toggleSynopsis(filmId) {
   const btnEl = $('synopsisToggleBtn');
   if (synEl.classList.contains('collapsed')) {
     synEl.classList.remove('collapsed');
-    synEl.textContent = movie.synopsis_long || movie.synopsis || '';
+    synEl.textContent = movie.synopsis_long || movie.synopsis || ''; synEl.dataset.fr = synEl.textContent; if (LANG === 'en') applySynopsisLang(synEl.parentNode);
     btnEl.textContent = 'Réduire';
   } else {
     synEl.classList.add('collapsed');
-    synEl.textContent = movie.synopsis || '';
+    synEl.textContent = movie.synopsis || ''; synEl.dataset.fr = synEl.textContent; if (LANG === 'en') applySynopsisLang(synEl.parentNode);
     btnEl.textContent = 'Lire la suite';
   }
 }
@@ -2093,12 +2132,34 @@ async function wikiPerson(name) {
   }
   return (personCache[name] = out);
 }
+const tmdbCache = {};
+async function tmdbCredits(m) {
+  if (m.id_film in tmdbCache) return tmdbCache[m.id_film];
+  try {
+    const d = await (await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&language=fr-FR&query=${encodeURIComponent(m.titre)}${m.annee ? '&year=' + m.annee : ''}`)).json();
+    const id = d.results && d.results[0] && d.results[0].id;
+    if (!id) return (tmdbCache[m.id_film] = null);
+    return (tmdbCache[m.id_film] = await (await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${TMDB_KEY}&language=fr-FR`)).json());
+  } catch (e) { return null; }
+}
 function loadCast(movie) {
   const row = $('castRow'); if (!row) return;
-  const names = [...new Set(String(movie.realisateur || '').split(/,| et /).concat(String(movie.casting || '').split(',')).map(x => x.trim()).filter(Boolean))].slice(0, 10);
-  const dirs = String(movie.realisateur || '').split(/,| et /).map(x => x.trim());
-  row.innerHTML = names.map((n, i) => `<button class="cast-item" onclick="openPerson(${jsq(n)})"><div class="cast-photo" id="cp-${i}">${n.split(' ').map(w => w[0]).slice(0, 2).join('')}</div><span class="cast-name">${esc(n)}${dirs.includes(n) ? '<br><em>réal.</em>' : ''}</span></button>`).join('');
+  const dirs = String(movie.realisateur || '').split(/,| et /).map(x => x.trim()).filter(Boolean);
+  const names = [...new Set(dirs.concat(String(movie.casting || '').split(',').map(x => x.trim()).filter(Boolean)))].slice(0, 10);
+  // Personnages : colonne optionnelle "personnages" du Sheets, format « Acteur = Rôle ; Acteur = Rôle »
+  const roles = {};
+  String(movie.personnages || '').split(/[;\n]/).forEach(x => { const m = x.split(/[=:]/); if (m.length > 1) roles[norm(m[0])] = m.slice(1).join(':').trim(); });
+  row.innerHTML = names.map((n, i) => `<button class="cast-item" onclick="openPerson(${jsq(n)})"><div class="cast-photo" id="cp-${i}">${n.split(' ').map(w => w[0]).slice(0, 2).join('')}</div><span class="cast-name">${esc(n)}</span><span class="cast-role" id="cr-${i}">${dirs.includes(n) ? 'réal.' : esc(roles[norm(n)] || '')}</span></button>`).join('');
   names.forEach(async (n, i) => { const p = await wikiPerson(n); const el = $('cp-' + i); if (p && p.photo && el) { el.style.backgroundImage = `url('${p.photo}')`; el.textContent = ''; } });
+  if (TMDB_KEY) tmdbCredits(movie).then(c => {
+    if (!c) return;
+    names.forEach((n, i) => {
+      const k = norm(n), a = (c.cast || []).find(x => norm(x.name) === k), pp = a || (c.crew || []).find(x => norm(x.name) === k);
+      const el = $('cp-' + i), rr = $('cr-' + i);
+      if (a && rr && !dirs.includes(n) && a.character) rr.textContent = a.character;
+      if (pp && pp.profile_path && el && !el.style.backgroundImage) { el.style.backgroundImage = `url('https://image.tmdb.org/t/p/w185${pp.profile_path}')`; el.textContent = ''; }
+    });
+  });
 }
 async function openPerson(name) {
   const m = $('personModal'), b = $('personBox');
@@ -2138,7 +2199,7 @@ async function detectFaces(img, url) {
 }
 function applyFocus(img, faces) {
   if (!img || !img.naturalWidth || !faces || !faces.length) return;
-  const box = img.parentElement, bw = box.clientWidth, bh = box.clientHeight, mob = window.innerWidth <= 768;
+  const bw = img.clientWidth, bh = img.clientHeight, mob = window.innerWidth <= 768;
   const s = Math.max(bw / img.naturalWidth, bh / img.naturalHeight), iw = img.naturalWidth * s, ih = img.naturalHeight * s;
   const u = { x0: Math.min(...faces.map(f => f.x0)), x1: Math.max(...faces.map(f => f.x1)), y0: Math.min(...faces.map(f => f.y0)), y1: Math.max(...faces.map(f => f.y1)) };
   const big = faces.slice().sort((a, b) => (b.x1 - b.x0) * (b.y1 - b.y0) - (a.x1 - a.x0) * (a.y1 - a.y0))[0];
@@ -2171,7 +2232,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -2292,7 +2353,142 @@ function setLang(l) {
   }
   translateTree(document.body);
 }
-function toggleLang() { setLang(LANG === 'fr' ? 'en' : 'fr'); }
+function toggleLang() { setLang(LANG === 'fr' ? 'en' : 'fr'); applySynopsisLang(document); }
+
+/* ---- Trailers YouTube muets en hero d'accueil (lecteurs préchargés) ---- */
+let ytReady = null, heroPool = {}, heroFailed = {}, heroSound = false, heroSuspended = false;
+const SPK_ON = '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+const SPK_OFF = '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
+function loadYT() {
+  if (window.YT && YT.Player) return Promise.resolve();
+  if (ytReady) return ytReady;
+  ytReady = new Promise(res => {
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prev) prev(); res(); };
+    const t = document.createElement('script'); t.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(t);
+  });
+  return ytReady;
+}
+function ytId(u) { const m = String(u || '').match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/|\/v\/)([\w-]{11})/); return m ? m[1] : null; }
+function sizeHeroVideos() {
+  document.querySelectorAll('.hero-video').forEach(h => h.style.setProperty('--vk', (Math.max(h.clientWidth / 1920, h.clientHeight / 1080) * 1.3).toFixed(4)));
+}
+function destroyHeroPlayer(i) {
+  const p = heroPool[i]; if (!p) return;
+  try { p.player.destroy(); } catch (e) {}
+  if (p.host) { p.host.classList.remove('playing'); p.host.innerHTML = ''; }
+  delete heroPool[i];
+}
+function failHero(i) { const p = heroPool[i]; if (p) heroFailed[p.id] = true; destroyHeroPlayer(i); updateSoundVisibility(); }
+function updateSoundBtn() { const b = $('heroSound'); if (b) b.innerHTML = heroSound ? SPK_ON : SPK_OFF; }
+function updateSoundVisibility() { const b = $('heroSound'); if (b) { const c = heroPool[heroCarouselIndex]; b.style.display = c && c.phase === 2 && !heroSuspended ? 'flex' : 'none'; updateSoundBtn(); } }
+function applySound(p) { try { if (heroSound) { p.player.unMute(); p.player.setVolume(80); } else p.player.mute(); } catch (e) {} }
+function createHeroPlayer(index) {
+  const movie = heroFeaturedFilms[index], id = movie && ytId(movie.bande_annonce), host = $('hv-' + index);
+  if (!id || !host || heroPool[index] || heroFailed[id]) return;
+  const iframe = document.createElement('iframe');
+  const origin = /^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '';
+  iframe.src = `https://www.youtube.com/embed/${id}?enablejsapi=1&autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&vq=hd1080${origin}`;
+  iframe.allow = 'autoplay; encrypted-media'; iframe.setAttribute('tabindex', '-1'); iframe.setAttribute('aria-hidden', 'true');
+  host.appendChild(iframe); sizeHeroVideos();
+  const p = { host, id, index, phase: 0, player: null };
+  heroPool[index] = p;
+  setTimeout(() => { if (heroPool[index] === p && p.phase < 2 && p.index === heroCarouselIndex) failHero(index); }, 20000);
+  p.player = new YT.Player(iframe, { events: {
+    onReady: e => { e.target.mute(); e.target.playVideo(); try { e.target.setPlaybackQuality('hd1080'); } catch (_) {} },
+    onError: () => failHero(index),
+    onStateChange: e => {
+      const st = e.data;
+      if (st === 1) {
+        try { e.target.setPlaybackQuality('hd1080'); } catch (_) {}
+        if (p.phase === 0) {
+          const d = e.target.getDuration();
+          if (d > 30) { p.phase = 1; e.target.seekTo(d * (0.35 + Math.random() * 0.2), true); } else p.phase = 2;
+        } else if (p.phase === 1) p.phase = 2;
+        if (p.phase === 2) {
+          if (p.index === heroCarouselIndex && !heroSuspended) { applySound(p); host.classList.add('playing'); updateSoundVisibility(); }
+          else { try { e.target.mute(); e.target.pauseVideo(); } catch (_) {} }
+        }
+      } else if (st === 0) {
+        e.target.seekTo(e.target.getDuration() * 0.35, true); e.target.playVideo();
+      } else if (st === 2 && p.phase === 2 && p.index === heroCarouselIndex && !heroSuspended) {
+        e.target.playVideo(); // reprise si le navigateur a mis la lecture en pause
+      }
+    }
+  } });
+}
+function stopHeroVideo() {
+  heroSuspended = true;
+  Object.values(heroPool).forEach(p => { p.host.classList.remove('playing'); try { p.player.pauseVideo(); } catch (e) {} });
+  const b = $('heroSound'); if (b) b.style.display = 'none';
+}
+function activateHeroVideo(index) {
+  const home = $('view-home');
+  if (!home || !home.classList.contains('active-view')) return;
+  heroSuspended = false;
+  Object.keys(heroPool).forEach(k => { if (!heroPool[k].host.isConnected) destroyHeroPlayer(k); });
+  loadYT().then(() => {
+    if (index !== heroCarouselIndex) return;
+    const n = heroFeaturedFilms.length, keep = [index, (index + 1) % n, (index - 1 + n) % n];
+    keep.forEach(createHeroPlayer);
+    Object.keys(heroPool).forEach(k => { if (!keep.includes(+k)) destroyHeroPlayer(k); });
+    Object.values(heroPool).forEach(p => {
+      if (p.index === index) {
+        p.host.classList.toggle('playing', p.phase === 2);
+        applySound(p); try { p.player.playVideo(); } catch (e) {}
+      } else {
+        p.host.classList.remove('playing');
+        if (p.phase === 2) { try { p.player.mute(); p.player.pauseVideo(); } catch (e) {} }
+      }
+    });
+    updateSoundVisibility();
+  }).catch(() => {});
+}
+function toggleHeroSound(ev) {
+  ev.stopPropagation(); ev.preventDefault();
+  heroSound = !heroSound;
+  const c = heroPool[heroCarouselIndex];
+  if (c && c.player) {
+    applySound(c); c.player.playVideo();
+    setTimeout(() => { try { if (c.player.getPlayerState() !== 1) c.player.playVideo(); } catch (e) {} }, 300);
+  }
+  updateSoundBtn();
+}
+
+/* ---- Traduction des synopsis (EN) ---- */
+let trCache = {}; try { trCache = JSON.parse(localStorage.getItem('balad_tr_v1') || '{}'); } catch (e) {}
+async function trEN(text) {
+  if (!text) return '';
+  if (trCache[text]) return trCache[text];
+  const parts = text.match(/[^.!?…]+[.!?…]*\s*/g) || [text], chunks = []; let cur = '';
+  parts.forEach(x => { if ((cur + x).length > 450) { if (cur) chunks.push(cur); cur = x; } else cur += x; });
+  if (cur) chunks.push(cur);
+  try {
+    const out = [];
+    for (const c of chunks) {
+      const d = await (await fetch('https://api.mymemory.translated.net/get?langpair=fr|en&q=' + encodeURIComponent(c))).json();
+      out.push(d && d.responseData && d.responseData.translatedText ? d.responseData.translatedText : c);
+    }
+    const t = out.join(' ').trim();
+    trCache[text] = t; try { localStorage.setItem('balad_tr_v1', JSON.stringify(trCache)); } catch (e) {}
+    return t;
+  } catch (e) { return text; }
+}
+function applySynopsisLang(root) {
+  (root || document).querySelectorAll('[data-syn]').forEach(async el => {
+    if (el.dataset.fr === undefined) el.dataset.fr = el.textContent;
+    if (LANG === 'en') { const t = await trEN(el.dataset.fr); if (LANG === 'en') el.textContent = t; }
+    else el.textContent = el.dataset.fr;
+  });
+}
+
+/* ---- Logo : petit vol au survol / clic ---- */
+(function () {
+  const lc = document.querySelector('.logo-container'), im = lc && lc.querySelector('img'); if (!im) return;
+  const fly = () => { im.classList.remove('fly'); void im.offsetWidth; im.classList.add('fly'); };
+  lc.addEventListener('mouseenter', fly); lc.addEventListener('click', fly);
+  im.addEventListener('animationend', () => im.classList.remove('fly'));
+})();
 
 function initFooter() {
   $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
@@ -2304,9 +2500,11 @@ function initFooter() {
 /* =========================================================
    RESIZE & INIT
    ========================================================= */
+let lastMobile = window.innerWidth <= 768;
 window.addEventListener('resize', () => {
-  const home = $('view-home');
-  if (home && home.classList.contains('active-view')) renderHeroCarouselContainer();
+  sizeHeroVideos();
+  const m = window.innerWidth <= 768;
+  if (m !== lastMobile) { lastMobile = m; const home = $('view-home'); if (home && home.classList.contains('active-view')) renderHeroCarouselContainer(); }
 });
 
 initFooter();
