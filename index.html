@@ -9,10 +9,11 @@
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Source+Sans+3:wght@600;700;900&display=swap" rel="stylesheet">
 
 <!-- Démarre le téléchargement des données dès le début de la page (gain de temps au chargement) -->
 <script>
+  try { if (localStorage.getItem('balad_theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch (e) {}
   window.BALAD_API = "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
   window.__baladData = fetch(window.BALAD_API).then(function (r) { return r.json(); }).catch(function () { return null; });
 </script>
@@ -226,7 +227,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
       rgba(var(--tint), 0.18) 72%, rgba(var(--tint), 0) 100%),
     linear-gradient(180deg,
       rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.42) 50%,
-      rgba(var(--tint2), 0.68) 76%, rgba(var(--tint2), 0) 100%);
+      rgba(var(--tint2), 0.72) 72%, var(--bg-dark) 100%);
 }
 .movie-hero-content { position: relative; z-index: 3; max-width: 720px; }
 .trailer-btn-wrapper { z-index: 3; display: flex; align-items: center; justify-content: center; margin: auto; flex-shrink: 0; }
@@ -558,7 +559,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .movie-hero::after {
     background: linear-gradient(180deg,
       rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.45) 52%,
-      rgba(var(--tint2), 0.70) 76%, rgba(var(--tint2), 0) 100%);
+      rgba(var(--tint2), 0.72) 72%, var(--bg-dark) 100%);
   }
   .trailer-btn-wrapper { width: 100%; margin: 14px 0 0 0; justify-content: flex-start; }
   .btn-play-trailer {
@@ -597,13 +598,178 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .movie-hero-content { width: 100%; max-width: 100%; min-width: 0; }
   .movie-title, .synopsis-text, .hero-title { overflow-wrap: anywhere; }
   .movie-hero-img { height: 64%; object-position: 50% 20%; }
-  .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 62%, rgba(var(--tint2), 0) 100%); }
+  .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 62%, var(--bg-dark) 100%); }
   .desktop-only { display: none; }
   .mobile-only { display: inline-flex; }
   .trailer-btn-wrapper { flex-wrap: nowrap; gap: 10px; align-items: center; }
   .trailer-btn-wrapper .btn-note { margin-top: 0; }
   .hero-top-badge { left: 5%; top: 70px; }
   .hero-sound { bottom: 14px; }
+}
+
+/* ===== v5 : charte Familles Rurales + hero d'accueil complet ===== */
+:root {
+  --fr-blue: #5985c8; --fr-green: #a9c93c; --fr-orange: #d99a30;
+  --fr-line: linear-gradient(90deg, #fdf26a 0.00% 7.69%, #f5b95a 7.69% 15.38%, #e48f3c 15.38% 23.08%, #e03a2e 23.08% 30.77%, #e63e78 30.77% 38.46%, #7b3f8c 38.46% 46.15%, #3a4fa3 46.15% 53.85%, #3e82c4 53.85% 61.54%, #84cdee 61.54% 69.23%, #8fbac0 69.23% 76.92%, #4aa598 76.92% 84.62%, #3a8128 84.62% 92.31%, #9bc24a 92.31% 100.00%);
+  --font-title: 'Myriad Pro', 'Source Sans 3', 'Inter', sans-serif;
+}
+h1, h2, h3, h4, .section-title, .card-title, .hero-title, .movie-title, .page-title, .tarif-price, .kpi strong, .panel-title, .nav-link, .logo-text, .btn-glass-slot, .btn-agenda, .btn-primary { font-family: var(--font-title); }
+.hero-title, .movie-title, .page-title { font-weight: 900; letter-spacing: -0.01em; }
+.has-logo img { display: block; max-width: min(460px, 82%); max-height: 140px; object-fit: contain; filter: drop-shadow(0 3px 12px rgba(0,0,0,.65)); }
+.hero-content .has-logo, .movie-hero-content .has-logo { margin-bottom: 12px; }
+
+/* Header : liseret FR translucide + barre de progression multicolore */
+.hdr-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--fr-line); opacity: .28; pointer-events: none; }
+.hdr-progress i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--fr-line); box-shadow: 0 0 8px rgba(47,161,220,.6); }
+.hdr-progress-fill { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; pointer-events: none; }
+.hdr-progress-fill i { display: block; height: 100%; width: 0; background: var(--fr-line); }
+.nav-link { position: relative; }
+.nav-link.active { box-shadow: none; }
+.nav-link::after { content: ""; position: absolute; left: 6px; right: 6px; bottom: -3px; height: 3px; border-radius: 2px; background: var(--fr-line); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+.nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+.mobile-nav-overlay .nav-link::after { display: none; }
+.fr-logo { display: none; height: 34px; width: auto; flex-shrink: 0; opacity: .95; }
+@media (min-width: 1280px) { .fr-logo { display: block; } }
+@media (max-width: 1350px) { .logo-text { display: none !important; } }
+
+/* Touches de couleur */
+.section-title::after, .page-title::after { content: ""; display: block; width: 64px; height: 4px; border-radius: 2px; background: var(--fr-line); margin-top: 8px; }
+.card-movie:nth-child(3n+1):hover { border-color: var(--fr-blue); } .card-movie:nth-child(3n+2):hover { border-color: var(--fr-green); }
+.site-footer { border-top: 0; position: relative; background: linear-gradient(180deg, #14161c, #0f0f12); }
+.site-footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--fr-line); opacity: .8; }
+.social-btn:hover { background: var(--fr-blue); border-color: var(--fr-blue); }
+.footer-links a:hover, .footer-help a:hover { color: var(--fr-green); }
+
+
+/* ===== v6 ===== */
+.hdr-progress-fill i { background-size: 100vw 100%; }
+.slots-label { color: var(--fr-orange); }
+.page-title::after { background: var(--accent, var(--fr-blue)); }
+.view-page { --accent: var(--fr-blue); }
+#view-activites, #view-activite, #view-benevolat { --accent: var(--fr-green); }
+#view-salles, #view-contact, #view-plein-air { --accent: var(--fr-orange); }
+.prose h2, .prose a { color: var(--accent); }
+.tarif-card { border-top: 4px solid var(--accent); }
+.tarif-price, .kpi strong, .film-card .fc-cycle { color: var(--accent); }
+.tarif-card.featured { border-color: var(--accent); background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 14%, transparent), var(--bg-card) 60%); }
+.card-activite:hover { border-color: var(--accent); }
+.movie-extend { display: none !important; }
+.movie-hero { background: var(--bg-dark); }
+#view-movie .showtimes-section, #view-venue .catalog-container { background: linear-gradient(180deg, rgba(var(--tint2, 15, 15, 18), .22) 0, rgba(var(--bg-dark-rgb), 0) 460px); }
+
+/* Logo : les ailes battent, le corps bouge à peine */
+.logo-fly { position: relative; display: inline-block; line-height: 0; }
+.logo-fly .lp { position: absolute; left: 0; top: 0; visibility: hidden; }
+.logo-fly.flying .fb { visibility: hidden; }
+.logo-fly.flying .lp { visibility: visible; }
+.lp.l { clip-path: inset(0 64% 0 0); transform-origin: 36% 65%; }
+.lp.r { clip-path: inset(0 0 0 64%); transform-origin: 64% 65%; }
+.lp.b { clip-path: inset(0 36% 0 36%); }
+.logo-fly.flying .lp.l { animation: wingL .3s ease-in-out 6; }
+.logo-fly.flying .lp.r { animation: wingR .3s ease-in-out 6; }
+.logo-fly.flying .lp.b { animation: bodyB .6s ease-in-out 3; }
+@keyframes wingL { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(17deg); } }
+@keyframes wingR { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-17deg); } }
+@keyframes bodyB { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+.theme-btn { background: none; border: 1px solid var(--border-subtle); color: var(--text-muted); border-radius: 14px; padding: 4px 12px; font-size: .72rem; cursor: pointer; margin-left: 12px; }
+.theme-btn:hover { color: var(--brand-orange); border-color: var(--brand-orange); }
+
+/* Mobile : header en bas (accès au pouce) */
+@media (max-width: 768px) {
+  header { top: auto; bottom: 0; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: rgba(12,12,16,.94); }
+  .hdr-progress, .hdr-progress-fill { bottom: auto; top: 0; }
+  body { padding-bottom: 78px; }
+  .search-dropdown { top: auto !important; bottom: 78px; }
+  .hero-content { padding-top: 70px; }
+  .movie-hero { padding-top: 90px; }
+  .page-simple { padding-top: 36px; }
+  .hero-top-badge { top: 16px; }
+}
+
+/* ===== Version claire ===== */
+html[data-theme="light"] {
+  --bg-dark: #f4f1ea; --bg-dark-rgb: 244, 241, 234; --bg-card: #ffffff; --bg-surface: #ebe7de;
+  --text-main: #1b1d22; --text-muted: #5b5f68; --border-subtle: rgba(0,0,0,.13);
+}
+html[data-theme="light"] .page-lead, html[data-theme="light"] .prose p, html[data-theme="light"] .prose ul, html[data-theme="light"] .tarif-card ul,
+html[data-theme="light"] .info-card p, html[data-theme="light"] .kpi span, html[data-theme="light"] .film-card p, html[data-theme="light"] .info-item,
+html[data-theme="light"] .tarif-note, html[data-theme="light"] .footer-links a, html[data-theme="light"] .footer-help a, html[data-theme="light"] .result-item { color: #3b3e46; }
+html[data-theme="light"] .section-title, html[data-theme="light"] .card-title, html[data-theme="light"] .panel-title, html[data-theme="light"] .item-value,
+html[data-theme="light"] .card-date, html[data-theme="light"] .info-item strong, html[data-theme="light"] .form-field label, html[data-theme="light"] .venue-info-box h3,
+html[data-theme="light"] .page-title, html[data-theme="light"] .tarif-card h3, html[data-theme="light"] .card-activite h3, html[data-theme="light"] .film-card h3,
+html[data-theme="light"] .slot-pill, html[data-theme="light"] .site-footer h4, html[data-theme="light"] .result-box h3 { color: #1b1d22; }
+html[data-theme="light"] .page-title:not(.x) { text-shadow: none; }
+html[data-theme="light"] .showtime-horizontal-card, html[data-theme="light"] .practical-details-panel, html[data-theme="light"] .kpi, html[data-theme="light"] .film-card { background: rgba(255,255,255,.75); }
+html[data-theme="light"] .showtime-horizontal-card:hover, html[data-theme="light"] .showtime-horizontal-card.active { background: #fff; }
+html[data-theme="light"] .slot-pill, html[data-theme="light"] .form-field input, html[data-theme="light"] .form-field textarea, html[data-theme="light"] .salles-search input { background: var(--bg-surface); color: #1b1d22; }
+html[data-theme="light"] .btn-back-home, html[data-theme="light"] .badge-pmr { background: rgba(0,0,0,.06); color: #1b1d22; }
+html[data-theme="light"] .site-footer { background: #fff; }
+html[data-theme="light"] .footer-brand p, html[data-theme="light"] .footer-bottom { color: #5b5f68; }
+html[data-theme="light"] .social-btn { background: rgba(0,0,0,.06); color: #1b1d22; }
+html[data-theme="light"] .tarif-card.featured { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 16%, #fff), #fff 60%); }
+html[data-theme="light"] #app-loader { background: var(--bg-dark); }
+
+/* ===== v7 ===== */
+.hdr-progress, .hdr-progress-fill { display: none !important; }
+.nav-link::after { background: var(--hdr-accent, var(--fr-orange)); }
+#view-home, #view-movie, #view-venue { --accent: var(--fr-orange); }
+.section-title::after, .page-title::after { background: var(--accent, var(--fr-orange)); }
+.fr-logo { display: block !important; }
+.fr-logo-link { display: none; flex-shrink: 0; align-items: center; }
+@media (min-width: 1280px) { .fr-logo-link { display: flex; } }
+header { transition: background .3s ease, backdrop-filter .3s ease; }
+@media (min-width: 769px) { body.hdr-clear header { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } }
+.d-only { display: inline; } .m-only { display: none; }
+
+/* Nos salles : carte plein écran + panneau flottant */
+#view-salles { padding: 0 !important; height: 100vh; min-height: 100vh !important; overflow: hidden; position: relative; background: var(--bg-dark); }
+#view-salles .page-wrap { position: absolute; inset: 0; max-width: none; padding: 0; margin: 0; }
+#view-salles #sallesMap { position: absolute; inset: 0; z-index: 0; height: 100%; min-height: 0; border-radius: 0; border: 0; }
+#view-salles #sallesMap .leaflet-top { top: 72px; }
+.salles-panel { position: absolute; top: 84px; right: 18px; z-index: 500; width: min(400px, calc(100% - 36px)); background: rgba(20,20,24,.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+.salles-panel .page-title { font-size: 1.5rem; margin-bottom: 6px; }
+.salles-panel .page-lead { font-size: .85rem; margin-bottom: 12px; }
+.salles-panel .salles-search { margin-bottom: 0; max-width: none; }
+.salles-panel #sallesResult { margin: 10px 0 0; }
+.salles-note { position: absolute; left: 12px; bottom: 12px; z-index: 5; font-size: .74rem; color: #222; background: rgba(255,255,255,.8); padding: 3px 8px; border-radius: 8px; margin: 0; }
+.salles-note:empty { display: none; }
+html[data-theme="light"] .salles-panel { background: rgba(255,255,255,.92); }
+.pin-num { position: relative; width: 28px; height: 36px; }
+.pin-num span { position: absolute; top: 4px; left: 0; right: 0; text-align: center; font-size: .68rem; line-height: 16px; font-weight: 800; color: #1b1d22; }
+
+@media (max-width: 768px) {
+  .d-only { display: none; } .m-only { display: inline; }
+  .salles-panel { top: auto; bottom: 84px; left: 10px; right: 10px; width: auto; padding: 10px 12px; }
+  .salles-panel .page-title { font-size: 1.1rem; margin-bottom: 2px; }
+  .salles-panel .page-title::after { display: none; }
+  .salles-panel .page-lead { font-size: .78rem; margin-bottom: 8px; }
+  .salles-panel .salles-search input { padding: 8px 14px; font-size: .85rem; }
+  .salles-panel .salles-search .btn-primary { padding: 8px 14px !important; font-size: .82rem; }
+  .salles-panel .salles-search .search-dropdown { top: auto; bottom: 100%; margin: 0 0 6px; right: 0; }
+  .salles-panel #sallesResult .result-box { max-height: 17vh; overflow: auto; padding: 10px 12px; }
+  #view-salles #sallesMap .leaflet-top { top: 10px; }
+  .salles-note { bottom: 150px; }
+}
+
+/* ===== Version claire : header inversé, fondus vers le blanc ===== */
+html[data-theme="light"] header { background: rgba(255,255,255,.88); }
+html[data-theme="light"] body:not(.hdr-clear) header .nav-link, html[data-theme="light"] body:not(.hdr-clear) header .logo-text,
+html[data-theme="light"] body:not(.hdr-clear) header .menu-burger-btn, html[data-theme="light"] body:not(.hdr-clear) header .lang-btn,
+html[data-theme="light"] body:not(.hdr-clear) header .header-location-select, html[data-theme="light"] body:not(.hdr-clear) header .dropdown-icon,
+html[data-theme="light"] body:not(.hdr-clear) header .header-search-input { color: #1b1d22; }
+html[data-theme="light"] body:not(.hdr-clear) header .header-search-input, html[data-theme="light"] body:not(.hdr-clear) header .header-location-select, html[data-theme="light"] body:not(.hdr-clear) header .lang-btn { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.2); }
+html[data-theme="light"] body:not(.hdr-clear) header .header-search-input::placeholder { color: rgba(0,0,0,.5); }
+html[data-theme="light"] body:not(.hdr-clear) header .search-btn-trigger svg { fill: #1b1d22; }
+html[data-theme="light"] body:not(.hdr-clear) header .fr-logo { filter: brightness(0); }
+html[data-theme="light"] .header-location-select option { color: #1b1d22; }
+html[data-theme="light"] .mobile-nav-overlay { background: rgba(244,241,234,.98); }
+html[data-theme="light"] .movie-hero::after { background:
+  radial-gradient(ellipse 70% 55% at 12% 60%, rgba(var(--tint), .85) 0%, rgba(var(--tint), .5) 40%, rgba(var(--tint), 0) 100%),
+  linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .06) 28%, rgba(var(--tint), .42) 50%, rgba(var(--tint2), .72) 72%, rgba(var(--bg-dark-rgb), .9) 92%, var(--bg-dark) 100%); }
+html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(180deg, rgba(15,15,18,.25) 0%, rgba(15,15,18,.1) 30%, rgba(15,15,18,.18) 50%, rgba(15,15,18,.45) 68%, rgba(15,15,18,.6) 82%, rgba(var(--bg-dark-rgb), .9) 95%, var(--bg-dark) 100%); }
+html[data-theme="light"] #view-movie .showtimes-section, html[data-theme="light"] #view-venue .catalog-container { background: linear-gradient(180deg, rgba(var(--tint2, 15, 15, 18), .08) 0, rgba(var(--bg-dark-rgb), 0) 460px); }
+@media (max-width: 768px) {
+  html[data-theme="light"] .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 60%, rgba(var(--bg-dark-rgb), .9) 85%, var(--bg-dark) 100%); }
 }
 </style>
 </head>
@@ -619,6 +785,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 
 <!-- HEADER -->
 <header>
+  <div class="hdr-progress"></div><div class="hdr-progress-fill"><i id="hdrProgress"></i></div>
   <div class="header-left">
     <a onclick="goHome()" class="logo-container">
       <img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" class="brand-logo-img" fetchpriority="high">
@@ -652,6 +819,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   </nav>
 
   <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-label="Language">EN</button>
+  <a class="fr-logo-link" href="https://maine-et-loire.famillesrurales.org" target="_blank" rel="noopener noreferrer" aria-label="Familles Rurales Maine-et-Loire"><img class="fr-logo" src="https://www.famillesrurales.org/sites/multisite.famillesrurales.org._www/files/styles/logo/public/logo_institutionnel_blanc2.png?itok=ON3WOdcm" alt="Familles Rurales" loading="lazy"></a>
   <button class="menu-burger-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
 </header>
 
@@ -704,8 +872,8 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 <!-- ===== NOS SALLES ===== -->
 <div id="view-salles" class="view-page page-simple">
   <div class="page-wrap">
-    <h1 class="page-title">Nos salles</h1>
-    <p class="page-lead">Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.</p>
+    <div class="salles-panel"><h1 class="page-title">Nos salles</h1>
+    <p class="page-lead"><span class="d-only">Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.</span><span class="m-only">Touchez un repère, ou cherchez votre commune.</span></p>
 
     <div class="salles-search">
       <input type="text" id="sallesSearch" placeholder="Rechercher une commune..." autocomplete="off"
@@ -714,6 +882,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
       <div class="search-dropdown" id="sallesSuggest"></div>
     </div>
     <div id="sallesResult"></div>
+    </div>
     <div id="sallesMap"></div>
     <div class="salles-note" id="sallesNote"></div>
   </div>
@@ -946,7 +1115,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
     </div>
   </div>
   <div class="footer-help"><h4>Centre d'aide</h4><div id="footer-help"></div></div>
-  <div class="footer-bottom">© <span id="footer-year"></span> Balad'Images – Familles Rurales Maine-et-Loire</div>
+  <div class="footer-bottom">© <span id="footer-year"></span> Balad'Images – Familles Rurales Maine-et-Loire<button class="theme-btn" id="themeBtn" onclick="toggleTheme()"></button></div>
 </footer>
 
 <script>
@@ -1191,7 +1360,8 @@ const ARROW_R = '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>';
 
 function setupHeroCarousel() {
   if (!db.films || !db.films.length) return;
-  heroFeaturedFilms = [...db.films].sort(() => 0.5 - Math.random()).slice(0, 5);
+  const withTrailer = db.films.filter(f => ytId(f.bande_annonce) && !heroFailed[ytId(f.bande_annonce)]);
+  heroFeaturedFilms = [...(withTrailer.length ? withTrailer : db.films)].sort(() => 0.5 - Math.random()).slice(0, 5);
   heroCarouselIndex = 0;
   renderHeroCarouselContainer();
   startHeroAutoPlay();
@@ -1227,11 +1397,10 @@ function renderHeroCarouselContainer() {
       : `data-src="${bg}"`;
     return `
     <div class="hero-slide ${index === 0 ? 'active' : ''}" id="hero-slide-${index}" onclick="openMovieDetails('${movie.id_film}')">
-      <img class="hero-bg-layer" alt="" decoding="async" ${imgAttrs}>
-      <div class="hero-video" id="hv-${index}"></div>
+      <div class="hero-media"><img class="hero-bg-layer" alt="" decoding="async" ${imgAttrs}><div class="hero-video" id="hv-${index}"></div></div>
       <div class="hero-overlay-gradient"></div>
       <div class="hero-content">
-        ${badgesHtml(movie.id_film, 'hero-badges')}<h1 class="hero-title">${movie.titre}</h1>
+        ${badgesHtml(movie.id_film, 'hero-badges')}${titleHtml(movie, 'hero-title')}
         <div class="hero-meta">
           <span>${movie.annee || ''}</span> • <span>${movie.duree}</span>
           <span class="badge-2k">2K</span>
@@ -1402,6 +1571,7 @@ function switchView(targetViewId, cb) {
     const target = $(targetViewId);
     if (target) { target.classList.add('active-view'); window.scrollTo(0, 0); }
     document.body.classList.toggle('view-venue-active', targetViewId === 'view-venue');
+    updateHdrClear(); setHdrAccent(targetViewId);
     if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue' && !PAGE_BG[targetViewId.replace('view-', '')]) document.querySelector('header').style.removeProperty('--hdr-dark');
 
     // Surbrillance du menu
@@ -1566,6 +1736,7 @@ function setTint(heroSec, tint) {
   heroSec.style.setProperty('--tint2', tint.t2);
   const ext = heroSec.nextElementSibling;
   if (ext && ext.classList.contains('movie-extend')) { ext.style.setProperty('--tint2', tint.t2); if (tint.f) ext.style.setProperty('--field', tint.f); }
+  const vw = heroSec.closest('.view-page'); if (vw) vw.style.setProperty('--tint2', tint.t2);
   const h = document.querySelector('header');
   if (h) h.style.setProperty('--hdr-dark', tint.h); // header plus sombre si le haut de l'image est clair
 }
@@ -1599,6 +1770,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
 
   // Voile neutre par défaut ; remplacé par la teinte dominante dès que l'image est lue
   document.querySelector('header').style.removeProperty('--hdr-dark');
+  const vwr = heroSec.closest('.view-page'); if (vwr) vwr.style.removeProperty('--tint2');
   heroSec.style.setProperty('--tint', '15,15,18');
   heroSec.style.setProperty('--tint2', '15,15,18');
 
@@ -1608,7 +1780,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
       <div style="margin-bottom:18px;">
         <button class="btn-back-home" onclick="${backAction}">← Retour</button>
       </div>
-      ${badgesHtml(movie.id_film, 'hero-badges')}<h1 class="movie-title">${movie.titre}</h1>
+      ${badgesHtml(movie.id_film, 'hero-badges')}${titleHtml(movie, 'movie-title')}
       <div class="movie-quick-meta">
         <span>${movie.annee || ''}</span> • <span>${movie.duree}</span> • <span>${movie.genre}</span>
         <span class="badge-2k">2K</span>
@@ -1937,6 +2109,32 @@ function popupHtml(v) {
     </div>`;
 }
 
+function parseSeanceDate(str) {
+  str = String(str || '').trim();
+  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let m = str.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if (m) { let y = +m[3]; if (y < 100) y += 2000; return new Date(y, +m[2] - 1, +m[1]); }
+  m = str.match(/(\d{1,2})\s+([a-zéûàè.]+)/i);
+  if (m) {
+    const mo = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'].findIndex(x => m[2].toLowerCase().startsWith(x));
+    if (mo >= 0) { let d = new Date(now.getFullYear(), mo, +m[1]); if (d < new Date(today.getTime() - 7 * 864e5)) d = new Date(now.getFullYear() + 1, mo, +m[1]); return d; }
+  }
+  return null;
+}
+function venueDays(v) {
+  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let best = null;
+  v.seances.forEach(x => { const d = parseSeanceDate(x.date_texte); if (!d) return; const diff = Math.round((d - today) / 864e5); if (diff >= 0 && (best === null || diff < best)) best = diff; });
+  return best;
+}
+function dayLabel(v) { const d = venueDays(v); return d === null ? '' : d === 0 ? " · aujourd'hui" : d === 1 ? ' · demain' : ' · dans ' + d + ' j'; }
+const PROJ_SVG = '<svg width="36" height="30" viewBox="0 0 36 30"><circle cx="10" cy="8" r="6" fill="#111" stroke="#fff" stroke-width="1.5"/><circle cx="22" cy="8" r="6" fill="#111" stroke="#fff" stroke-width="1.5"/><rect x="4" y="12" width="24" height="14" rx="3" fill="#111" stroke="#fff" stroke-width="1.5"/><path d="M28 15L34 12V25L28 22z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+function pinIconFor(v) {
+  const d = venueDays(v);
+  if (d === 0) return L.divIcon({ className: 'pin-icon', html: PROJ_SVG, iconSize: [36, 30], iconAnchor: [18, 28], popupAnchor: [0, -26], tooltipAnchor: [0, -24] });
+  if (d === null) return L.divIcon({ className: 'pin-icon', html: PIN_SVG, iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -38], tooltipAnchor: [0, -34] });
+  return L.divIcon({ className: 'pin-icon', html: '<div class="pin-num"><svg width="28" height="36" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="8" fill="#fff"/></svg><span>' + (d > 99 ? '99+' : d) + '</span></div>', iconSize: [28, 36], iconAnchor: [14, 36], popupAnchor: [0, -34], tooltipAnchor: [0, -30] });
+}
 const PIN_SVG = '<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="4.6" fill="#fff"/></svg>';
 
 function drawSallesMarkers() {
@@ -1948,8 +2146,8 @@ function drawSallesMarkers() {
   let missing = 0;
   sallesVenues.forEach(v => {
     if (!v.coords) { missing++; return; }
-    const m = L.marker(v.coords, { icon, title: v.id }).bindPopup(popupHtml(v), { minWidth: 250, maxWidth: 250, autoPanPaddingTopLeft: [20, 90], autoPanPaddingBottomRight: [20, 20] });
-    m.bindTooltip(v.id, { direction: 'top' });
+    const m = L.marker(v.coords, { icon: pinIconFor(v), title: v.id }).bindPopup(popupHtml(v), { minWidth: 250, maxWidth: 250, autoPanPaddingTopLeft: [20, 90], autoPanPaddingBottomRight: [20, 20] });
+    m.bindTooltip(v.id + dayLabel(v), { direction: 'top' });
     m.addTo(sallesLayer);
     sallesMarkers[v.id] = m;
     pts.push(v.coords);
@@ -1971,7 +2169,7 @@ async function initSalles() {
     return;
   }
   if (!sallesMap) {
-    sallesMap = L.map('sallesMap', { scrollWheelZoom: false }).setView([47.45, -0.55], 9);
+    sallesMap = L.map('sallesMap', { scrollWheelZoom: false, dragging: !L.Browser.mobile }).setView([47.45, -0.55], 9);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
@@ -2232,7 +2430,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Films à l'affiche":"Now showing","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -2356,7 +2554,7 @@ function setLang(l) {
 function toggleLang() { setLang(LANG === 'fr' ? 'en' : 'fr'); applySynopsisLang(document); }
 
 /* ---- Trailers YouTube muets en hero d'accueil (lecteurs préchargés) ---- */
-let ytReady = null, heroPool = {}, heroFailed = {}, heroSound = false, heroSuspended = false;
+let ytReady = null, heroPool = {}, heroFailed = (() => { try { return JSON.parse(localStorage.getItem('balad_ytfail') || '{}'); } catch (e) { return {}; } })(), heroSound = false, heroSuspended = false;
 const SPK_ON = '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
 const SPK_OFF = '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
 function loadYT() {
@@ -2379,7 +2577,7 @@ function destroyHeroPlayer(i) {
   if (p.host) { p.host.classList.remove('playing'); p.host.innerHTML = ''; }
   delete heroPool[i];
 }
-function failHero(i) { const p = heroPool[i]; if (p) heroFailed[p.id] = true; destroyHeroPlayer(i); updateSoundVisibility(); }
+function failHero(i) { const p = heroPool[i]; if (p) { heroFailed[p.id] = true; try { localStorage.setItem('balad_ytfail', JSON.stringify(heroFailed)); } catch (e) {} } destroyHeroPlayer(i); updateSoundVisibility(); }
 function updateSoundBtn() { const b = $('heroSound'); if (b) b.innerHTML = heroSound ? SPK_ON : SPK_OFF; }
 function updateSoundVisibility() { const b = $('heroSound'); if (b) { const c = heroPool[heroCarouselIndex]; b.style.display = c && c.phase === 2 && !heroSuspended ? 'flex' : 'none'; updateSoundBtn(); } }
 function applySound(p) { try { if (heroSound) { p.player.unMute(); p.player.setVolume(80); } else p.player.mute(); } catch (e) {} }
@@ -2482,15 +2680,42 @@ function applySynopsisLang(root) {
   });
 }
 
-/* ---- Logo : petit vol au survol / clic ---- */
+/* ---- Logo : battement d'ailes au survol / clic ---- */
 (function () {
   const lc = document.querySelector('.logo-container'), im = lc && lc.querySelector('img'); if (!im) return;
-  const fly = () => { im.classList.remove('fly'); void im.offsetWidth; im.classList.add('fly'); };
+  const w = document.createElement('span'); w.className = 'logo-fly';
+  im.replaceWith(w); w.appendChild(im); im.classList.add('fb');
+  ['l', 'b', 'r'].forEach(k => { const c = im.cloneNode(); c.className = 'brand-logo-img lp ' + k; c.removeAttribute('fetchpriority'); c.setAttribute('aria-hidden', 'true'); w.appendChild(c); });
+  const fly = () => { if (w.classList.contains('flying')) return; w.classList.add('flying'); setTimeout(() => w.classList.remove('flying'), 1850); };
   lc.addEventListener('mouseenter', fly); lc.addEventListener('click', fly);
-  im.addEventListener('animationend', () => im.classList.remove('fly'));
 })();
 
+/* ---- Titre : logo du film si disponible (colonne "logo"), sinon texte ---- */
+function titleHtml(movie, cls) {
+  const u = String(movie.logo || movie.logo_url || '').trim();
+  if (!/^https?:/i.test(u)) return `<h1 class="${cls}">${movie.titre}</h1>`;
+  return `<h1 class="${cls} has-logo"><img src="${esc(u)}" alt="${esc(movie.titre)}" onerror="this.parentNode.classList.remove('has-logo');this.replaceWith(document.createTextNode(this.alt))"></h1>`;
+}
+/* ---- Header effacé en haut de l'accueil ---- */
+function updateHdrClear() {
+  const h = $('view-home');
+  document.body.classList.toggle('hdr-clear', !!(h && h.classList.contains('active-view') && window.scrollY < 40));
+}
+window.addEventListener('scroll', updateHdrClear, { passive: true });
+function setHdrAccent(id) {
+  const k = id.replace('view-', ''), m = { tarifs: 'blue', apropos: 'blue', mentions: 'blue', aide: 'blue', activites: 'green', activite: 'green', benevolat: 'green' };
+  document.documentElement.style.setProperty('--hdr-accent', 'var(--fr-' + (m[k] || 'orange') + ')');
+}
+
+function updateThemeBtn() { const b = $('themeBtn'); if (b) b.textContent = document.documentElement.dataset.theme === 'light' ? '🌙 Mode sombre' : '☀ Mode clair'; }
+function toggleTheme() {
+  const light = document.documentElement.dataset.theme === 'light';
+  if (light) delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = 'light';
+  try { localStorage.setItem('balad_theme', light ? 'dark' : 'light'); } catch (e) {}
+  updateThemeBtn();
+}
 function initFooter() {
+  updateThemeBtn(); updateHdrClear();
   $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
   $('footer-year').textContent = new Date().getFullYear();
   $('footer-socials').innerHTML = SITE.socials.map(s =>
