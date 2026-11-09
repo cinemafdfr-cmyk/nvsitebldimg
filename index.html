@@ -752,7 +752,7 @@ html[data-theme="light"] .salles-panel { background: rgba(255,255,255,.92); }
 }
 
 /* ===== Version claire : header inversé, fondus vers le blanc ===== */
-html[data-theme="light"] header { background: rgba(255,255,255,.88); }
+html[data-theme="light"] header { background: none; }
 html[data-theme="light"] body:not(.hdr-clear) header .nav-link, html[data-theme="light"] body:not(.hdr-clear) header .logo-text,
 html[data-theme="light"] body:not(.hdr-clear) header .menu-burger-btn, html[data-theme="light"] body:not(.hdr-clear) header .lang-btn,
 html[data-theme="light"] body:not(.hdr-clear) header .header-location-select, html[data-theme="light"] body:not(.hdr-clear) header .dropdown-icon,
@@ -760,7 +760,7 @@ html[data-theme="light"] body:not(.hdr-clear) header .header-search-input { colo
 html[data-theme="light"] body:not(.hdr-clear) header .header-search-input, html[data-theme="light"] body:not(.hdr-clear) header .header-location-select, html[data-theme="light"] body:not(.hdr-clear) header .lang-btn { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.2); }
 html[data-theme="light"] body:not(.hdr-clear) header .header-search-input::placeholder { color: rgba(0,0,0,.5); }
 html[data-theme="light"] body:not(.hdr-clear) header .search-btn-trigger svg { fill: #1b1d22; }
-html[data-theme="light"] body:not(.hdr-clear) header .fr-logo { filter: brightness(0); }
+html[data-theme="light"] body:not(.hdr-clear) header .fr-logo { filter: none; }
 html[data-theme="light"] .header-location-select option { color: #1b1d22; }
 html[data-theme="light"] .mobile-nav-overlay { background: rgba(244,241,234,.98); }
 html[data-theme="light"] .movie-hero::after { background:
@@ -771,6 +771,119 @@ html[data-theme="light"] #view-movie .showtimes-section, html[data-theme="light"
 @media (max-width: 768px) {
   html[data-theme="light"] .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 60%, rgba(var(--bg-dark-rgb), .9) 85%, var(--bg-dark) 100%); }
 }
+
+/* ===== v8 ===== */
+.nav-link[data-page="tarifs"]::after, .nav-link[data-page="apropos"]::after { background: var(--fr-blue); }
+.nav-link[data-page="activites"]::after, .nav-link[data-page="benevolat"]::after { background: var(--fr-green); }
+.nav-link[data-page="home"]::after, .nav-link[data-page="salles"]::after { background: var(--fr-orange); }
+
+/* Header : îlot central */
+header { background: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; padding: 12px 2%; justify-content: center; pointer-events: none; transition: transform .35s ease; }
+.hdr-island, .mobile-bar { pointer-events: auto; }
+.hdr-island { display: flex; align-items: center; gap: 22px; margin: 0 auto; padding: 6px 20px; border-radius: 34px; background: rgba(15,15,18,.6); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.14); box-shadow: 0 8px 28px rgba(0,0,0,.35); transition: transform .3s ease, background .3s, border-color .3s; }
+.hdr-island:has(.header-search-container:hover), .hdr-island:has(.header-search-container:focus-within) { transform: translateX(-95px); }
+.hdr-island .brand-logo-img { height: 38px; }
+.hdr-island .header-nav { display: flex !important; gap: 6px; }
+.hdr-island .menu-burger-btn { display: none; }
+.hdr-island .header-search-container { position: relative; width: 40px; height: 40px; max-width: none; border-radius: 20px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); transition: width .3s ease, background .3s; flex-shrink: 0; }
+.hdr-island .header-search-container:hover, .hdr-island .header-search-container:focus-within { width: 230px; background: rgba(0,0,0,.55); border-color: var(--brand-orange); }
+.hdr-island .header-search-input { position: absolute; left: 14px; right: 40px; top: 0; bottom: 0; width: auto; background: transparent; border: 0; border-radius: 0; padding: 0; opacity: 0; pointer-events: none; transition: opacity .2s; font-size: .85rem; }
+.hdr-island .header-search-input:focus { background: transparent; }
+.hdr-island .header-search-container:hover .header-search-input, .hdr-island .header-search-container:focus-within .header-search-input { opacity: 1; pointer-events: auto; }
+.hdr-island .search-btn-trigger { position: absolute; right: 0; top: 0; width: 40px; height: 100%; padding: 0; }
+.hdr-island .search-dropdown { left: auto; right: 0; width: 270px; top: calc(100% + 8px); }
+body.view-venue-active .hdr-island .header-search-container { display: flex !important; }
+body.hdr-clear .hdr-island { background: transparent; border-color: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.fr-logo-link { display: flex; align-items: center; }
+.fr-logo { height: 44px; width: auto; filter: brightness(0) invert(1); }
+@media (min-width: 769px) { body.hdr-hidden header { transform: translateY(-140%); } }
+@media (max-width: 1100px) { .hdr-island { gap: 12px; padding: 6px 14px; } .nav-link { font-size: .8rem; padding: 4px; } }
+.mobile-bar, .mobile-logo, .msearch { display: none; }
+.mb-btn { flex: 1; background: none; border: 0; color: #fff; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: .66rem; font-weight: 700; padding: 6px 2px; cursor: pointer; }
+.mb-ico { font-size: 1.2rem; line-height: 1.2; }
+.mb-search { flex: 0 0 54px; width: 54px; height: 54px; border-radius: 50%; background: var(--brand-orange); border: 0; margin-top: -20px; box-shadow: 0 6px 18px rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.mb-search svg { width: 24px; height: 24px; fill: #fff; }
+.mobile-logo .brand-logo-img { height: 40px; display: block; }
+
+/* Logo : les ailes battent, le corps et le croissant restent fixes */
+.lp.l { clip-path: polygon(0 0, 44% 0, 44% 47%, 37% 47%, 37% 64%, 0 64%); transform-origin: 43% 38%; }
+.lp.r { clip-path: polygon(56% 0, 100% 0, 100% 64%, 63% 64%, 63% 47%, 56% 47%); transform-origin: 57% 38%; }
+.lp.b { clip-path: polygon(37% 0, 63% 0, 63% 100%, 37% 100%); }
+.logo-fly.flying { animation: bob .45s ease-in-out 4; }
+.logo-fly.flying .lp.l { animation: wingL .45s ease-in-out 4; }
+.logo-fly.flying .lp.r { animation: wingR .45s ease-in-out 4; }
+.logo-fly.flying .lp.b { animation: none; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes wingL { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(22deg); } 65% { transform: rotate(-12deg); } }
+@keyframes wingR { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-22deg); } 65% { transform: rotate(12deg); } }
+
+/* Cartes affiches + catalogues horizontaux */
+.catalog-rows { display: block; }
+.cat-row { margin-bottom: 28px; }
+.cat-title { font-family: var(--font-title); font-size: 1.25rem; font-weight: 800; margin-bottom: 12px; }
+.cat-title::after { content: ""; display: block; width: 48px; height: 4px; border-radius: 2px; background: var(--fr-orange); margin-top: 6px; }
+.row-wrap { position: relative; }
+.h-row { display: flex; gap: 14px; overflow-x: auto; padding: 4px 2px 14px; scroll-snap-type: x proximity; align-items: flex-start; scrollbar-width: thin; scrollbar-color: var(--fr-orange) transparent; }
+.h-row .card-movie { flex: 0 0 178px; scroll-snap-align: start; }
+.row-arrow { display: none; position: absolute; top: 110px; z-index: 5; width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.3); color: #fff; font-size: 1.4rem; align-items: center; justify-content: center; cursor: pointer; }
+.row-arrow.l { left: -10px; } .row-arrow.r { right: -10px; }
+@media (hover: hover) { .row-wrap:hover .row-arrow { display: flex; } }
+.card-poster { height: auto; aspect-ratio: 3 / 4; background: var(--bg-surface); }
+.card-poster img { object-fit: contain; }
+.card-toggle { display: flex; align-items: center; justify-content: center; width: 100%; background: transparent; border: 0; border-top: 1px solid var(--border-subtle); padding: 6px; cursor: pointer; color: var(--text-muted); }
+.card-toggle:hover { color: var(--brand-orange); }
+.card-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s; }
+.card-movie.open .card-toggle svg { transform: rotate(180deg); }
+.card-details { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.card-movie.open .card-details { max-height: 700px; }
+#venue-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.genre-chips { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 12px; scrollbar-width: thin; }
+.genre-chip { flex: 0 0 auto; padding: 12px 24px; border-radius: 28px; border: 2px solid var(--gc); background: color-mix(in srgb, var(--gc) 14%, transparent); color: var(--text-main); font-family: var(--font-title); font-size: 1rem; font-weight: 800; cursor: pointer; transition: background .2s, transform .2s; }
+.genre-chip:hover { transform: translateY(-2px); }
+.genre-chip.active { background: var(--gc); color: #fff; }
+
+/* Héros : texte toujours clair sur l'image */
+.movie-hero, .hero-slide, .hero-content, .movie-hero-content { color: #fff; }
+
+/* Mobile : barre du bas flottante, logo en haut à droite */
+@media (max-width: 768px) {
+  header { left: 12px; right: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); padding: 0; }
+  .hdr-island { display: none; }
+  .mobile-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; background: rgba(15,15,20,.62); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.14); border-radius: 30px; padding: 6px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+  body { padding-bottom: 104px; }
+  .mobile-logo { display: block; position: absolute; top: 12px; right: 12px; z-index: 900; }
+  .msearch { position: fixed; left: 12px; right: 12px; bottom: calc(100px + env(safe-area-inset-bottom)); z-index: 1001; background: rgba(15,15,20,.92); backdrop-filter: blur(14px); border-radius: 24px; padding: 8px; border: 1px solid rgba(255,255,255,.14); }
+  .msearch.open { display: block; }
+  .msearch input { width: 100%; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 18px; padding: 10px 14px; color: #fff; font-size: .95rem; outline: none; font-family: inherit; }
+  .msearch .search-dropdown { position: absolute !important; top: auto !important; bottom: 100% !important; left: 0 !important; right: 0 !important; width: auto !important; margin: 0 0 6px; }
+  .h-row .card-movie { flex-basis: 150px; }
+  .salles-panel { bottom: calc(104px + env(safe-area-inset-bottom)); }
+  html[data-theme="light"] .mobile-bar { background: rgba(255,255,255,.78); }
+  html[data-theme="light"] .mb-btn { color: #1b1d22; }
+  html[data-theme="light"] .msearch { background: rgba(255,255,255,.95); }
+  html[data-theme="light"] .msearch input { background: rgba(0,0,0,.06); color: #1b1d22; border-color: rgba(0,0,0,.2); }
+  html[data-theme="light"] body.plain-page .mobile-logo img { filter: brightness(0); }
+  html[data-theme="light"] .movie-hero-img { height: 100%; }
+  html[data-theme="light"] .movie-hero { padding-bottom: 40px; }
+  html[data-theme="light"] .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 100%); }
+  html[data-theme="light"] #view-movie .showtimes-section { margin-top: 0; }
+}
+
+/* Version claire : header, logos, séparation nette sous les héros */
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island { background: rgba(255,255,255,.88); border-color: rgba(0,0,0,.12); box-shadow: 0 8px 28px rgba(0,0,0,.12); }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-container { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.2); }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-container:hover, html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-container:focus-within { background: rgba(0,0,0,.09); }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-input { background: transparent !important; }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island .brand-logo-img { filter: brightness(0); }
+html[data-theme="light"] .footer-brand img { filter: brightness(0); }
+html[data-theme="light"] .movie-hero-img, html[data-theme="light"] .movie-hero::before { -webkit-mask-image: none; mask-image: none; }
+html[data-theme="light"] .movie-hero { padding-bottom: 56px; }
+html[data-theme="light"] .movie-hero::after { background:
+  radial-gradient(ellipse 70% 55% at 12% 60%, rgba(var(--tint), .85) 0%, rgba(var(--tint), .5) 40%, rgba(var(--tint), 0) 100%),
+  linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .06) 28%, rgba(var(--tint), .42) 50%, rgba(var(--tint2), .72) 100%); }
+html[data-theme="light"] #view-movie .showtimes-section { margin-top: 0; padding-top: 28px; background: none; }
+html[data-theme="light"] #view-venue .catalog-container { background: none; }
+html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(180deg, rgba(15,15,18,.25) 0%, rgba(15,15,18,.1) 30%, rgba(15,15,18,.18) 50%, rgba(15,15,18,.45) 68%, rgba(15,15,18,.62) 100%); }
 </style>
 </head>
 
@@ -782,56 +895,49 @@ html[data-theme="light"] #view-movie .showtimes-section, html[data-theme="light"
   <div style="font-size:0.85rem;font-weight:600;color:var(--text-muted);">Chargement du programme...</div>
 </div>
 <div id="page-transition-overlay"></div>
+<a class="mobile-logo logo-container" onclick="goHome()" aria-label="Accueil"><img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" class="brand-logo-img"></a>
+<div class="msearch" id="mSearch"><input id="mSearchInput" type="text" placeholder="Rechercher..." oninput="handleSearchInput(this.value,'mSearchDropdown')" onkeydown="if(event.key==='Enter'){triggerSearchExecution('mSearchInput')}"><div class="search-dropdown" id="mSearchDropdown"></div></div>
 
 <!-- HEADER -->
 <header>
-  <div class="hdr-progress"></div><div class="hdr-progress-fill"><i id="hdrProgress"></i></div>
-  <div class="header-left">
-    <a onclick="goHome()" class="logo-container">
+  <div class="hdr-island">
+    <a onclick="goHome()" class="logo-container" aria-label="Accueil">
       <img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" class="brand-logo-img" fetchpriority="high">
-      <span class="logo-text">Cinémas itinérants Balad'images</span>
     </a>
-  </div>
-
-  <div class="header-center">
-    <div class="header-location-wrapper">
-      <select class="header-location-select" id="locationSelect" onchange="handleLocationChange(this.value)">
-        <option value="all">Cinémas</option>
-      </select>
-      <span class="dropdown-icon">▼</span>
-    </div>
+    <nav class="header-nav">
+      <a onclick="go('home')" class="nav-link active" data-page="home">Accueil</a>
+      <a onclick="go('salles')" class="nav-link" data-page="salles">Nos salles</a>
+      <a onclick="go('activites')" class="nav-link" data-page="activites">Activités</a>
+      <a onclick="go('tarifs')" class="nav-link" data-page="tarifs">Tarifs</a>
+      <a onclick="go('apropos')" class="nav-link" data-page="apropos">À propos</a>
+      <a onclick="go('benevolat')" class="nav-link" data-page="benevolat">Bénévolat</a>
+    </nav>
     <div class="header-search-container" id="searchContainer">
       <input type="text" class="header-search-input" id="searchInput" placeholder="Rechercher..." oninput="handleSearchInput(this.value)" onkeydown="if(event.key==='Enter'){triggerSearchExecution()}">
-      <button class="search-btn-trigger" id="searchBtnTrigger" onclick="triggerSearchExecution()" aria-label="Rechercher">
-        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      </button>
+      <button class="search-btn-trigger" id="searchBtnTrigger" onclick="triggerSearchExecution()" aria-label="Rechercher"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
       <div class="search-dropdown" id="searchDropdown"></div>
     </div>
+    <a class="fr-logo-link" href="https://maine-et-loire.famillesrurales.org" target="_blank" rel="noopener noreferrer" aria-label="Familles Rurales Maine-et-Loire"><img class="fr-logo" src="https://fd.maine-et-loire.portail-defi.net/uploads/logo/5ecb915092eea_logo_fd49_quadri.png" alt="Familles Rurales Maine-et-Loire" loading="lazy"></a>
+    <button class="lang-btn" onclick="toggleLang()" aria-label="Language">EN</button>
   </div>
-
-  <nav class="header-nav">
-    <a onclick="go('home')" class="nav-link active" data-page="home">Accueil</a>
-    <a onclick="go('salles')" class="nav-link" data-page="salles">Nos salles</a>
-    <a onclick="go('activites')" class="nav-link" data-page="activites">Activités</a>
-    <a onclick="go('tarifs')" class="nav-link" data-page="tarifs">Tarifs</a>
-    <a onclick="go('apropos')" class="nav-link" data-page="apropos">À propos</a>
-    <a onclick="go('benevolat')" class="nav-link" data-page="benevolat">Bénévolat</a>
-  </nav>
-
-  <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-label="Language">EN</button>
-  <a class="fr-logo-link" href="https://maine-et-loire.famillesrurales.org" target="_blank" rel="noopener noreferrer" aria-label="Familles Rurales Maine-et-Loire"><img class="fr-logo" src="https://www.famillesrurales.org/sites/multisite.famillesrurales.org._www/files/styles/logo/public/logo_institutionnel_blanc2.png?itok=ON3WOdcm" alt="Familles Rurales" loading="lazy"></a>
-  <button class="menu-burger-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+  <div class="header-location-wrapper" style="display:none"><select id="locationSelect"><option value="all">Cinémas</option></select></div>
+  <div class="mobile-bar">
+    <button class="mb-btn" onclick="go('home')"><span class="mb-ico">🏠</span><span>Accueil</span></button>
+    <button class="mb-btn" onclick="go('salles')"><span class="mb-ico">📍</span><span>Nos salles</span></button>
+    <button class="mb-search" onclick="toggleMSearch()" aria-label="Rechercher"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
+    <button class="mb-btn" onclick="go('tarifs')"><span class="mb-ico">🎟️</span><span>Tarifs</span></button>
+    <button class="mb-btn" onclick="toggleMenu()"><span class="mb-ico">☰</span><span>Menu</span></button>
+  </div>
 </header>
 
 <!-- MENU MOBILE -->
 <div class="mobile-nav-overlay" id="mobileMenu">
-  <a class="nav-link" onclick="go('home')">Accueil</a>
-  <a class="nav-link" onclick="go('salles')">Nos salles</a>
   <a class="nav-link" onclick="go('activites')">Activités</a>
-  <a class="nav-link" onclick="go('tarifs')">Tarifs</a>
   <a class="nav-link" onclick="go('apropos')">À propos</a>
   <a class="nav-link" onclick="go('benevolat')">Bénévolat</a>
   <a class="nav-link" onclick="go('contact')">Nous contacter</a>
+  <a class="nav-link" onclick="go('mentions')">Mentions légales</a>
+  <button class="lang-btn" onclick="toggleLang()" aria-label="Language">EN</button>
 </div>
 
 <!-- ===== VUE ACCUEIL ===== -->
@@ -1491,7 +1597,104 @@ function setHeroSlide(index, dir = 1) {
 /* =========================================================
    GRILLE FILMS
    ========================================================= */
+function buildMovieCard(movie, containerId, mIndex) {
+  const movieSeances = db.seances.filter(s => String(s.id_film) === String(movie.id_film));
+  let slotsListHtml = '';
+  const limit = 2;
+  movieSeances.forEach((s, idx) => {
+    const isHidden = idx >= limit;
+    slotsListHtml += `
+      <div class="slot-pill ${isHidden ? 'extra-slot-' + containerId + '-' + mIndex : ''}"
+           style="${isHidden ? 'display:none;' : ''}"
+           onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}', '${s.id_seance}')">
+        <span class="town">${getCommune(s)}</span>
+        <span>${s.date_texte} à ${s.horaire_texte}</span>
+      </div>`;
+  });
+  let moreBtnHtml = '';
+  if (movieSeances.length > limit) {
+    const remaining = movieSeances.length - limit;
+    moreBtnHtml = `
+      <button class="btn-more-slots" id="btn-more-${containerId}-${mIndex}"
+              onclick="event.stopPropagation(); toggleExtraSlots('${containerId}', ${mIndex}, ${remaining})">
+        + ${remaining} autre(s) séance(s)
+      </button>`;
+  }
+  const card = document.createElement('div');
+  card.className = 'card-movie';
+  card.onclick = () => openMovieDetails(movie.id_film);
+  card.innerHTML = `
+    <div class="card-poster">
+      ${badgesHtml(movie.id_film, 'card-badges')}<img src="${movie.affiche_url}" alt="${esc(movie.titre)}" loading="lazy" decoding="async" fetchpriority="low"
+           onload="this.classList.add('loaded')" onerror="this.classList.add('loaded')">
+    </div>
+    <button class="card-toggle" aria-label="Détails" onclick="toggleCard(event, this)"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="card-details"><div class="card-content">
+      <div class="card-title">${movie.titre}</div>
+      <div class="card-meta">
+        <span>${movie.duree}</span> • <span>${movie.genre}</span>
+        <span class="badge-2k">2K</span>
+        ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
+      </div>
+      <div class="card-slots-area">
+        <div class="slots-label">Prochaines séances :</div>
+        <div class="slots-list">${slotsListHtml}</div>
+        ${moreBtnHtml}
+      </div>
+    </div></div>`;
+  return card;
+}
+function toggleCard(e, btn) { e.stopPropagation(); btn.closest('.card-movie').classList.toggle('open'); }
+
+/* ---- Catalogue horizontal (accueil) ---- */
+let activeGenre = null, catalogList = null;
+const GENRE_COLORS = ['#5985c8', '#a9c93c', '#d99a30', '#e03a2e', '#e63e78', '#7b3f8c', '#4aa598', '#3e82c4', '#e48f3c', '#3a8128'];
+const genreList = f => String(f.genre || '').split(/[,/]/).map(x => x.trim()).filter(Boolean);
+function weekFilms(list) {
+  const now = new Date(), t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(), t1 = t0 + 7 * 864e5;
+  return list.filter(f => db.seances.some(s => { if (String(s.id_film) !== String(f.id_film)) return false; const d = parseSeanceDate(s.date_texte); return d && d.getTime() >= t0 && d.getTime() <= t1; }));
+}
+function genresOf(list) {
+  const c = {}; list.forEach(f => genreList(f).forEach(g => { c[g] = (c[g] || 0) + 1; }));
+  return Object.keys(c).sort((a, b) => c[b] - c[a] || a.localeCompare(b));
+}
+function rowHtml(title, id, extra) {
+  return `<section class="cat-row"><div class="cat-title">${title}</div>${extra || ''}<div class="row-wrap"><button class="row-arrow l" onclick="rowScroll('${id}', -1)" aria-label="Précédent">‹</button><div class="h-row" id="${id}"></div><button class="row-arrow r" onclick="rowScroll('${id}', 1)" aria-label="Suivant">›</button></div></section>`;
+}
+function fillRow(id, films) {
+  const el = $(id); el.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  films.forEach((m, i) => frag.appendChild(buildMovieCard(m, id, i)));
+  el.appendChild(frag);
+}
+function rowScroll(id, d) { const el = $(id); el.scrollBy({ left: d * el.clientWidth * 0.8, behavior: 'smooth' }); }
+function fillGenre() { fillRow('row-genre', catalogList.filter(f => genreList(f).includes(activeGenre))); }
+function selectGenre(g) {
+  activeGenre = g;
+  document.querySelectorAll('.genre-chip').forEach(b => b.classList.toggle('active', b.dataset.g === g));
+  fillGenre();
+}
+function renderCatalog(list) {
+  const c = $('home-grid'); c.className = 'catalog-rows'; c.innerHTML = '';
+  catalogList = list;
+  $('catalog-title').style.display = list === db.films ? 'none' : 'block';
+  if (!list.length) { c.innerHTML = '<p style="color:var(--text-muted);">Aucun film trouvé.</p>'; return; }
+  const wk = weekFilms(list), genres = genresOf(list);
+  let html = wk.length ? rowHtml('Diffusé cette semaine', 'row-wk') : '';
+  if (genres.length) {
+    if (!activeGenre || !genres.includes(activeGenre)) activeGenre = genres[0];
+    const chips = '<div class="genre-chips">' + genres.map((g, i) => `<button class="genre-chip ${g === activeGenre ? 'active' : ''}" data-g="${esc(g)}" style="--gc:${GENRE_COLORS[i % GENRE_COLORS.length]}" onclick="selectGenre(${jsq(g)})">${esc(g)}</button>`).join('') + '</div>';
+    html += rowHtml('Par genre', 'row-genre', chips);
+  }
+  html += rowHtml('Tous les films proposés', 'row-all');
+  c.innerHTML = html;
+  if (wk.length) fillRow('row-wk', wk);
+  if (genres.length) fillGenre();
+  fillRow('row-all', list);
+}
+
 function renderGridMovies(filmList, containerId) {
+  if (containerId === 'home-grid') { renderCatalog(filmList); return; }
   const container = $(containerId);
   if (!container) return;
   container.innerHTML = '';
@@ -1500,52 +1703,7 @@ function renderGridMovies(filmList, containerId) {
     return;
   }
   const frag = document.createDocumentFragment();
-  filmList.forEach((movie, mIndex) => {
-    const movieSeances = db.seances.filter(s => String(s.id_film) === String(movie.id_film));
-    let slotsListHtml = '';
-    const limit = 2;
-    movieSeances.forEach((s, idx) => {
-      const isHidden = idx >= limit;
-      slotsListHtml += `
-        <div class="slot-pill ${isHidden ? 'extra-slot-' + containerId + '-' + mIndex : ''}"
-             style="${isHidden ? 'display:none;' : ''}"
-             onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}', '${s.id_seance}')">
-          <span class="town">${getCommune(s)}</span>
-          <span>${s.date_texte} à ${s.horaire_texte}</span>
-        </div>`;
-    });
-    let moreBtnHtml = '';
-    if (movieSeances.length > limit) {
-      const remaining = movieSeances.length - limit;
-      moreBtnHtml = `
-        <button class="btn-more-slots" id="btn-more-${containerId}-${mIndex}"
-                onclick="event.stopPropagation(); toggleExtraSlots('${containerId}', ${mIndex}, ${remaining})">
-          + ${remaining} autre(s) séance(s)
-        </button>`;
-    }
-    const card = document.createElement('div');
-    card.className = 'card-movie';
-    card.onclick = () => openMovieDetails(movie.id_film);
-    card.innerHTML = `
-      <div class="card-poster">
-        ${badgesHtml(movie.id_film, 'card-badges')}<img src="${movie.affiche_url}" alt="${esc(movie.titre)}" loading="lazy" decoding="async" fetchpriority="low"
-             onload="this.classList.add('loaded')" onerror="this.classList.add('loaded')">
-      </div>
-      <div class="card-content">
-        <div class="card-title">${movie.titre}</div>
-        <div class="card-meta">
-          <span>${movie.duree}</span> • <span>${movie.genre}</span>
-          <span class="badge-2k">2K</span>
-          ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
-        </div>
-        <div class="card-slots-area">
-          <div class="slots-label">Prochaines séances :</div>
-          <div class="slots-list">${slotsListHtml}</div>
-          ${moreBtnHtml}
-        </div>
-      </div>`;
-    frag.appendChild(card);
-  });
+  filmList.forEach((movie, mIndex) => frag.appendChild(buildMovieCard(movie, containerId, mIndex)));
   container.appendChild(frag);
 }
 
@@ -1572,6 +1730,8 @@ function switchView(targetViewId, cb) {
     if (target) { target.classList.add('active-view'); window.scrollTo(0, 0); }
     document.body.classList.toggle('view-venue-active', targetViewId === 'view-venue');
     updateHdrClear(); setHdrAccent(targetViewId);
+    document.body.classList.toggle('plain-page', !['view-home', 'view-movie', 'view-venue', 'view-apropos', 'view-benevolat', 'view-plein-air'].includes(targetViewId));
+    closeSearchUI();
     if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue' && !PAGE_BG[targetViewId.replace('view-', '')]) document.querySelector('header').style.removeProperty('--hdr-dark');
 
     // Surbrillance du menu
@@ -1619,8 +1779,8 @@ function handleLocationChange(val) {
    RECHERCHE FILMS
    ========================================================= */
 const PAGES_SEARCH = [['tarifs', 'Tarifs'], ['salles', 'Nos salles'], ['apropos', 'À propos'], ['benevolat', 'Bénévolat'], ['contact', 'Nous contacter'], ['mentions', 'Mentions légales'], ['plein-air', 'Cinéma en plein air']];
-function handleSearchInput(val) {
-  const q = norm(val), dd = $('searchDropdown');
+function handleSearchInput(val, ddId) {
+  const q = norm(val), dd = $(ddId || 'searchDropdown');
   if (!q) { dd.classList.remove('open'); dd.innerHTML = ''; return; }
   const it = [];
   db.films.filter(f => norm(f.titre).includes(q)).slice(0, 5).forEach(f => it.push(['🎬', f.titre, `openMovieDetails('${f.id_film}')`, 'Film']));
@@ -1628,12 +1788,12 @@ function handleSearchInput(val) {
   ACTIVITES.filter(a => norm(a.titre + ' ' + a.resume).includes(q)).forEach(a => it.push([a.ico, a.titre, `openActivite('${a.id}')`, 'Dispositif']));
   PAGES_SEARCH.filter(x => norm(x[1]).includes(q)).forEach(x => it.push(['📄', x[1], `go('${x[0]}')`, 'Page']));
   HELP.filter(h => norm(h.q).includes(q)).forEach(h => it.push(['❓', h.q, `openHelp('${h.id}')`, 'Aide']));
-  dd.innerHTML = it.slice(0, 10).map(i => `<a class="search-dropdown-item" onclick="event.stopPropagation(); ${i[2]}; $('searchDropdown').classList.remove('open')">${i[0]} ${esc(i[1])} <small style="opacity:.55">· ${i[3]}</small></a>`).join('');
+  dd.innerHTML = it.slice(0, 10).map(i => `<a class="search-dropdown-item" onclick="event.stopPropagation(); ${i[2]}; closeSearchUI()">${i[0]} ${esc(i[1])} <small style="opacity:.55">· ${i[3]}</small></a>`).join('');
   dd.classList.toggle('open', it.length > 0);
 }
 
-function triggerSearchExecution() {
-  const input = $('searchInput');
+function triggerSearchExecution(inputId) {
+  const input = $(inputId || 'searchInput');
   const q = input.value.toLowerCase().trim();
   $('searchDropdown').classList.remove('open');
   if (!q) return;
@@ -2430,7 +2590,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Films à l'affiche":"Now showing","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","Diffusé cette semaine":"Showing this week","Par genre":"By genre","Tous les films proposés":"All our films","Menu":"Menu","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -2538,7 +2698,7 @@ function translateTree(root) {
 let i18nObs = null;
 function setLang(l) {
   LANG = l; try { localStorage.setItem('balad_lang', l); } catch (e) {}
-  document.documentElement.lang = l; $('langBtn').textContent = l === 'en' ? 'FR' : 'EN';
+  document.documentElement.lang = l; document.querySelectorAll('.lang-btn').forEach(b => b.textContent = l === 'en' ? 'FR' : 'EN');
   if (l === 'en' && !i18nObs) {
     i18nObs = new MutationObserver(ms => {
       if (i18nBusy || LANG !== 'en') return;
@@ -2681,14 +2841,36 @@ function applySynopsisLang(root) {
 }
 
 /* ---- Logo : battement d'ailes au survol / clic ---- */
-(function () {
-  const lc = document.querySelector('.logo-container'), im = lc && lc.querySelector('img'); if (!im) return;
+function initLogoFly(img, trigger) {
+  if (!img || img.dataset.fly) return; img.dataset.fly = 1;
   const w = document.createElement('span'); w.className = 'logo-fly';
-  im.replaceWith(w); w.appendChild(im); im.classList.add('fb');
-  ['l', 'b', 'r'].forEach(k => { const c = im.cloneNode(); c.className = 'brand-logo-img lp ' + k; c.removeAttribute('fetchpriority'); c.setAttribute('aria-hidden', 'true'); w.appendChild(c); });
-  const fly = () => { if (w.classList.contains('flying')) return; w.classList.add('flying'); setTimeout(() => w.classList.remove('flying'), 1850); };
-  lc.addEventListener('mouseenter', fly); lc.addEventListener('click', fly);
-})();
+  img.replaceWith(w); w.appendChild(img); img.classList.add('fb');
+  ['l', 'r', 'b'].forEach(k => { const c = img.cloneNode(); c.className = (img.className.replace('fb', '') + ' lp ' + k).trim(); c.removeAttribute('fetchpriority'); c.removeAttribute('loading'); c.setAttribute('aria-hidden', 'true'); w.appendChild(c); });
+  const fly = () => { if (w.classList.contains('flying')) return; w.classList.add('flying'); setTimeout(() => w.classList.remove('flying'), 1900); };
+  (trigger || w).addEventListener('mouseenter', fly); (trigger || w).addEventListener('click', fly);
+}
+document.querySelectorAll('.logo-container').forEach(lc => initLogoFly(lc.querySelector('img'), lc));
+initLogoFly(document.querySelector('.footer-brand img'), null);
+
+/* ---- Recherche mobile + header qui se masque en descendant (PC) ---- */
+function toggleMSearch() {
+  const m = $('mSearch'); m.classList.toggle('open');
+  if (m.classList.contains('open')) $('mSearchInput').focus(); else closeSearchUI();
+}
+function closeSearchUI() {
+  ['searchDropdown', 'mSearchDropdown'].forEach(i => { const d = $(i); if (d) d.classList.remove('open'); });
+  const m = $('mSearch'); if (m) m.classList.remove('open');
+  const mi = $('mSearchInput'); if (mi) mi.value = '';
+}
+let lastScrollY = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (window.innerWidth > 768) {
+    if (y > lastScrollY + 8 && y > 140) document.body.classList.add('hdr-hidden');
+    else if (y < lastScrollY - 8 || y < 40) document.body.classList.remove('hdr-hidden');
+  }
+  lastScrollY = y;
+}, { passive: true });
 
 /* ---- Titre : logo du film si disponible (colonne "logo"), sinon texte ---- */
 function titleHtml(movie, cls) {
