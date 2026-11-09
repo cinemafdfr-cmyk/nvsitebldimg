@@ -864,7 +864,7 @@ body.hdr-clear .hdr-island { background: transparent; border-color: transparent;
   html[data-theme="light"] .msearch input { background: rgba(0,0,0,.06); color: #1b1d22; border-color: rgba(0,0,0,.2); }
   html[data-theme="light"] body.plain-page .mobile-logo img { filter: brightness(0); }
   html[data-theme="light"] .movie-hero-img { height: 100%; }
-  html[data-theme="light"] .movie-hero { padding-bottom: 40px; }
+  html[data-theme="light"] .movie-hero { padding-bottom: 64px; }
   html[data-theme="light"] .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 100%); }
   html[data-theme="light"] #view-movie .showtimes-section { margin-top: 0; }
 }
@@ -877,13 +877,110 @@ html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-input {
 html[data-theme="light"] body:not(.hdr-clear) .hdr-island .brand-logo-img { filter: brightness(0); }
 html[data-theme="light"] .footer-brand img { filter: brightness(0); }
 html[data-theme="light"] .movie-hero-img, html[data-theme="light"] .movie-hero::before { -webkit-mask-image: none; mask-image: none; }
-html[data-theme="light"] .movie-hero { padding-bottom: 56px; }
+html[data-theme="light"] .movie-hero { padding-bottom: 84px; }
 html[data-theme="light"] .movie-hero::after { background:
   radial-gradient(ellipse 70% 55% at 12% 60%, rgba(var(--tint), .85) 0%, rgba(var(--tint), .5) 40%, rgba(var(--tint), 0) 100%),
   linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .06) 28%, rgba(var(--tint), .42) 50%, rgba(var(--tint2), .72) 100%); }
 html[data-theme="light"] #view-movie .showtimes-section { margin-top: 0; padding-top: 28px; background: none; }
 html[data-theme="light"] #view-venue .catalog-container { background: none; }
 html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(180deg, rgba(15,15,18,.25) 0%, rgba(15,15,18,.1) 30%, rgba(15,15,18,.18) 50%, rgba(15,15,18,.45) 68%, rgba(15,15,18,.62) 100%); }
+
+/* ===== v9 ===== */
+/* Logo : articulation des ailes aux deux jonctions, projecteur intact */
+.lp.l { clip-path: polygon(0 0, 40% 0, 40% 44%, 0 44%); transform-origin: 38.9% 38.8%; }
+.lp.r { clip-path: polygon(55% 0, 100% 0, 100% 66%, 59.5% 66%, 59.5% 52%, 55% 52%); transform-origin: 55.9% 45.3%; }
+.lp.b { clip-path: polygon(0 44%, 38.5% 44%, 38.5% 0, 56% 0, 56% 52%, 59.5% 52%, 59.5% 66%, 100% 66%, 100% 100%, 0 100%); }
+@keyframes wingL { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(16deg); } 65% { transform: rotate(-9deg); } }
+@keyframes wingR { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-16deg); } 65% { transform: rotate(9deg); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+
+/* Header : orange translucide, EN flottant, logos */
+.hdr-island { background: rgba(232,140,30,.62); border: 1px solid rgba(255,255,255,.35); box-shadow: 0 8px 28px rgba(232,140,30,.25); gap: 18px; }
+.hdr-island .header-search-container { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.4); }
+.hdr-island .header-search-container:hover, .hdr-island .header-search-container:focus-within { background: rgba(0,0,0,.35); border-color: #fff; }
+.nav-link::after { box-shadow: 0 0 0 1px rgba(255,255,255,.75); }
+.fr-logo { height: 32px; }
+.fr-logo-link { transition: transform .25s ease; }
+.fr-logo-link:hover { transform: scale(1.12); }
+.mobile-fr .fr-logo { height: 56px; }
+.lang-float { position: fixed; top: 16px; right: 18px; z-index: 1001; background: rgba(15,15,18,.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #fff; border: 1px solid rgba(255,255,255,.3); border-radius: 22px; padding: 8px 14px; font-weight: 800; }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island { background: rgba(232,140,30,.7); border-color: rgba(255,255,255,.4); box-shadow: 0 8px 28px rgba(232,140,30,.25); }
+html[data-theme="light"] body:not(.hdr-clear) header .nav-link, html[data-theme="light"] body:not(.hdr-clear) header .header-search-input { color: #fff; }
+html[data-theme="light"] body:not(.hdr-clear) header .search-btn-trigger svg { fill: #fff; }
+html[data-theme="light"] body:not(.hdr-clear) header .header-search-input::placeholder { color: rgba(255,255,255,.7); }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-container { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.4); }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-container:hover, html[data-theme="light"] body:not(.hdr-clear) .hdr-island .header-search-container:focus-within { background: rgba(0,0,0,.35); }
+html[data-theme="light"] body:not(.hdr-clear) .hdr-island .brand-logo-img { filter: none; }
+html[data-theme="light"] body:not(.hdr-clear) header .fr-logo { filter: brightness(0) invert(1); }
+html[data-theme="light"] .mobile-nav-overlay .fr-logo { filter: none; }
+
+/* Parallax léger */
+.movie-hero-img { transform: scale(1.12); will-change: transform; }
+
+/* Barres de défilement horizontales : grises, visibles au survol / en utilisation */
+.h-row, .genre-chips, .horizontal-cards-strip, .cast-row { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+.h-row:hover, .genre-chips:hover, .horizontal-cards-strip:hover, .h-row.scrolling, .genre-chips.scrolling, .horizontal-cards-strip.scrolling, .cast-row.scrolling { scrollbar-color: rgba(150,150,160,.55) transparent; }
+.h-row::-webkit-scrollbar, .genre-chips::-webkit-scrollbar, .horizontal-cards-strip::-webkit-scrollbar { height: 6px; }
+.h-row::-webkit-scrollbar-thumb, .genre-chips::-webkit-scrollbar-thumb, .horizontal-cards-strip::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+.h-row:hover::-webkit-scrollbar-thumb, .genre-chips:hover::-webkit-scrollbar-thumb, .horizontal-cards-strip:hover::-webkit-scrollbar-thumb, .h-row.scrolling::-webkit-scrollbar-thumb, .genre-chips.scrolling::-webkit-scrollbar-thumb, .horizontal-cards-strip.scrolling::-webkit-scrollbar-thumb { background: rgba(150,150,160,.55); }
+
+/* Cartes horizontales */
+.cat-head { display: flex; align-items: center; gap: 18px; margin-bottom: 12px; }
+.cat-head .cat-title { margin: 0; white-space: nowrap; }
+.cat-head .genre-chips { flex: 1; min-width: 0; padding-bottom: 6px; }
+.h-row .fcard { flex: 0 0 300px; }
+.fcard { background: none; border: 0; border-radius: 0; overflow: visible; cursor: pointer; }
+.fcard:hover { transform: translateY(-3px); }
+.fc-img { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: var(--bg-surface); border: 1px solid var(--border-subtle); }
+.fc-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.fcard:hover .fc-bg { transform: scale(1.05); }
+.fc-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.38) 48%, rgba(0,0,0,0) 80%); }
+.fc-left { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); max-width: 55%; z-index: 2; color: #fff; }
+.fc-logo { display: block; max-width: 100%; max-height: 70px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,.7)); }
+.fc-title { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--font-title); font-weight: 900; line-height: 1.05; text-shadow: 0 2px 8px rgba(0,0,0,.7); overflow-wrap: anywhere; }
+.fc-name { font-family: var(--font-title); font-weight: 800; margin-top: 9px; font-size: 1rem; color: var(--text-main); }
+.fc-sub { font-size: .8rem; color: var(--text-muted); margin-top: 1px; }
+.map-card .fc-img { background: #cfd8cf; }
+.mm-inner { position: absolute; left: 0; top: 0; width: 600px; height: 338px; transform-origin: 0 0; transform: scale(.5); }
+.mm-inner img { position: absolute; width: 256px; height: 256px; max-width: none; filter: saturate(.75) brightness(.85); }
+.mm-inner i { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: #E88C1E; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.45); }
+#venue-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.grid-movies .fcard { flex: none; }
+.row-arrow { background: none; border: 0; border-radius: 0; width: 44px; height: 44px; top: 62px; opacity: .6; color: #fff; transition: opacity .18s; }
+.row-arrow:hover { background: none; opacity: 1; }
+.row-arrow svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 5px rgba(0,0,0,.85)); }
+.row-arrow.l { left: 4px; } .row-arrow.r { right: 4px; }
+
+/* Carte « À propos » */
+.about-card { position: relative; display: block; margin-top: 30px; border-radius: 18px; overflow: hidden; cursor: pointer; min-height: 230px; border: 1px solid var(--border-subtle); color: #fff; }
+.about-bg { position: absolute; inset: 0; background: var(--abg, none) center / cover no-repeat, #222; transition: transform .6s ease; }
+.about-card:hover .about-bg { transform: scale(1.04); }
+.about-card::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(10,10,14,.9) 0%, rgba(10,10,14,.62) 55%, rgba(10,10,14,.25) 100%); }
+.about-body { position: relative; z-index: 2; padding: 34px 36px; max-width: 660px; }
+.about-kicker { font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--fr-orange); margin-bottom: 6px; }
+.about-body h2 { font-size: 1.7rem; font-weight: 900; margin-bottom: 8px; color: #fff; }
+.about-body p { font-size: .95rem; line-height: 1.55; color: #e6e6eb; }
+.about-stats { margin-top: 12px; } .about-stats span { display: inline-block; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); border-radius: 14px; padding: 4px 12px; font-size: .8rem; font-weight: 700; }
+.about-cta { display: inline-block; margin-top: 14px; font-weight: 800; border-bottom: 3px solid var(--fr-orange); }
+
+/* Épingles modernes */
+.pin-modern { position: relative; width: 30px; height: 38px; transform-origin: 50% 100%; transition: transform .2s ease; filter: drop-shadow(0 3px 5px rgba(0,0,0,.4)); }
+.pin-modern span { position: absolute; top: 5px; left: 0; right: 0; height: 19px; line-height: 19px; text-align: center; font-size: .68rem; font-weight: 800; color: #1b1d22; }
+.pin-proj { position: relative; width: 40px; height: 40px; border-radius: 12px; background: #111; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,.45); transition: transform .2s ease; }
+.pin-proj::after { content: ""; position: absolute; inset: -6px; border-radius: 16px; border: 2px solid rgba(232,140,30,.8); animation: pinPulse 1.8s ease-out infinite; }
+@keyframes pinPulse { 0% { transform: scale(.85); opacity: .9; } 100% { transform: scale(1.3); opacity: 0; } }
+.leaflet-marker-icon:hover .pin-modern { transform: translateY(-4px) scale(1.14); }
+.leaflet-marker-icon:hover .pin-proj { transform: scale(1.12); }
+
+@media (max-width: 768px) {
+  .h-row .fcard { flex-basis: 250px; }
+  .mm-inner { transform: scale(.4167); }
+  .cat-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .cat-head .genre-chips { width: 100%; flex: none; }
+  .row-arrow { display: none !important; }
+  .about-body { padding: 24px 20px; }
+  .lang-float { display: none; }
+}
 </style>
 </head>
 
@@ -904,6 +1001,7 @@ html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(18
     <a onclick="goHome()" class="logo-container" aria-label="Accueil">
       <img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" class="brand-logo-img" fetchpriority="high">
     </a>
+    <a class="fr-logo-link" href="https://maine-et-loire.famillesrurales.org" target="_blank" rel="noopener noreferrer" aria-label="Familles Rurales Maine-et-Loire"><img class="fr-logo" src="https://fd.maine-et-loire.portail-defi.net/uploads/logo/5ecb915092eea_logo_fd49_quadri.png" alt="Familles Rurales Maine-et-Loire" loading="lazy"></a>
     <nav class="header-nav">
       <a onclick="go('home')" class="nav-link active" data-page="home">Accueil</a>
       <a onclick="go('salles')" class="nav-link" data-page="salles">Nos salles</a>
@@ -917,8 +1015,7 @@ html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(18
       <button class="search-btn-trigger" id="searchBtnTrigger" onclick="triggerSearchExecution()" aria-label="Rechercher"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
       <div class="search-dropdown" id="searchDropdown"></div>
     </div>
-    <a class="fr-logo-link" href="https://maine-et-loire.famillesrurales.org" target="_blank" rel="noopener noreferrer" aria-label="Familles Rurales Maine-et-Loire"><img class="fr-logo" src="https://fd.maine-et-loire.portail-defi.net/uploads/logo/5ecb915092eea_logo_fd49_quadri.png" alt="Familles Rurales Maine-et-Loire" loading="lazy"></a>
-    <button class="lang-btn" onclick="toggleLang()" aria-label="Language">EN</button>
+    
   </div>
   <div class="header-location-wrapper" style="display:none"><select id="locationSelect"><option value="all">Cinémas</option></select></div>
   <div class="mobile-bar">
@@ -929,6 +1026,7 @@ html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(18
     <button class="mb-btn" onclick="toggleMenu()"><span class="mb-ico">☰</span><span>Menu</span></button>
   </div>
 </header>
+<button class="lang-btn lang-float" onclick="toggleLang()" aria-label="Language">EN</button>
 
 <!-- MENU MOBILE -->
 <div class="mobile-nav-overlay" id="mobileMenu">
@@ -937,6 +1035,7 @@ html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(18
   <a class="nav-link" onclick="go('benevolat')">Bénévolat</a>
   <a class="nav-link" onclick="go('contact')">Nous contacter</a>
   <a class="nav-link" onclick="go('mentions')">Mentions légales</a>
+  <a class="fr-logo-link mobile-fr" href="https://maine-et-loire.famillesrurales.org" target="_blank" rel="noopener noreferrer" aria-label="Familles Rurales Maine-et-Loire"><img class="fr-logo" src="https://fd.maine-et-loire.portail-defi.net/uploads/logo/5ecb915092eea_logo_fd49_quadri.png" alt="Familles Rurales Maine-et-Loire"></a>
   <button class="lang-btn" onclick="toggleLang()" aria-label="Language">EN</button>
 </div>
 
@@ -946,6 +1045,17 @@ html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(18
   <div class="catalog-container">
     <div class="section-title" id="catalog-title">Toute la programmation réseau</div>
     <div class="grid-movies" id="home-grid"></div>
+
+      <section class="about-card" onclick="go('apropos')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')go('apropos')">
+        <div class="about-bg"></div>
+        <div class="about-body">
+          <div class="about-kicker">À propos</div>
+          <h2>Balad'Images, le cinéma qui vient à vous</h2>
+          <p>Un circuit de cinéma itinérant porté par Familles Rurales : des séances en numérique 2K, accessibles à toutes et tous, animées par des bénévoles près de chez vous.</p>
+          <div class="about-stats" id="aboutStats"></div>
+          <span class="about-cta">En savoir plus →</span>
+        </div>
+      </section>
   </div>
 </div>
 
@@ -1061,8 +1171,11 @@ html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(18
       <h2>Qui sommes-nous ?</h2>
       <p>Balad'Images est le circuit de cinéma itinérant porté par Familles Rurales. Des séances de cinéma sont organisées au plus près des habitants, dans des salles de communes, par des associations locales Familles Rurales et leurs équipes de bénévoles.</p>
       <p>Familles Rurales est un mouvement familial associatif et d'éducation populaire. Il rassemble des femmes et des hommes qui agissent au quotidien pour répondre aux besoins des familles dans leur milieu de vie.</p>
-      <h2>Notre projection</h2>
+      <h2>Conditions techniques</h2>
       <p>Nous projetons en numérique 2K, avec un écran et un son de qualité, dans des salles accessibles aux personnes à mobilité réduite.</p>
+      <h2>Accessibilité</h2>
+      <p>Nos salles sont accessibles aux personnes à mobilité réduite.</p>
+      <p>Pour les personnes aveugles, malvoyantes, sourdes ou malentendantes, certaines séances peuvent être suivies grâce à l'application gratuite <a href="https://labavarde.fr/" target="_blank" rel="noopener noreferrer">La Bavarde</a> : elle diffuse sur votre smartphone, au casque, l'audiodescription et/ou les sous-titres du film, synchronisés avec la projection. Pensez à la télécharger avant la séance et à vous munir d'écouteurs.</p>
       <h2>Fédération départementale Familles Rurales Maine et Loire, au service des territoires et des familles</h2>
       <p><img src="https://fd.maine-et-loire.portail-defi.net/uploads/logo/5ecb915092eea_logo_fd49_quadri.png" alt="Familles Rurales Maine-et-Loire" style="height:80px;background:#fff;border-radius:10px;padding:8px;margin-bottom:8px;display:block;" loading="lazy"></p>
       <p>Notre fédération accompagne et fédère les associations locales œuvrant en milieu rural. Nous développons des actions éducatives, sociales et culturelles, dont le cinéma itinérant Balad’Images, afin de favoriser l’accès aux services, à la culture et de renforcer la cohésion sociale sur l’ensemble du territoire.</p>
@@ -1230,7 +1343,8 @@ html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(18
    ========================================================= */
 const GOOGLE_SHEET_API_URL = window.BALAD_API;
 const CACHE_KEY = 'balad_data_cache_v2';
-const HERO_DELAY = 30000; // durée d'affichage de chaque film à l'affiche (ms)
+const HERO_DELAY = 30000;
+const HEADER_AUTOHIDE = false; // false = header toujours visible // durée d'affichage de chaque film à l'affiche (ms)
 
 const SITE = {
   email: 'cinema49@famillesrurales.org',
@@ -1526,7 +1640,6 @@ function renderHeroCarouselContainer() {
   container.innerHTML = `
     <div class="hero-slider-wrapper" id="heroWrapper">
       ${slidesHtml}
-      <div class="hero-top-badge">Films à l'affiche</div>
       <button class="hero-sound" id="heroSound" onclick="toggleHeroSound(event)" aria-label="Activer le son"></button>
       <button class="hero-arrow prev" onclick="heroStep(-1)" aria-label="Film précédent">${ARROW_L}</button>
       <button class="hero-arrow next" onclick="heroStep(1)" aria-label="Film suivant">${ARROW_R}</button>
@@ -1597,54 +1710,59 @@ function setHeroSlide(index, dir = 1) {
 /* =========================================================
    GRILLE FILMS
    ========================================================= */
+function cardTitleHtml(m) {
+  const u = String(m.logo || m.logo_url || '').trim();
+  if (/^https?:/i.test(u)) return `<img class="fc-logo" src="${esc(u)}" alt="${esc(m.titre)}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'fc-title',textContent:this.alt}))">`;
+  const n = String(m.titre).length, fs = n <= 10 ? 1.7 : n <= 16 ? 1.45 : n <= 24 ? 1.2 : n <= 34 ? 1.0 : 0.85;
+  return `<span class="fc-title" style="font-size:${fs}rem">${m.titre}</span>`;
+}
 function buildMovieCard(movie, containerId, mIndex) {
-  const movieSeances = db.seances.filter(s => String(s.id_film) === String(movie.id_film));
-  let slotsListHtml = '';
-  const limit = 2;
-  movieSeances.forEach((s, idx) => {
-    const isHidden = idx >= limit;
-    slotsListHtml += `
-      <div class="slot-pill ${isHidden ? 'extra-slot-' + containerId + '-' + mIndex : ''}"
-           style="${isHidden ? 'display:none;' : ''}"
-           onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}', '${s.id_seance}')">
-        <span class="town">${getCommune(s)}</span>
-        <span>${s.date_texte} à ${s.horaire_texte}</span>
-      </div>`;
-  });
-  let moreBtnHtml = '';
-  if (movieSeances.length > limit) {
-    const remaining = movieSeances.length - limit;
-    moreBtnHtml = `
-      <button class="btn-more-slots" id="btn-more-${containerId}-${mIndex}"
-              onclick="event.stopPropagation(); toggleExtraSlots('${containerId}', ${mIndex}, ${remaining})">
-        + ${remaining} autre(s) séance(s)
-      </button>`;
-  }
+  const bg = movie.fond_url || movie.affiche_url || '';
   const card = document.createElement('div');
-  card.className = 'card-movie';
+  card.className = 'card-movie fcard';
   card.onclick = () => openMovieDetails(movie.id_film);
   card.innerHTML = `
-    <div class="card-poster">
-      ${badgesHtml(movie.id_film, 'card-badges')}<img src="${movie.affiche_url}" alt="${esc(movie.titre)}" loading="lazy" decoding="async" fetchpriority="low"
-           onload="this.classList.add('loaded')" onerror="this.classList.add('loaded')">
+    <div class="fc-img">
+      <img class="fc-bg" src="${bg}" alt="" loading="lazy" decoding="async">
+      <div class="fc-shade"></div>
+      ${badgesHtml(movie.id_film, 'card-badges')}
+      <div class="fc-left">${cardTitleHtml(movie)}</div>
     </div>
-    <button class="card-toggle" aria-label="Détails" onclick="toggleCard(event, this)"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-    <div class="card-details"><div class="card-content">
-      <div class="card-title">${movie.titre}</div>
-      <div class="card-meta">
-        <span>${movie.duree}</span> • <span>${movie.genre}</span>
-        <span class="badge-2k">2K</span>
-        ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
-      </div>
-      <div class="card-slots-area">
-        <div class="slots-label">Prochaines séances :</div>
-        <div class="slots-list">${slotsListHtml}</div>
-        ${moreBtnHtml}
-      </div>
-    </div></div>`;
+    <div class="fc-name">${movie.titre}</div>
+    <div class="fc-sub">${movie.duree || ''} • ${genreList(movie)[0] || ''}</div>`;
   return card;
 }
-function toggleCard(e, btn) { e.stopPropagation(); btn.closest('.card-movie').classList.toggle('open'); }
+
+/* ---- Mini-carte « Nos salles » ---- */
+function miniMapHtml(vs) {
+  const pts = vs.filter(v => v.coords); if (!pts.length) return '';
+  const W = 600, H = 338, lats = pts.map(v => v.coords[0]), lngs = pts.map(v => v.coords[1]);
+  const wx = (lng, z) => (lng + 180) / 360 * 256 * 2 ** z;
+  const wy = (lat, z) => (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * 256 * 2 ** z;
+  let z = 10;
+  for (; z > 3; z--) {
+    const sx = wx(Math.max(...lngs), z) - wx(Math.min(...lngs), z), sy = wy(Math.min(...lats), z) - wy(Math.max(...lats), z);
+    if (sx <= W * 0.78 && sy <= H * 0.72) break;
+  }
+  const cx = (wx(Math.min(...lngs), z) + wx(Math.max(...lngs), z)) / 2, cy = (wy(Math.min(...lats), z) + wy(Math.max(...lats), z)) / 2;
+  const x0 = cx - W / 2, y0 = cy - H / 2; let tiles = '';
+  for (let tx = Math.floor(x0 / 256); tx <= Math.floor((x0 + W) / 256); tx++)
+    for (let ty = Math.floor(y0 / 256); ty <= Math.floor((y0 + H) / 256); ty++)
+      tiles += `<img src="https://tile.openstreetmap.org/${z}/${tx}/${ty}.png" style="left:${(tx * 256 - x0).toFixed(1)}px;top:${(ty * 256 - y0).toFixed(1)}px" alt="" loading="lazy">`;
+  return tiles + pts.map(v => `<i style="left:${(wx(v.coords[1], z) - x0).toFixed(1)}px;top:${(wy(v.coords[0], z) - y0).toFixed(1)}px"></i>`).join('');
+}
+function buildMapCard() {
+  const vs = buildVenues();
+  const card = document.createElement('div');
+  card.className = 'card-movie fcard map-card';
+  card.onclick = () => go('salles');
+  card.innerHTML = `
+    <div class="fc-img"><div class="mm-inner">${miniMapHtml(vs)}</div><div class="fc-shade"></div>
+      <div class="fc-left"><span class="fc-title" style="font-size:1.7rem">Nos salles</span></div></div>
+    <div class="fc-name">Nos salles</div>
+    <div class="fc-sub">${vs.length} lieux de projection</div>`;
+  return card;
+}
 
 /* ---- Catalogue horizontal (accueil) ---- */
 let activeGenre = null, catalogList = null;
@@ -1658,8 +1776,9 @@ function genresOf(list) {
   const c = {}; list.forEach(f => genreList(f).forEach(g => { c[g] = (c[g] || 0) + 1; }));
   return Object.keys(c).sort((a, b) => c[b] - c[a] || a.localeCompare(b));
 }
-function rowHtml(title, id, extra) {
-  return `<section class="cat-row"><div class="cat-title">${title}</div>${extra || ''}<div class="row-wrap"><button class="row-arrow l" onclick="rowScroll('${id}', -1)" aria-label="Précédent">‹</button><div class="h-row" id="${id}"></div><button class="row-arrow r" onclick="rowScroll('${id}', 1)" aria-label="Suivant">›</button></div></section>`;
+const ARR_L = '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>', ARR_R = '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>';
+function rowHtml(title, id, chips) {
+  return `<section class="cat-row"><div class="cat-head"><div class="cat-title">${title}</div>${chips || ''}</div><div class="row-wrap"><button class="row-arrow l" onclick="rowScroll('${id}', -1)" aria-label="Précédent">${ARR_L}</button><div class="h-row" id="${id}"></div><button class="row-arrow r" onclick="rowScroll('${id}', 1)" aria-label="Suivant">${ARR_R}</button></div></section>`;
 }
 function fillRow(id, films) {
   const el = $(id); el.innerHTML = '';
@@ -1668,11 +1787,15 @@ function fillRow(id, films) {
   el.appendChild(frag);
 }
 function rowScroll(id, d) { const el = $(id); el.scrollBy({ left: d * el.clientWidth * 0.8, behavior: 'smooth' }); }
-function fillGenre() { fillRow('row-genre', catalogList.filter(f => genreList(f).includes(activeGenre))); }
+function fillAll() { fillRow('row-all', activeGenre ? catalogList.filter(f => genreList(f).includes(activeGenre)) : catalogList); }
 function selectGenre(g) {
-  activeGenre = g;
-  document.querySelectorAll('.genre-chip').forEach(b => b.classList.toggle('active', b.dataset.g === g));
-  fillGenre();
+  activeGenre = activeGenre === g ? null : g;
+  document.querySelectorAll('.genre-chip').forEach(b => b.classList.toggle('active', b.dataset.g === activeGenre));
+  fillAll();
+}
+function updateAboutStats() {
+  const el = $('aboutStats'); if (!el) return;
+  el.innerHTML = `<span>${buildVenues().length} salles · ${db.films.length} films à l'affiche</span>`;
 }
 function renderCatalog(list) {
   const c = $('home-grid'); c.className = 'catalog-rows'; c.innerHTML = '';
@@ -1680,17 +1803,12 @@ function renderCatalog(list) {
   $('catalog-title').style.display = list === db.films ? 'none' : 'block';
   if (!list.length) { c.innerHTML = '<p style="color:var(--text-muted);">Aucun film trouvé.</p>'; return; }
   const wk = weekFilms(list), genres = genresOf(list);
-  let html = wk.length ? rowHtml('Diffusé cette semaine', 'row-wk') : '';
-  if (genres.length) {
-    if (!activeGenre || !genres.includes(activeGenre)) activeGenre = genres[0];
-    const chips = '<div class="genre-chips">' + genres.map((g, i) => `<button class="genre-chip ${g === activeGenre ? 'active' : ''}" data-g="${esc(g)}" style="--gc:${GENRE_COLORS[i % GENRE_COLORS.length]}" onclick="selectGenre(${jsq(g)})">${esc(g)}</button>`).join('') + '</div>';
-    html += rowHtml('Par genre', 'row-genre', chips);
-  }
-  html += rowHtml('Tous les films proposés', 'row-all');
-  c.innerHTML = html;
-  if (wk.length) fillRow('row-wk', wk);
-  if (genres.length) fillGenre();
-  fillRow('row-all', list);
+  if (activeGenre && !genres.includes(activeGenre)) activeGenre = null;
+  const chips = genres.length ? '<div class="genre-chips">' + genres.map((g, i) => `<button class="genre-chip ${g === activeGenre ? 'active' : ''}" data-g="${esc(g)}" style="--gc:${GENRE_COLORS[i % GENRE_COLORS.length]}" onclick="selectGenre(${jsq(g)})">${esc(g)}</button>`).join('') + '</div>' : '';
+  c.innerHTML = rowHtml('Diffusé cette semaine', 'row-wk') + rowHtml('Tous les films proposés', 'row-all', chips);
+  fillRow('row-wk', wk); $('row-wk').prepend(buildMapCard());
+  fillAll();
+  updateAboutStats();
 }
 
 function renderGridMovies(filmList, containerId) {
@@ -2289,13 +2407,17 @@ function venueDays(v) {
 }
 function dayLabel(v) { const d = venueDays(v); return d === null ? '' : d === 0 ? " · aujourd'hui" : d === 1 ? ' · demain' : ' · dans ' + d + ' j'; }
 const PROJ_SVG = '<svg width="36" height="30" viewBox="0 0 36 30"><circle cx="10" cy="8" r="6" fill="#111" stroke="#fff" stroke-width="1.5"/><circle cx="22" cy="8" r="6" fill="#111" stroke="#fff" stroke-width="1.5"/><rect x="4" y="12" width="24" height="14" rx="3" fill="#111" stroke="#fff" stroke-width="1.5"/><path d="M28 15L34 12V25L28 22z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+const PIN_PATH = 'M15 37C15 37 2 24 2 14.5 2 7.6 7.8 2 15 2s13 5.6 13 12.5C28 24 15 37 15 37z';
+const PIN_DEFS = '<defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#e07b0f"/></linearGradient></defs>';
+const pinSvg = inner => '<svg width="30" height="38" viewBox="0 0 30 38">' + PIN_DEFS + '<path d="' + PIN_PATH + '" fill="url(#pg)" stroke="#fff" stroke-width="2"/><circle cx="15" cy="14.5" r="9" fill="#fff"/>' + inner + '</svg>';
+const PIN_SVG = '<div class="pin-modern">' + pinSvg('<circle cx="15" cy="14.5" r="3.6" fill="#e07b0f"/>') + '</div>';
+const PROJ_PIN = '<div class="pin-proj"><svg width="24" height="20" viewBox="0 0 36 30"><circle cx="10" cy="8" r="6" fill="#fff"/><circle cx="22" cy="8" r="6" fill="#fff"/><rect x="4" y="12" width="24" height="14" rx="3" fill="#fff"/><path d="M28 15L34 12V25L28 22z" fill="#fff"/></svg></div>';
 function pinIconFor(v) {
   const d = venueDays(v);
-  if (d === 0) return L.divIcon({ className: 'pin-icon', html: PROJ_SVG, iconSize: [36, 30], iconAnchor: [18, 28], popupAnchor: [0, -26], tooltipAnchor: [0, -24] });
-  if (d === null) return L.divIcon({ className: 'pin-icon', html: PIN_SVG, iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -38], tooltipAnchor: [0, -34] });
-  return L.divIcon({ className: 'pin-icon', html: '<div class="pin-num"><svg width="28" height="36" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="8" fill="#fff"/></svg><span>' + (d > 99 ? '99+' : d) + '</span></div>', iconSize: [28, 36], iconAnchor: [14, 36], popupAnchor: [0, -34], tooltipAnchor: [0, -30] });
+  if (d === 0) return L.divIcon({ className: 'pin-icon', html: PROJ_PIN, iconSize: [40, 40], iconAnchor: [20, 20], popupAnchor: [0, -22], tooltipAnchor: [0, -20] });
+  const html = d === null ? PIN_SVG : '<div class="pin-modern">' + pinSvg('') + '<span>' + (d > 99 ? '99+' : d) + '</span></div>';
+  return L.divIcon({ className: 'pin-icon', html, iconSize: [30, 38], iconAnchor: [15, 38], popupAnchor: [0, -34], tooltipAnchor: [0, -32] });
 }
-const PIN_SVG = '<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="4.6" fill="#fff"/></svg>';
 
 function drawSallesMarkers() {
   sallesVenues = buildVenues();
@@ -2590,7 +2712,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Films à l'affiche":"Now showing","Diffusé cette semaine":"Showing this week","Par genre":"By genre","Tous les films proposés":"All our films","Menu":"Menu","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","Conditions techniques":"Technical conditions","Accessibilité":"Accessibility","Nos salles sont accessibles aux personnes à mobilité réduite.":"Our venues are accessible to people with reduced mobility.","Pour les personnes aveugles, malvoyantes, sourdes ou malentendantes, certaines séances peuvent être suivies grâce à l'application gratuite":"For blind, partially sighted, deaf or hard-of-hearing people, some screenings can be followed with the free app","La Bavarde":"La Bavarde",": elle diffuse sur votre smartphone, au casque, l'audiodescription et/ou les sous-titres du film, synchronisés avec la projection. Pensez à la télécharger avant la séance et à vous munir d'écouteurs.":": it plays the film's audio description and/or subtitles on your smartphone, through headphones, in sync with the screening. Download it before the screening and bring earphones.","Balad'Images, le cinéma qui vient à vous":"Balad'Images, cinema that comes to you","Un circuit de cinéma itinérant porté par Familles Rurales : des séances en numérique 2K, accessibles à toutes et tous, animées par des bénévoles près de chez vous.":"A mobile cinema circuit run by Familles Rurales: 2K digital screenings, open to everyone, hosted by volunteers near you.","En savoir plus →":"Learn more →","Voir la carte des lieux de projection":"See the map of screening venues","Diffusé cette semaine":"Showing this week","Par genre":"By genre","Tous les films proposés":"All our films","Menu":"Menu","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -2671,7 +2793,8 @@ const EN_RX = [
  [/^🎬 (\d+) films? à l'affiche$/, '🎬 $1 film(s) showing'], [/^🕒 Prochaine séance : (.+) à (\d+h\d+)$/, '🕒 Next screening: $1 at $2'],
  [/^Les 3 salles les plus proches de « (.+) »$/, 'The 3 nearest venues to “$1”'], [/^à (\d+) km$/, '$1 km away'],
  [/^Résultats de recherche pour "(.+)"$/, 'Search results for "$1"'], [/^(.*\d) à (\d{1,2}h\d{2})$/, '$1 at $2'],
- [/^🔎 Chercher « (.+) » : 3 salles les plus proches$/, '🔎 Search “$1”: 3 nearest venues']
+ [/^🔎 Chercher « (.+) » : 3 salles les plus proches$/, '🔎 Search “$1”: 3 nearest venues'],
+ [/^(\d+) salles · (\d+) films à l'affiche$/, '$1 venues · $2 films showing'], [/^(\d+) lieux de projection$/, '$1 screening venues']
 ];
 let LANG = 'fr', i18nBusy = false;
 const origTxt = new WeakMap();
@@ -2862,10 +2985,25 @@ function closeSearchUI() {
   const m = $('mSearch'); if (m) m.classList.remove('open');
   const mi = $('mSearchInput'); if (mi) mi.value = '';
 }
+document.addEventListener('click', e => {
+  const m = $('mSearch');
+  if (m && m.classList.contains('open') && !m.contains(e.target) && !e.target.closest('.mb-search')) closeSearchUI();
+});
+$('mSearchInput').addEventListener('blur', () => setTimeout(() => { const m = $('mSearch'); if (m && !m.contains(document.activeElement)) closeSearchUI(); }, 280));
+window.addEventListener('scroll', () => {
+  const img = document.querySelector('.view-page.active-view .movie-hero-img'); if (!img) return;
+  img.style.transform = `translate3d(0, ${Math.min(window.scrollY, 800) * 0.06}px, 0) scale(1.12)`;
+}, { passive: true });
+document.addEventListener('scroll', e => {
+  const t = e.target;
+  if (t && t.classList && (t.classList.contains('h-row') || t.classList.contains('genre-chips') || t.classList.contains('horizontal-cards-strip') || t.classList.contains('cast-row'))) {
+    t.classList.add('scrolling'); clearTimeout(t._st); t._st = setTimeout(() => t.classList.remove('scrolling'), 900);
+  }
+}, true);
 let lastScrollY = 0;
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
-  if (window.innerWidth > 768) {
+  if (HEADER_AUTOHIDE && window.innerWidth > 768) {
     if (y > lastScrollY + 8 && y > 140) document.body.classList.add('hdr-hidden');
     else if (y < lastScrollY - 8 || y < 40) document.body.classList.remove('hdr-hidden');
   }
@@ -2898,6 +3036,7 @@ function toggleTheme() {
 }
 function initFooter() {
   updateThemeBtn(); updateHdrClear();
+  const ab = document.querySelector('.about-card'); if (ab) ab.style.setProperty('--abg', "url('" + PAGE_BG.apropos.url + "')");
   $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
   $('footer-year').textContent = new Date().getFullYear();
   $('footer-socials').innerHTML = SITE.socials.map(s =>
