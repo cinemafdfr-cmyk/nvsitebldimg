@@ -1117,6 +1117,35 @@ html[data-theme="light"] .cine-search { background: rgba(0,0,0,.05); }
   body.view-salles-active { padding-bottom: 0; }
   body.view-salles-active .site-footer { display: none; }
 }
+
+/* ===== v12 ===== */
+.ld-bg i { opacity: .45; filter: blur(64px); animation: ldorbit var(--d, 26s) linear infinite; }
+.ld-bg i:nth-child(1) { left: 50%; top: 50%; right: auto; bottom: auto; width: 330px; height: 330px; margin: -165px 0 0 -165px; background: var(--fr-blue); --a: 0deg; --r: 230px; --d: 26s; }
+.ld-bg i:nth-child(2) { left: 50%; top: 50%; right: auto; bottom: auto; width: 300px; height: 300px; margin: -150px 0 0 -150px; background: var(--fr-green); --a: 72deg; --r: 260px; --d: 32s; }
+.ld-bg i:nth-child(3) { left: 50%; top: 50%; right: auto; bottom: auto; width: 280px; height: 280px; margin: -140px 0 0 -140px; background: var(--fr-orange); --a: 144deg; --r: 200px; --d: 22s; }
+.ld-bg i:nth-child(4) { left: 50%; top: 50%; right: auto; bottom: auto; width: 260px; height: 260px; margin: -130px 0 0 -130px; background: #e63e78; --a: 216deg; --r: 270px; --d: 36s; }
+.ld-bg i:nth-child(5) { left: 50%; top: 50%; right: auto; bottom: auto; width: 300px; height: 300px; margin: -150px 0 0 -150px; background: #7b3f8c; --a: 288deg; --r: 220px; --d: 28s; }
+@keyframes ldorbit { from { transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(var(--a) * -1)); } to { transform: rotate(calc(var(--a) + 360deg)) translateX(var(--r)) rotate(calc((var(--a) + 360deg) * -1)); } }
+.ld-stage { width: 140px; height: 140px; }
+.ld-logo .brand-logo-img { height: 78px; }
+html[data-theme="light"] #home-hero-container::after { content: ""; display: block; height: 6px; background: var(--fr-line); }
+#venue-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.gcal-link { font-size: .78rem; color: var(--text-muted); text-decoration: underline; cursor: pointer; align-self: center; font-weight: 600; }
+.gcal-link:hover { color: var(--brand-orange); }
+.map-legend { position: absolute; left: 14px; bottom: 14px; z-index: 400; background: rgba(20,20,24,.88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px 12px; font-size: .74rem; color: var(--text-main); max-width: 250px; }
+.lg-title { font-family: var(--font-title); font-weight: 800; margin-bottom: 6px; }
+.lg-row { display: flex; align-items: center; gap: 8px; margin-top: 5px; line-height: 1.25; }
+.lg-pin { display: inline-flex; flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; align-items: center; justify-content: center; font-size: .62rem; font-weight: 800; font-style: normal; color: #1b1d22; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.lg-pin.green { background: #a9d447; } .lg-pin.orange { background: #f0a23a; }
+.lg-pin.dot::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #e07b0f; }
+.lg-proj { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 7px; background: #111; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.salles-note { bottom: 150px; }
+html[data-theme="light"] .map-legend { background: rgba(255,255,255,.92); color: #1b1d22; }
+@media (max-width: 768px) {
+  .map-legend { top: 64px; bottom: auto; left: 10px; font-size: .64rem; max-width: 190px; padding: 6px 8px; }
+  .lg-row { margin-top: 3px; }
+  #view-salles #sallesMap .leaflet-top.leaflet-left { left: auto; right: 10px; }
+}
 </style>
 </head>
 
@@ -1127,11 +1156,9 @@ html[data-theme="light"] .cine-search { background: rgba(0,0,0,.05); }
   <div class="ld-bg"><i></i><i></i><i></i><i></i><i></i></div>
   <div class="ld-center">
     <div class="ld-stage">
-      <div class="ld-ring"></div>
       <span class="logo-fly flying loop ld-logo"><img class="brand-logo-img fb" src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt=""><img class="brand-logo-img lp l" src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt=""><img class="brand-logo-img lp r" src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt=""><img class="brand-logo-img lp b" src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt=""></span>
     </div>
     <div class="ld-text">Cinéma itinérant Balad'images</div>
-    <div class="ld-band"></div>
   </div>
 </div>
 <div id="page-transition-overlay"></div>
@@ -1245,6 +1272,12 @@ html[data-theme="light"] .cine-search { background: rgba(0,0,0,.05); }
       <div class="sector-box" id="sectorBox" style="display:none"><div class="sector-title" onclick="toggleSector()"><span>Films dans le secteur</span><em id="sectorCount"></em><button class="sector-toggle" aria-label="Afficher / masquer"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div><div class="sector-list" id="sectorList"></div></div>
     </div>
     <div id="sallesMap"></div>
+    <div class="map-legend"><div class="lg-title">Légende</div>
+      <div class="lg-row"><i class="lg-pin green">3</i><span>Séance dans les 7 jours (chiffre = jours restants)</span></div>
+      <div class="lg-row"><i class="lg-pin orange">12</i><span>Prochaine séance dans plus d'une semaine</span></div>
+      <div class="lg-row"><i class="lg-pin orange dot"></i><span>Date de séance inconnue</span></div>
+      <div class="lg-row"><i class="lg-proj"></i><span>Projection aujourd'hui</span></div>
+    </div>
     <div class="salles-note" id="sallesNote"></div>
   </div>
 </div>
@@ -1967,7 +2000,7 @@ function renderGridMovies(filmList, containerId) {
     return;
   }
   const frag = document.createDocumentFragment();
-  filmList.forEach((movie, mIndex) => frag.appendChild(buildMovieCard(movie, containerId, mIndex)));
+  filmList.forEach(movie => frag.appendChild(buildPosterCard(movie)));
   container.appendChild(frag);
 }
 
@@ -1996,6 +2029,8 @@ function switchView(targetViewId, cb) {
     updateHdrClear(); setHdrAccent(targetViewId);
     document.body.classList.toggle('plain-page', !['view-home', 'view-movie', 'view-venue', 'view-apropos', 'view-benevolat', 'view-plein-air'].includes(targetViewId));
     closeSearchUI();
+    ['searchInput', 'cineInput'].forEach(i => { const e = $(i); if (e) e.value = ''; });
+    if (targetViewId !== 'view-salles') { const ss = $('sallesSearch'); if (ss) ss.value = ''; }
     document.body.classList.toggle('view-salles-active', targetViewId === 'view-salles');
     if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue' && !PAGE_BG[targetViewId.replace('view-', '')]) document.querySelector('header').style.removeProperty('--hdr-dark');
 
@@ -2178,20 +2213,23 @@ function attachTint(img, hero, url) {
 /* =========================================================
    OUVERTURE FILM
    ========================================================= */
-function openMovieDetails(filmId, selectedSeanceId = null) {
+function openMovieDetails(filmId, selectedSeanceId = null, fromBack = false) {
   const cleanId = String(filmId).trim();
   const movie = db.films.find(f => String(f.id_film) === cleanId);
   if (!movie) return;
 
   $('searchInput').value = '';
-  previousView = (document.querySelector('.view-page.active-view') || {}).id || 'view-home';
+  const activeId = (document.querySelector('.view-page.active-view') || {}).id || 'view-home';
+  if (activeId === 'view-movie') { if (!fromBack && currentFilmId && currentFilmId !== cleanId) movieHistory.push(currentFilmId); }
+  else { movieHistory = []; previousView = activeId; }
+  currentFilmId = cleanId;
   switchView('view-movie');
 
   const heroSec = $('movie-detail-hero');
   const bgUrl = movie.fond_url || movie.affiche_url || '';
   const fullSynopsisText = movie.synopsis_long || movie.synopsis || '';
   const isMobile = window.innerWidth <= 768;
-  const backAction = isSearchActive ? 'goHome()' : `switchView('${previousView}')`;
+  const backAction = 'movieBack()';
 
   // Voile neutre par défaut ; remplacé par la teinte dominante dès que l'image est lue
   document.querySelector('header').style.removeProperty('--hdr-dark');
@@ -2368,6 +2406,8 @@ function renderShowtimePanel(seance, movie) {
     </div>
     ${dsp ? `<div class="practical-item" style="margin-bottom:16px;"><div class="item-label">Détail de la séance</div><div class="item-value">${esc(dsp).replace(/\n/g, '<br>')}</div></div>` : ''}
     <div class="actions-row">
+      <a class="btn-agenda filled" onclick="addToCalendar(${jsq(seance.id_seance)}, ${jsq(movie.id_film)})">📅 Ajouter à mon agenda</a>
+      <a class="gcal-link" onclick="openGCal(${jsq(seance.id_seance)}, ${jsq(movie.id_film)})">Google Agenda</a>
       <a class="btn-agenda" onclick="openVenueDetails(${jsq(getCommune(seance))})">Voir la salle & infos</a>
     </div>`;
 }
@@ -2883,7 +2923,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Films à l'affiche":"Now showing","Sélectionnez votre cinéma":"Select your cinema","Vous aimerez aussi":"You may also like","Cinéma itinérant Balad'images":"Balad'images mobile cinema","Annuler":"Cancel","🚗 Itinéraire vers":"🚗 Route to","Films dans le secteur":"Films in this area","Conditions techniques":"Technical conditions","Accessibilité":"Accessibility","Nos salles sont accessibles aux personnes à mobilité réduite.":"Our venues are accessible to people with reduced mobility.","Pour les personnes aveugles, malvoyantes, sourdes ou malentendantes, toutes les séances peuvent être suivies grâce à l'application gratuite":"For blind, partially sighted, deaf or hard-of-hearing people, all screenings can be followed with the free app","La Bavarde":"La Bavarde",": elle diffuse sur votre smartphone, au casque, l'audiodescription et/ou les sous-titres du film, synchronisés avec la projection. Pensez à la télécharger avant la séance et à vous munir d'écouteurs.":": it plays the film's audio description and/or subtitles on your smartphone, through headphones, in sync with the screening. Download it before the screening and bring earphones.","Balad'Images, le cinéma qui vient à vous":"Balad'Images, cinema that comes to you","Un circuit de cinéma itinérant porté par Familles Rurales : des séances en numérique 2K, accessibles à toutes et tous, animées par des bénévoles près de chez vous.":"A mobile cinema circuit run by Familles Rurales: 2K digital screenings, open to everyone, hosted by volunteers near you.","En savoir plus →":"Learn more →","Voir la carte des lieux de projection":"See the map of screening venues","Diffusé cette semaine":"Showing this week","Par genre":"By genre","Tous les films proposés":"All our films","Menu":"Menu","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","📅 Ajouter à mon agenda":"📅 Add to my calendar","Google Agenda":"Google Calendar","Légende":"Legend","Séance dans les 7 jours (chiffre = jours restants)":"Screening within 7 days (number = days left)","Prochaine séance dans plus d'une semaine":"Next screening in over a week","Date de séance inconnue":"Screening date unknown","Projection aujourd'hui":"Screening today","Sélectionnez votre cinéma":"Select your cinema","Vous aimerez aussi":"You may also like","Cinéma itinérant Balad'images":"Balad'images mobile cinema","Annuler":"Cancel","🚗 Itinéraire vers":"🚗 Route to","Films dans le secteur":"Films in this area","Conditions techniques":"Technical conditions","Accessibilité":"Accessibility","Nos salles sont accessibles aux personnes à mobilité réduite.":"Our venues are accessible to people with reduced mobility.","Pour les personnes aveugles, malvoyantes, sourdes ou malentendantes, toutes les séances peuvent être suivies grâce à l'application gratuite":"For blind, partially sighted, deaf or hard-of-hearing people, all screenings can be followed with the free app","La Bavarde":"La Bavarde",": elle diffuse sur votre smartphone, au casque, l'audiodescription et/ou les sous-titres du film, synchronisés avec la projection. Pensez à la télécharger avant la séance et à vous munir d'écouteurs.":": it plays the film's audio description and/or subtitles on your smartphone, through headphones, in sync with the screening. Download it before the screening and bring earphones.","Balad'Images, le cinéma qui vient à vous":"Balad'Images, cinema that comes to you","Un circuit de cinéma itinérant porté par Familles Rurales : des séances en numérique 2K, accessibles à toutes et tous, animées par des bénévoles près de chez vous.":"A mobile cinema circuit run by Familles Rurales: 2K digital screenings, open to everyone, hosted by volunteers near you.","En savoir plus →":"Learn more →","Voir la carte des lieux de projection":"See the map of screening venues","Diffusé cette semaine":"Showing this week","Par genre":"By genre","Tous les films proposés":"All our films","Menu":"Menu","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -3144,7 +3184,6 @@ function initLogoFly(img, trigger) {
   (trigger || w).addEventListener('mouseenter', fly); (trigger || w).addEventListener('click', fly);
 }
 document.querySelectorAll('.logo-container').forEach(lc => initLogoFly(lc.querySelector('img'), lc));
-initLogoFly(document.querySelector('.footer-brand img'), null);
 
 /* ---- Recherche mobile + header qui se masque en descendant (PC) ---- */
 function toggleMSearch() {
@@ -3218,7 +3257,7 @@ function renderSimilar(m) {
   const inV = f => db.seances.some(x => String(x.id_film) === String(f.id_film) && venues.has(getCommune(x)));
   const sameG = f => genreList(f).some(g => gs.includes(g));
   const t1 = others.filter(f => inV(f) && sameG(f)), t2 = others.filter(f => inV(f) && !t1.includes(f)), t3 = others.filter(f => sameG(f) && !t1.includes(f) && !t2.includes(f));
-  const list = [...t1, ...t2, ...t3].slice(0, 14);
+  const list = [...t1, ...t2, ...t3].slice(0, 6);
   if (!list.length) { box.style.display = 'none'; return; }
   box.style.display = 'block'; box.innerHTML = rowHtml('Vous aimerez aussi', 'row-similar', '', 100); fillRow('row-similar', list);
   if (LANG === 'en') translateTree(box);
@@ -3258,6 +3297,50 @@ function cineOpen(kind, val) {
   setTimeout(() => afterSallesReady(() => { const inp = $('sallesSearch'); inp.value = val || ''; if (kind === 'venue') pickSalle(val); else if (val) sallesSearchGo(true); else inp.focus(); }), 300);
 }
 document.addEventListener('click', e => { const c = $('cineSearch'); if (c && !c.contains(e.target)) closeCine(); });
+
+/* ---- Navigation film -> film ---- */
+let movieHistory = [], currentFilmId = null;
+function movieBack() {
+  if (movieHistory.length) { openMovieDetails(movieHistory.pop(), null, true); return; }
+  if (isSearchActive) goHome(); else switchView(previousView);
+}
+/* ---- Ajout à l'agenda (fichier .ics généré dans le navigateur) ---- */
+function seanceTimes(s, m) {
+  const iso = v => { const x = String(v || '').match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/); return x ? new Date(+x[1], +x[2] - 1, +x[3], +x[4], +x[5]) : null; };
+  let start = iso(s.agenda_debut), end = iso(s.agenda_fin);
+  if (!start) {
+    const d = parseSeanceDate(s.date_texte), t = String(s.horaire_texte || '').match(/(\d{1,2})h(\d{2})/);
+    if (!d || !t) return null;
+    start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), +t[1], +t[2]);
+  }
+  if (!end) { const du = String(m.duree || '').match(/(\d+)h(\d+)/); end = new Date(start.getTime() + (du ? (+du[1]) * 60 + (+du[2]) : 120) * 60000); }
+  return { start, end };
+}
+const pad2 = n => String(n).padStart(2, '0');
+const icsDate = d => `${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}T${pad2(d.getHours())}${pad2(d.getMinutes())}00`;
+const icsEsc = t => String(t || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+function agendaData(sid, fid) {
+  const s = db.seances.find(x => String(x.id_seance) === String(sid)), m = db.films.find(f => String(f.id_film) === String(fid));
+  if (!s || !m) return null;
+  const t = seanceTimes(s, m); if (!t) { alert("La date ou l'horaire de cette séance n'est pas lisible."); return null; }
+  const place = s.lieu_nom || getCommune(s), maps = sanitizeGoogleMapsUrl(s.google_maps_url, place + ' France');
+  return { s, m, t, title: '🎬 ' + m.titre, place, desc: `${m.titre} - Balad'Images (Familles Rurales)\n${maps}`, uid: `${s.id_seance}-${m.id_film}@baladimages` };
+}
+function addToCalendar(sid, fid) {
+  const a = agendaData(sid, fid); if (!a) return;
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', "PRODID:-//Balad'Images//FR", 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+    'UID:' + a.uid, 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''), 'DTSTART:' + icsDate(a.t.start), 'DTEND:' + icsDate(a.t.end),
+    'SUMMARY:' + icsEsc(a.title), 'LOCATION:' + icsEsc(a.place), 'DESCRIPTION:' + icsEsc(a.desc),
+    'BEGIN:VALARM', 'TRIGGER:-PT2H', 'ACTION:DISPLAY', 'DESCRIPTION:' + icsEsc(a.title), 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (ios) { window.location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics); return; }
+  const l = document.createElement('a'); l.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  l.download = 'seance-' + norm(a.m.titre).replace(/[^a-z0-9]+/g, '-') + '.ics'; document.body.appendChild(l); l.click(); l.remove();
+}
+function openGCal(sid, fid) {
+  const a = agendaData(sid, fid); if (!a) return;
+  window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(a.title) + '&dates=' + icsDate(a.t.start) + '/' + icsDate(a.t.end) + '&details=' + encodeURIComponent(a.desc) + '&location=' + encodeURIComponent(a.place) + '&ctz=Europe/Paris', '_blank', 'noopener');
+}
 
 function initFooter() {
   updateThemeBtn(); updateHdrClear();
