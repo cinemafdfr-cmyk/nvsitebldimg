@@ -14,7 +14,7 @@
 <!-- Démarre le téléchargement des données dès le début de la page (gain de temps au chargement) -->
 <script>
   try { if (localStorage.getItem('balad_theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch (e) {}
-  window.BALAD_API = "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
+  window.BALAD_API = "https://script.google.com/macros/s/AKfycby1SJvp79YPs1rkZzjj29wG1N5P1cPKuuQQHFycjCN3eb-onGNJLbWTC0_ONWkDgsQQXg/exec";
   window.__baladData = fetch(window.BALAD_API).then(function (r) { return r.json(); }).catch(function () { return null; });
 </script>
 
@@ -1146,6 +1146,80 @@ html[data-theme="light"] .map-legend { background: rgba(255,255,255,.92); color:
   .lg-row { margin-top: 3px; }
   #view-salles #sallesMap .leaflet-top.leaflet-left { left: auto; right: 10px; }
 }
+
+/* ===== v13 ===== */
+/* Transition : léger ton dominant jusqu'au noir */
+html:not([data-theme="light"]) .movie-hero::after { background:
+  radial-gradient(ellipse 70% 55% at 12% 60%, rgba(var(--tint), .94) 0%, rgba(var(--tint), .78) 28%, rgba(var(--tint), .48) 52%, rgba(var(--tint), .18) 72%, rgba(var(--tint), 0) 100%),
+  linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .06) 28%, rgba(var(--tint), .42) 50%, rgba(var(--tint2), .72) 72%, rgb(var(--tint)) 100%); }
+html:not([data-theme="light"]) #view-movie .showtimes-section { background: linear-gradient(180deg, rgba(var(--tint, 15, 15, 18), 0) 0, rgb(var(--tint, 15, 15, 18)) 70px, var(--bg-dark) 620px); }
+/* Page lieu : salle bien visible */
+html:not([data-theme="light"]) .venue-hero::after { background:
+  linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), 0) 42%, rgba(var(--tint), .3) 68%, rgba(var(--tint2), .5) 88%, rgb(var(--tint)) 100%),
+  radial-gradient(ellipse 60% 45% at 12% 78%, rgba(var(--tint), .55) 0%, rgba(var(--tint), 0) 100%); }
+html:not([data-theme="light"]) #view-venue .catalog-container { background: linear-gradient(180deg, rgb(var(--tint, 15, 15, 18)) 0, var(--bg-dark) 420px); }
+.venue-hero .movie-hero-img { -webkit-mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 100%); mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 100%); }
+.venue-hero .movie-hero-content { text-shadow: 0 2px 16px rgba(0,0,0,.7); }
+.hero-salle { font-size: 1.15rem; font-weight: 700; margin: -2px 0 10px; opacity: .95; }
+.svc.no { opacity: .7; text-decoration: line-through; }
+.svc b { font-size: .75rem; } .svc.yes b { color: #a9d447; } .svc.no b { color: #ff6b5e; }
+.addr-name { font-weight: 800; margin-top: 8px; font-size: .9rem; }
+
+/* Carte séance : fermée par défaut */
+.practical-details-panel { display: none; }
+.practical-details-panel.open { display: block; animation: panelIn .35s ease; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(-8px); } }
+.strip-hint { color: var(--text-muted); font-size: .82rem; margin: -6px 0 18px; }
+
+/* Séances spéciales : logos partenaires */
+.hero-partners { position: absolute; right: 5%; bottom: 64px; z-index: 6; display: flex; gap: 12px; align-items: center; background: rgba(255,255,255,.9); border-radius: 12px; padding: 6px 12px; }
+.hero-partners img { height: 34px; width: auto; max-width: 110px; object-fit: contain; }
+.panel-partners { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 14px; }
+.panel-partners img { height: 30px; background: rgba(255,255,255,.92); border-radius: 8px; padding: 4px 8px; }
+.card-partners { display: flex; gap: 4px; margin-top: 4px; }
+.card-partners img { height: 18px; background: rgba(255,255,255,.92); border-radius: 5px; padding: 2px 5px; }
+
+/* Genres, mobile, mode clair */
+.genre-chip { padding: 9px 18px; font-size: .9rem; }
+html[data-theme="light"] .movie-hero .btn-back-home, html[data-theme="light"] .hero-content .btn-back-home { background: rgba(255,255,255,.16); color: #fff; border-color: rgba(255,255,255,.3); }
+
+/* Page bénévolat */
+.vol-intro, .vol-outro { max-width: 760px; font-size: 1rem; line-height: 1.7; color: #d1d1d6; margin: 6px 0 22px; font-style: italic; }
+.vol-legend { font-size: .8rem; color: var(--text-muted); margin-bottom: 14px; }
+.vol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 22px; align-items: start; margin-bottom: 26px; }
+.vol-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-top: 5px solid var(--vc); border-radius: 16px; overflow: hidden; }
+.vol-img { position: relative; aspect-ratio: 16 / 9; background: color-mix(in srgb, var(--vc) 30%, #16161a); }
+.vol-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vol-ico { position: absolute; left: 12px; bottom: -20px; width: 44px; height: 44px; border-radius: 50%; background: var(--vc); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,.4); border: 3px solid var(--bg-card); z-index: 2; }
+.vol-img.noimg { display: flex; align-items: center; justify-content: center; }
+.vol-img.noimg .vol-ico { position: static; width: 70px; height: 70px; font-size: 2.1rem; border: 0; }
+.vol-body { padding: 28px 16px 14px; }
+.vol-body h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+.vol-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.vol-chips span { background: color-mix(in srgb, var(--vc) 22%, transparent); border: 1px solid var(--vc); border-radius: 12px; padding: 3px 10px; font-size: .74rem; font-weight: 700; }
+.vol-toggle { display: flex; align-items: center; gap: 6px; background: none; border: 0; color: var(--vc); font-weight: 800; cursor: pointer; padding: 4px 0; font-size: .88rem; font-family: inherit; }
+.vol-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s; }
+.vol-card.open .vol-toggle svg { transform: rotate(180deg); }
+.vol-detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
+.vol-card.open .vol-detail { grid-template-rows: 1fr; }
+.vol-detail-in { overflow: hidden; font-size: .9rem; line-height: 1.6; color: #d1d1d6; }
+.vol-card.open .vol-detail-in { padding-top: 8px; }
+.vol-find { margin-top: 36px; padding: 24px; border-radius: 16px; background: var(--bg-card); border: 1px solid var(--border-subtle); }
+.vol-find h2 { font-family: var(--font-title); font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; }
+.cine-search.full { width: 100%; max-width: 560px; margin-left: 0; }
+html[data-theme="light"] .vol-intro, html[data-theme="light"] .vol-outro, html[data-theme="light"] .vol-detail-in { color: #3b3e46; }
+
+@media (max-width: 768px) {
+  .h-row { scroll-snap-type: x mandatory; }
+  .h-row .pcard { flex-basis: 190px; }
+  .hero-partners { bottom: 70px; right: 12px; max-width: 48%; padding: 4px 8px; }
+  .hero-partners img { height: 26px; }
+  .cine-search.full { width: 100%; padding-left: 16px; background: rgba(255,255,255,.1); border: 1px solid var(--border-subtle); }
+  .cine-search.full input { display: block !important; }
+  .cine-search.full .search-dropdown.open { display: block !important; }
+  html:not([data-theme="light"]) .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 62%, rgb(var(--tint)) 100%); }
+  html:not([data-theme="light"]) .venue-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), 0) 40%, rgba(var(--tint), .3) 68%, rgba(var(--tint2), .5) 88%, rgb(var(--tint)) 100%); }
+}
 </style>
 </head>
 
@@ -1236,6 +1310,7 @@ html[data-theme="light"] .map-legend { background: rgba(255,255,255,.92); color:
   <section class="showtimes-section">
     <div class="section-title">Prochaines projections</div>
     <div class="horizontal-cards-strip" id="movie-showtimes-strip"></div>
+    <p class="strip-hint" id="stripHint">Sélectionnez une séance pour voir le détail et l'ajouter à votre agenda.</p>
     <div class="practical-details-panel" id="details-panel"></div>
   </section>
   <section class="similar-section" id="similarSection" style="display:none"></section>
@@ -1371,7 +1446,7 @@ html[data-theme="light"] .map-legend { background: rgba(255,255,255,.92); color:
     <h1 class="page-title">Bénévolat</h1>
     <!-- TEXTE PROVISOIRE : à remplacer par le contenu de https://baladimages.spread.name/benevolat -->
     <p class="page-lead">Rejoignez l'équipe de bénévoles de votre salle.</p>
-    <div class="prose">
+    <div class="prose" id="benevolat-static">
       <h2>Le cinéma près de chez vous repose sur des bénévoles</h2>
       <p>Chaque séance Balad'Images est rendue possible par des bénévoles de l'association Familles Rurales locale. Vous aimez le cinéma, vous avez un peu de temps ? Vous pouvez nous aider, selon vos envies :</p>
       <ul>
@@ -1383,6 +1458,7 @@ html[data-theme="light"] .map-legend { background: rgba(255,255,255,.92); color:
       <p>Les bénévoles sont accompagnés et formés par la fédération.</p>
       <p><a class="btn-agenda filled" href="mailto:cinema49@famillesrurales.org?subject=Devenir%20b%C3%A9n%C3%A9vole" style="text-decoration:none;color:#fff;">Devenir bénévole</a></p>
     </div>
+    <div id="benevolat-dyn"></div>
   </div>
 </div>
 
@@ -1641,19 +1717,51 @@ function formatYear(val) {
   return match ? match[0] : str;
 }
 
-function specialStyle(type) {
-  const k = norm(type);
-  const map = [['avant', '#8b5cf6'], ['debat', '#3b82f6'], ['rencontre', '#3b82f6'], ['gouter', '#ec4899'], ['plein', '#22c55e'], ['scolaire', '#eab308'], ['ecole', '#eab308']];
-  for (const [w, c] of map) if (k.includes(w)) return c;
-  let h = 0; for (const ch of k) h = (h * 31 + ch.charCodeAt(0)) % 360;
-  return `hsl(${h},70%,55%)`;
+const spCache = (() => { try { return JSON.parse(localStorage.getItem('balad_spcol_v1') || '{}'); } catch (e) { return {}; } })();
+function hashColor(t) { let h = 0; for (const c of norm(t)) h = (h * 31 + c.charCodeAt(0)) % 360; return `hsl(${h},65%,52%)`; }
+function specialStyle(type) { return spCache[type] || hashColor(type); }
+const logosOf = s => String((s && s.logo_special) || '').split(';').map(x => x.trim()).filter(u => /^https?:/i.test(u));
+function partnerLogosHtml(urls, cls) { return urls.length ? `<div class="${cls}">${urls.map(u => `<img src="${esc(u)}" alt="" loading="lazy" onerror="this.remove()">`).join('')}</div>` : ''; }
+function partnersHtml(filmId, cls) { return partnerLogosHtml([...new Set(db.seances.filter(x => String(x.id_film) === String(filmId)).flatMap(logosOf))].slice(0, 4), cls); }
+function logoDominant(url) {
+  return new Promise(res => {
+    const im = new Image(); im.crossOrigin = 'anonymous';
+    im.onload = () => {
+      try {
+        const c = document.createElement('canvas'); c.width = c.height = 40;
+        const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0, 40, 40);
+        const d = x.getImageData(0, 0, 40, 40).data; let r = 0, g = 0, b = 0, w = 0;
+        for (let i = 0; i < d.length; i += 4) {
+          if (d[i + 3] < 128) continue;
+          const R = d[i], G = d[i + 1], B = d[i + 2], mx = Math.max(R, G, B), mn = Math.min(R, G, B), sat = mx ? (mx - mn) / mx : 0, lum = (R + G + B) / 3;
+          if (lum > 235 || lum < 25 || sat < 0.12) continue;
+          const ww = sat * sat + 0.05; r += R * ww; g += G * ww; b += B * ww; w += ww;
+        }
+        if (!w) return res(null);
+        const hs = rgbToHsl(r / w, g / w, b / w);
+        res(`hsl(${Math.round(hs[0] * 360)},${Math.round(Math.min(1, Math.max(hs[1], 0.45)) * 100)}%,50%)`);
+      } catch (e) { res(null); }
+    };
+    im.onerror = () => res(null); im.src = url;
+  });
+}
+/* Couleur d'une séance spéciale : 1er logo partenaire, autres logos, logo du film, sinon couleur stable tirée du titre */
+async function refineSpecialColors() {
+  const titles = [...new Set(db.seances.map(x => String(x.type_special || '').trim()).filter(Boolean))]; let changed = false;
+  for (const t of titles) {
+    if (spCache[t]) continue;
+    const ss = db.seances.filter(x => String(x.type_special || '').trim() === t), cands = [...new Set(ss.flatMap(logosOf))];
+    ss.forEach(x => { const f = db.films.find(k => String(k.id_film) === String(x.id_film)), u = f && String(f.logo || f.logo_url || '').trim(); if (/^https?:/i.test(u) && !cands.includes(u)) cands.push(u); });
+    for (const u of cands) { const c = await logoDominant(u); if (c) { spCache[t] = c; changed = true; break; } }
+  }
+  if (changed) { try { localStorage.setItem('balad_spcol_v1', JSON.stringify(spCache)); } catch (e) {} document.querySelectorAll('[data-sp]').forEach(el => el.style.setProperty('--sc', specialStyle(el.dataset.sp))); }
 }
 function filmSpecials(filmId) {
   return [...new Set(db.seances.filter(s => String(s.id_film) === String(filmId) && String(s.type_special || '').trim()).map(s => String(s.type_special).trim()))];
 }
 function badgesHtml(filmId, cls) {
   const l = filmSpecials(filmId);
-  return l.length ? `<div class="${cls}">` + l.slice(0, 2).map(t => `<span class="special-badge" style="--sc:${specialStyle(t)}">${esc(t)}</span>`).join('') + '</div>' : '';
+  return l.length ? `<div class="${cls}">` + l.slice(0, 2).map(t => `<span class="special-badge" data-sp="${esc(t)}" style="--sc:${specialStyle(t)}">${esc(t)}</span>`).join('') + '</div>' : '';
 }
 
 function getCommune(seance) { return seance.lieu_id || seance.commune || seance.lieu_nom; }
@@ -1662,7 +1770,7 @@ function getCommune(seance) { return seance.lieu_id || seance.commune || seance.
    CHARGEMENT DES DONNEES (cache persistant + mise à jour en arrière-plan)
    ========================================================= */
 function normalizeData(raw) {
-  const out = { films: [], seances: [] };
+  const out = { films: [], seances: [], benevolat: [] };
   out.films = (raw.films || []).filter(f => f && f.titre && String(f.titre).trim() !== '');
   out.films.forEach(f => {
     f.id_film = String(f.id_film).trim();
@@ -1679,6 +1787,7 @@ function normalizeData(raw) {
     s.date_texte = formatDate(s.date_texte) || s.date_texte;
     if (!s.id_seance) s.id_seance = 'seance_' + idx;
   });
+  out.benevolat = raw.benevolat || [];
   return out;
 }
 
@@ -1721,6 +1830,7 @@ async function loadDataFromSheet() {
 }
 
 function initAppUI() {
+  refineSpecialColors();
   populateLocationDropdown();
   setupHeroCarousel();
   renderGridMovies(db.films, 'home-grid');
@@ -1728,6 +1838,7 @@ function initAppUI() {
 }
 
 function refreshAfterUpdate() {
+  refineSpecialColors();
   populateLocationDropdown();
   setupHeroCarousel();
   if (!isSearchActive && $('catalog-title').textContent.indexOf('Résultats') !== 0) renderGridMovies(db.films, 'home-grid');
@@ -1797,6 +1908,7 @@ function renderHeroCarouselContainer() {
     <div class="hero-slide ${index === 0 ? 'active' : ''}" id="hero-slide-${index}" onclick="openMovieDetails('${movie.id_film}')">
       <div class="hero-media"><img class="hero-bg-layer" alt="" decoding="async" ${imgAttrs}><div class="hero-video" id="hv-${index}"></div></div>
       <div class="hero-overlay-gradient"></div>
+      ${partnersHtml(movie.id_film, 'hero-partners')}
       <div class="hero-content">
         ${badgesHtml(movie.id_film, 'hero-badges')}${titleHtml(movie, 'hero-title')}
         <div class="hero-meta">
@@ -1894,9 +2006,9 @@ function cardTitleHtml(m) {
   const n = String(m.titre).length, fs = n <= 10 ? 1.7 : n <= 16 ? 1.45 : n <= 24 ? 1.2 : n <= 34 ? 1.0 : 0.85;
   return `<span class="fc-title" style="font-size:${fs}rem">${m.titre}</span>`;
 }
-function movieCardHtml(m) {
+function movieCardHtml(m, sid) {
   const bg = m.fond_url || m.affiche_url || '', meta = [m.duree, genreList(m)[0]].filter(Boolean).map(esc).join(' • ');
-  return `<div class="card-movie fcard" onclick="openMovieDetails('${m.id_film}')">
+  return `<div class="card-movie fcard" onclick="openMovieDetails('${m.id_film}'${sid ? ", '" + sid + "'" : ''})">
     <div class="fc-img">
       <img class="fc-bg" src="${bg}" alt="" loading="lazy" decoding="async">
       <div class="fc-shade"></div>
@@ -2029,7 +2141,7 @@ function switchView(targetViewId, cb) {
     updateHdrClear(); setHdrAccent(targetViewId);
     document.body.classList.toggle('plain-page', !['view-home', 'view-movie', 'view-venue', 'view-apropos', 'view-benevolat', 'view-plein-air'].includes(targetViewId));
     closeSearchUI();
-    ['searchInput', 'cineInput'].forEach(i => { const e = $(i); if (e) e.value = ''; });
+    ['searchInput', 'cineInput', 'volInput'].forEach(i => { const e = $(i); if (e) e.value = ''; });
     if (targetViewId !== 'view-salles') { const ss = $('sallesSearch'); if (ss) ss.value = ''; }
     document.body.classList.toggle('view-salles-active', targetViewId === 'view-salles');
     if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue' && !PAGE_BG[targetViewId.replace('view-', '')]) document.querySelector('header').style.removeProperty('--hdr-dark');
@@ -2068,6 +2180,7 @@ function go(page) {
   if (page === 'home') { goHome(); return; }
   if (page === 'salles') { switchView('view-salles', initSalles); return; }
   if (page === 'activites') { renderActivitesGrid(); switchView('view-activites'); return; }
+  if (page === 'benevolat') renderBenevolat();
   switchView('view-' + page);
 }
 
@@ -2196,7 +2309,7 @@ function setTint(heroSec, tint) {
   heroSec.style.setProperty('--tint2', tint.t2);
   const ext = heroSec.nextElementSibling;
   if (ext && ext.classList.contains('movie-extend')) { ext.style.setProperty('--tint2', tint.t2); if (tint.f) ext.style.setProperty('--field', tint.f); }
-  const vw = heroSec.closest('.view-page'); if (vw) vw.style.setProperty('--tint2', tint.t2);
+  const vw = heroSec.closest('.view-page'); if (vw) { vw.style.setProperty('--tint2', tint.t2); vw.style.setProperty('--tint', tint.t); }
   const h = document.querySelector('header');
   if (h) h.style.setProperty('--hdr-dark', tint.h); // header plus sombre si le haut de l'image est clair
 }
@@ -2233,12 +2346,13 @@ function openMovieDetails(filmId, selectedSeanceId = null, fromBack = false) {
 
   // Voile neutre par défaut ; remplacé par la teinte dominante dès que l'image est lue
   document.querySelector('header').style.removeProperty('--hdr-dark');
-  const vwr = heroSec.closest('.view-page'); if (vwr) vwr.style.removeProperty('--tint2');
+  const vwr = heroSec.closest('.view-page'); if (vwr) { vwr.style.removeProperty('--tint2'); vwr.style.removeProperty('--tint'); }
   heroSec.style.setProperty('--tint', '15,15,18');
   heroSec.style.setProperty('--tint2', '15,15,18');
 
   heroSec.innerHTML = `
     <img class="movie-hero-img" id="movieHeroImg" alt="" crossorigin="anonymous" decoding="async" fetchpriority="high" src="${bgUrl}">
+    ${partnersHtml(movie.id_film, 'hero-partners')}
     <div class="movie-hero-content">
       <div style="margin-bottom:18px;">
         <button class="btn-back-home" onclick="${backAction}">← Retour</button>
@@ -2299,6 +2413,8 @@ function openMovieDetails(filmId, selectedSeanceId = null, fromBack = false) {
   const movieSeances = db.seances.filter(s => String(s.id_film) === cleanId);
   const strip = $('movie-showtimes-strip');
   strip.innerHTML = '';
+  $('details-panel').classList.remove('open');
+  const hint = $('stripHint'); if (hint) hint.style.display = selectedSeanceId ? 'none' : 'block';
 
   if (!movieSeances.length) {
     strip.innerHTML = '<p style="color:var(--text-muted);">Aucune séance programmée pour ce film.</p>';
@@ -2307,16 +2423,16 @@ function openMovieDetails(filmId, selectedSeanceId = null, fromBack = false) {
   }
 
   movieSeances.forEach((s, idx) => {
-    const isActive = selectedSeanceId ? String(s.id_seance) === String(selectedSeanceId) : idx === 0;
+    const isActive = selectedSeanceId ? String(s.id_seance) === String(selectedSeanceId) : false;
     const card = document.createElement('div');
     card.className = `showtime-horizontal-card ${isActive ? 'active' : ''}`;
     card.onclick = e => selectShowtime(e, s, movie);
     const sp = String(s.type_special || '').trim();
-    if (sp) { card.style.setProperty('--sc', specialStyle(sp)); card.classList.add('special'); }
+    if (sp) { card.style.setProperty('--sc', specialStyle(sp)); card.dataset.sp = sp; card.classList.add('special'); }
     card.innerHTML = `
       <div class="town-tag">${getCommune(s)}</div>
       <div class="card-date">${s.date_texte}</div>
-      <div class="card-venue">${s.horaire_texte}</div>${sp ? `<div class="special-label">${esc(sp)}</div>` : ''}`;
+      <div class="card-venue">${s.horaire_texte}</div>${sp ? `<div class="special-label">${esc(sp)}</div>` : ''}${partnerLogosHtml(logosOf(s).slice(0, 3), 'card-partners')}`;
     strip.appendChild(card);
     if (isActive) renderShowtimePanel(s, movie);
   });
@@ -2349,14 +2465,12 @@ function toggleSynopsis(filmId) {
    SEANCE
    ========================================================= */
 function selectShowtime(evt, seance, movie) {
+  const card = evt && evt.currentTarget, was = card && card.classList.contains('active');
   document.querySelectorAll('.showtime-horizontal-card').forEach(c => c.classList.remove('active'));
-  if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
-  const panel = $('details-panel');
-  panel.classList.add('changing');
-  setTimeout(() => {
-    renderShowtimePanel(seance, movie);
-    panel.classList.remove('changing');
-  }, 150);
+  const panel = $('details-panel'), hint = $('stripHint');
+  if (was) { panel.classList.remove('open'); if (hint) hint.style.display = 'block'; return; }
+  if (card) card.classList.add('active');
+  renderShowtimePanel(seance, movie);
 }
 
 /* Tarifs : si la colonne "tarif" est vide ou vaut "habituel" -> tarifs standards ;
@@ -2374,18 +2488,19 @@ function renderShowtimePanel(seance, movie) {
   const lieuAffichage = seance.lieu_nom || getCommune(seance);
   const mapsUrl = sanitizeGoogleMapsUrl(seance.google_maps_url, `${lieuAffichage} France`);
   const mapsBadge = `
-    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" aria-label="Ouvrir dans Google Maps"><span class="pin">📍</span></a><div class="addr">${lieuAffichage}</div>`;
+    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" aria-label="Ouvrir dans Google Maps"><span class="pin">📍</span></a>${seance.nom_salle ? `<div class="addr-name">${esc(seance.nom_salle)}</div>` : ''}<div class="addr">${lieuAffichage}</div>`;
 
   const sp = String(seance.type_special || '').trim();
   const dsp = String(seance.detail_special || '').trim();
   const panelEl = $('details-panel');
-  panelEl.classList.toggle('special', !!sp);
-  if (sp) panelEl.style.setProperty('--sc', specialStyle(sp));
+  panelEl.classList.toggle('special', !!sp); panelEl.classList.add('open'); const hnt = $('stripHint'); if (hnt) hnt.style.display = 'none';
+  if (sp) { panelEl.style.setProperty('--sc', specialStyle(sp)); panelEl.dataset.sp = sp; } else delete panelEl.dataset.sp;
   panelEl.innerHTML = `
     <div class="panel-header">
-      <div class="panel-title">Séance à <span>${getCommune(seance)}</span> ${sp ? `<span class="special-badge" style="--sc:${specialStyle(sp)};color:#fff;margin-left:8px;">${esc(sp)}</span>` : ''}</div>
+      <div class="panel-title">Séance à <span>${getCommune(seance)}</span> ${sp ? `<span class="special-badge" data-sp="${esc(sp)}" style="--sc:${specialStyle(sp)};color:#fff;margin-left:8px;">${esc(sp)}</span>` : ''}</div>
       <div class="item-value">${seance.date_texte} à ${seance.horaire_texte}</div>
     </div>
+    ${partnerLogosHtml(logosOf(seance), 'panel-partners')}
     <div class="practical-grid">
       <div class="practical-item">
         <div class="item-label">Lieu & Adresse</div>
@@ -2428,6 +2543,7 @@ function openVenueDetails(lieuId) {
   const filmIds = [...new Set(venueSeances.map(s => String(s.id_film)))];
   const venueFilms = db.films.filter(f => filmIds.includes(String(f.id_film)));
 
+  const salleNames = [...new Set(venueSeances.map(x => String(x.nom_salle || '').trim()).filter(Boolean))].join(' · ');
   const mapsBadge = `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="badge-salle">📍 ${salleNom}</a>`;
 
   $('venue-hero-container').innerHTML = `
@@ -2438,7 +2554,8 @@ function openVenueDetails(lieuId) {
         </div>
         ${mapsBadge}
         <h1 class="hero-title">${lieuId}</h1>
-        <p class="hero-subtitle">Retrouvez la programmation Familles Rurales à ${lieuId}.</p>${servicesIcons(firstSeance)}
+        ${salleNames ? `<div class="hero-salle">${esc(salleNames)}</div>` : ''}
+        <p class="hero-subtitle">Retrouvez la programmation Familles Rurales à ${lieuId}.</p>${salleBadges(venueSeances.find(x => String(x.detail_salle || '').trim()) || firstSeance)}
       </div>
     </section>
     <div class="movie-extend">${bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : ''}</div>`;
@@ -2533,7 +2650,7 @@ function buildVenues() {
     if (!id) return;
     let v = map.get(id);
     if (!v) {
-      v = { id, nom: s.salle_lieu || s.lieu_nom || id, img: s.salle_url || '', adresse: s.adresse || '', coords: null, seances: [] };
+      v = { id, nom: s.nom_salle || s.salle_lieu || s.lieu_nom || id, img: s.salle_url || '', adresse: s.adresse || '', coords: null, seances: [] };
       map.set(id, v);
     }
     if (!v.coords) v.coords = parseCoords(s.coordonnees || s['coordonnées'] || s.coords);
@@ -2567,7 +2684,7 @@ function popupHtml(v) {
       <div class="popup-sub">${esc(v.nom)}</div>
       <div class="popup-info">🎬 ${nbFilms} film${nbFilms > 1 ? 's' : ''} à l'affiche</div>
       ${first && film ? `<div class="popup-info">🕒 Prochaine séance : ${esc(whenText(first))} à ${esc(first.horaire_texte)}</div>
-      ${movieCardHtml(film)}` : ''}
+      ${movieCardHtml(film, first.id_seance)}` : ''}
       <div class="popup-actions">
         <button class="btn-agenda" onclick="openVenueDetails(${jsq(v.id)})">En savoir plus</button>
         <button class="btn-agenda filled" onclick="openDirections(${jsq(v.id)})">Y aller</button>
@@ -2923,7 +3040,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Films à l'affiche":"Now showing","📅 Ajouter à mon agenda":"📅 Add to my calendar","Google Agenda":"Google Calendar","Légende":"Legend","Séance dans les 7 jours (chiffre = jours restants)":"Screening within 7 days (number = days left)","Prochaine séance dans plus d'une semaine":"Next screening in over a week","Date de séance inconnue":"Screening date unknown","Projection aujourd'hui":"Screening today","Sélectionnez votre cinéma":"Select your cinema","Vous aimerez aussi":"You may also like","Cinéma itinérant Balad'images":"Balad'images mobile cinema","Annuler":"Cancel","🚗 Itinéraire vers":"🚗 Route to","Films dans le secteur":"Films in this area","Conditions techniques":"Technical conditions","Accessibilité":"Accessibility","Nos salles sont accessibles aux personnes à mobilité réduite.":"Our venues are accessible to people with reduced mobility.","Pour les personnes aveugles, malvoyantes, sourdes ou malentendantes, toutes les séances peuvent être suivies grâce à l'application gratuite":"For blind, partially sighted, deaf or hard-of-hearing people, all screenings can be followed with the free app","La Bavarde":"La Bavarde",": elle diffuse sur votre smartphone, au casque, l'audiodescription et/ou les sous-titres du film, synchronisés avec la projection. Pensez à la télécharger avant la séance et à vous munir d'écouteurs.":": it plays the film's audio description and/or subtitles on your smartphone, through headphones, in sync with the screening. Download it before the screening and bring earphones.","Balad'Images, le cinéma qui vient à vous":"Balad'Images, cinema that comes to you","Un circuit de cinéma itinérant porté par Familles Rurales : des séances en numérique 2K, accessibles à toutes et tous, animées par des bénévoles près de chez vous.":"A mobile cinema circuit run by Familles Rurales: 2K digital screenings, open to everyone, hosted by volunteers near you.","En savoir plus →":"Learn more →","Voir la carte des lieux de projection":"See the map of screening venues","Diffusé cette semaine":"Showing this week","Par genre":"By genre","Tous les films proposés":"All our films","Menu":"Menu","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","Sélectionnez une séance pour voir le détail et l'ajouter à votre agenda.":"Select a screening to see the details and add it to your calendar.","Trouver mon cinéma proche":"Find my nearest cinema","Les missions de même couleur sont cumulables":"Missions of the same colour can be combined","Détails":"Details","📅 Ajouter à mon agenda":"📅 Add to my calendar","Google Agenda":"Google Calendar","Légende":"Legend","Séance dans les 7 jours (chiffre = jours restants)":"Screening within 7 days (number = days left)","Prochaine séance dans plus d'une semaine":"Next screening in over a week","Date de séance inconnue":"Screening date unknown","Projection aujourd'hui":"Screening today","Sélectionnez votre cinéma":"Select your cinema","Vous aimerez aussi":"You may also like","Cinéma itinérant Balad'images":"Balad'images mobile cinema","Annuler":"Cancel","🚗 Itinéraire vers":"🚗 Route to","Films dans le secteur":"Films in this area","Conditions techniques":"Technical conditions","Accessibilité":"Accessibility","Nos salles sont accessibles aux personnes à mobilité réduite.":"Our venues are accessible to people with reduced mobility.","Pour les personnes aveugles, malvoyantes, sourdes ou malentendantes, toutes les séances peuvent être suivies grâce à l'application gratuite":"For blind, partially sighted, deaf or hard-of-hearing people, all screenings can be followed with the free app","La Bavarde":"La Bavarde",": elle diffuse sur votre smartphone, au casque, l'audiodescription et/ou les sous-titres du film, synchronisés avec la projection. Pensez à la télécharger avant la séance et à vous munir d'écouteurs.":": it plays the film's audio description and/or subtitles on your smartphone, through headphones, in sync with the screening. Download it before the screening and bring earphones.","Balad'Images, le cinéma qui vient à vous":"Balad'Images, cinema that comes to you","Un circuit de cinéma itinérant porté par Familles Rurales : des séances en numérique 2K, accessibles à toutes et tous, animées par des bénévoles près de chez vous.":"A mobile cinema circuit run by Familles Rurales: 2K digital screenings, open to everyone, hosted by volunteers near you.","En savoir plus →":"Learn more →","Voir la carte des lieux de projection":"See the map of screening venues","Diffusé cette semaine":"Showing this week","Par genre":"By genre","Tous les films proposés":"All our films","Menu":"Menu","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -3279,16 +3396,17 @@ function whenText(x) {
 function toggleSector() { $('sectorBox').classList.toggle('collapsed'); }
 /* ---- Recherche « Sélectionnez votre cinéma » (accueil) ---- */
 const SEARCH_SVG = '<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>';
-const CINE_HTML = `<div class="cine-search" id="cineSearch"><input id="cineInput" type="text" placeholder="Sélectionnez votre cinéma" autocomplete="off" oninput="cineSuggest(this.value)" onfocus="cineSuggest(this.value)" onkeydown="if(event.key==='Enter'){cineGo()}"><button class="cs-btn" onclick="cineGo()" aria-label="Rechercher">${SEARCH_SVG}</button><div class="search-dropdown" id="cineDropdown"></div></div>`;
-function cineSuggest(val) {
-  const q = norm(val), dd = $('cineDropdown');
+const cineBox = (pfx, ph, full) => `<div class="cine-search${full ? ' full' : ''}" id="${pfx}Search"><input id="${pfx}Input" type="text" placeholder="${ph}" autocomplete="off" oninput="cineSuggest(this.value, '${pfx}')" onfocus="cineSuggest(this.value, '${pfx}')" onkeydown="if(event.key==='Enter'){cineGo('${pfx}')}"><button class="cs-btn" onclick="cineGo('${pfx}')" aria-label="Rechercher">${SEARCH_SVG}</button><div class="search-dropdown" id="${pfx}Dropdown"></div></div>`;
+const CINE_HTML = cineBox('cine', 'Sélectionnez votre cinéma');
+function cineSuggest(val, pfx) {
+  pfx = pfx || 'cine'; const q = norm(val), dd = $(pfx + 'Dropdown'); if (!dd) return;
   let h = buildVenues().filter(v => !q || norm(v.id).includes(q)).slice(0, q ? 6 : 8).map(v => `<a class="search-dropdown-item" onclick="cineOpen('venue', ${jsq(v.id)})">📍 ${esc(v.id)}</a>`).join('');
   if (q.length >= 2) h += `<a class="search-dropdown-item" onclick="cineOpen('place', ${jsq(val.trim())})">🔎 Rechercher « ${esc(val.trim())} » (autre localisation)</a>`;
   dd.innerHTML = h; dd.classList.toggle('open', !!h);
 }
-function closeCine() { const d = $('cineDropdown'); if (d) d.classList.remove('open'); }
-function cineGo() {
-  const v = $('cineInput').value.trim(), ex = buildVenues().find(x => norm(x.id) === norm(v));
+function closeCine() { ['cine', 'vol'].forEach(p => { const d = $(p + 'Dropdown'); if (d) d.classList.remove('open'); }); }
+function cineGo(pfx) {
+  const el = $((pfx || 'cine') + 'Input'), v = el ? el.value.trim() : '', ex = buildVenues().find(x => norm(x.id) === norm(v));
   if (ex) cineOpen('venue', ex.id); else cineOpen('place', v);
 }
 function afterSallesReady(cb, n) { n = n || 0; if (sallesMap && !sallesDirty) return cb(); if (n > 60) return; setTimeout(() => afterSallesReady(cb, n + 1), 150); }
@@ -3296,7 +3414,7 @@ function cineOpen(kind, val) {
   closeCine(); go('salles');
   setTimeout(() => afterSallesReady(() => { const inp = $('sallesSearch'); inp.value = val || ''; if (kind === 'venue') pickSalle(val); else if (val) sallesSearchGo(true); else inp.focus(); }), 300);
 }
-document.addEventListener('click', e => { const c = $('cineSearch'); if (c && !c.contains(e.target)) closeCine(); });
+document.addEventListener('click', e => { ['cine', 'vol'].forEach(p => { const c = $(p + 'Search'); if (c && !c.contains(e.target)) { const d = $(p + 'Dropdown'); if (d) d.classList.remove('open'); } }); });
 
 /* ---- Navigation film -> film ---- */
 let movieHistory = [], currentFilmId = null;
@@ -3340,6 +3458,61 @@ function addToCalendar(sid, fid) {
 function openGCal(sid, fid) {
   const a = agendaData(sid, fid); if (!a) return;
   window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(a.title) + '&dates=' + icsDate(a.t.start) + '/' + icsDate(a.t.end) + '&details=' + encodeURIComponent(a.desc) + '&location=' + encodeURIComponent(a.place) + '&ctz=Europe/Paris', '_blank', 'noopener');
+}
+
+/* ---- Page bénévolat (onglet « Page bénévolat » du Sheets) ---- */
+const VOL_PALETTE = ['var(--fr-blue)', 'var(--fr-green)', 'var(--fr-orange)', '#e63e78', '#7b3f8c', '#4aa598'];
+const VOL_ICONS = [['billet', '🎟️'], ['accueil', '🤝'], ['projection', '📽️'], ['logisti', '🚚'], ['communic', '📣'], ['animat', '🎤']];
+function parseBenevolat(rows) {
+  if (!rows || rows.length < 2) return null;
+  const find = p => rows.findIndex(x => norm(x[0]).startsWith(p)), iT = find('texte'), iC = find('cumul'), iE = find('estim'), iI = find('image'), head = rows[0];
+  const out = { intro: '', outro: '', missions: [] };
+  for (let j = 1; j < head.length; j++) {
+    const title = String(head[j] || '').trim(); if (!title) continue;
+    const k = norm(title), cell = i => (i >= 0 && rows[i] ? String(rows[i][j] || '').trim() : '');
+    if (k === 'presentation') { out.intro = cell(iT); continue; }
+    if (k === 'conclusion') { out.outro = cell(iT); continue; }
+    out.missions.push({ title, txt: cell(iT), cum: cell(iC), time: cell(iE), img: cell(iI) });
+  }
+  const n = out.missions.length, par = [...Array(n).keys()], fd = i => (par[i] === i ? i : (par[i] = fd(par[i])));
+  out.missions.forEach((m, i) => {
+    const mm = m.cum.match(/mission\s+(.+)$/i); if (!mm) return; const nm = norm(mm[1]);
+    out.missions.forEach((o, j) => { const t = norm(o.title); if (j !== i && (t === nm || nm.includes(t) || t.includes(nm))) par[fd(i)] = fd(j); });
+  });
+  const gid = {}; let gc = 0;
+  out.missions.forEach((m, i) => { const rt = fd(i); if (!(rt in gid)) gid[rt] = gc++; m.g = gid[rt]; m.color = VOL_PALETTE[m.g % VOL_PALETTE.length]; });
+  out.missions.sort((a, b) => a.g - b.g);
+  return out;
+}
+function volCard(m) {
+  const ico = (VOL_ICONS.find(x => norm(m.title).includes(x[0])) || [0, '🎬'])[1], hasImg = /^https?:/i.test(m.img);
+  return `<div class="vol-card" style="--vc:${m.color}"><div class="vol-img ${hasImg ? '' : 'noimg'}">${hasImg ? `<img src="${esc(m.img)}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">` : ''}<span class="vol-ico">${ico}</span></div>
+    <div class="vol-body"><h3>${esc(m.title)}</h3><div class="vol-chips">${m.time ? `<span>⏱ ${esc(m.time)}</span>` : ''}${m.cum ? `<span>🔗 ${esc(m.cum)}</span>` : ''}</div>
+    <button class="vol-toggle" onclick="this.closest('.vol-card').classList.toggle('open')"><span>Détails</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="vol-detail"><div class="vol-detail-in">${esc(m.txt).replace(/\n/g, '<br>')}</div></div></div></div>`;
+}
+function renderBenevolat() {
+  const host = $('benevolat-dyn'), st = $('benevolat-static'); if (!host) return;
+  const d = parseBenevolat(db.benevolat), find = `<div class="vol-find"><h2>Trouver mon cinéma proche</h2>${cineBox('vol', 'Trouver mon cinéma proche', true)}</div>`;
+  if (!d || !d.missions.length) { if (st) st.style.display = ''; host.innerHTML = find; }
+  else {
+    if (st) st.style.display = 'none';
+    host.innerHTML = (d.intro ? `<div class="vol-intro">${esc(d.intro).replace(/\n/g, '<br>')}</div>` : '') +
+      '<div class="vol-legend">Les missions de même couleur sont cumulables</div><div class="vol-grid">' + d.missions.map(volCard).join('') + '</div>' +
+      (d.outro ? `<div class="vol-outro">${esc(d.outro).replace(/\n/g, '<br>')}</div>` : '') +
+      '<p><a class="btn-agenda filled" href="mailto:cinema49@famillesrurales.org?subject=Devenir%20b%C3%A9n%C3%A9vole" style="text-decoration:none;color:#fff;">Devenir bénévole</a></p>' + find;
+  }
+  if (LANG === 'en') translateTree(host);
+}
+/* ---- Badges d'une salle depuis la colonne detail_salle (✅ PMR | ❌ CB | ✅ Confiserie) ---- */
+function salleBadges(seance) {
+  const raw = String((seance && seance.detail_salle) || '').trim(); if (!raw) return servicesIcons(seance);
+  const ICON = [['pmr', '♿'], ['cb|tpe|carte', '💳'], ['confiserie|snack|popcorn', '🍿'], ['buvette|boisson', '🥤'], ['espece', '💶'], ['cheque', '🧾'], ['parking', '🅿️']];
+  const h = raw.split(/\s*\|\s*|\s+[Il¦]\s+/).map(x => x.trim()).filter(Boolean).map(it => {
+    const bad = /[❌✖✗]/.test(it), label = it.replace(/[✅❌✔✓✖✗]\uFE0F?/g, '').trim(), k = norm(label), ic = (ICON.find(x => new RegExp(x[0]).test(k)) || [0, '•'])[1];
+    return `<span class="svc ${bad ? 'no' : 'yes'}"><b>${bad ? '✕' : '✓'}</b> ${ic} ${esc(label)}</span>`;
+  }).join('');
+  return h ? `<div class="svc-icons">${h}</div>` : '';
 }
 
 function initFooter() {
