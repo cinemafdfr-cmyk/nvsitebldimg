@@ -14,7 +14,7 @@
 <!-- Démarre le téléchargement des données dès le début de la page (gain de temps au chargement) -->
 <script>
   try { if (localStorage.getItem('balad_theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch (e) {}
-  window.BALAD_API = "https://script.google.com/macros/s/AKfycby1SJvp79YPs1rkZzjj29wG1N5P1cPKuuQQHFycjCN3eb-onGNJLbWTC0_ONWkDgsQQXg/exec";
+  window.BALAD_API = "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
   window.__baladData = fetch(window.BALAD_API).then(function (r) { return r.json(); }).catch(function () { return null; });
 </script>
 
